@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<title>CMS | TELEGRAM | Вход</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->
+	{% include "./layouts/component/head.html" %}
+<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="static/admin/favicon.ico"/>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="static/login/css/util.css">
+	<link rel="stylesheet" type="text/css" href="static/login/css/main.css">
+<!--===============================================================================================-->
+</head>
+<body>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title" style="background-image: url(static/admin/img/user-info.jpg);">
+					<span class="login100-form-title-1">
+						LOGIN
+					</span>
+				</div>
+
+				<div class="login100-form validate-form">
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Некорректный логин">
+						<span class="label-input100">Логин</span>
+						<input class="input100" type="text" id="login" name="username" placeholder="Введите логин">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Некорректный пароль">
+						<span class="label-input100">Пароль</span>
+						<input class="input100" type="password" id="password" name="pass" placeholder="Введите пароль">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" id="go">
+							Войти
+						</button>
+					</div>
+			</div>
+		</div>
+	</div>
+	<script>
+
+    function generate_alert(text, type) {
+      new Noty({
+        text        : text,
+        type        : type,
+        dismissQueue: true,
+        layout      : 'topRight',
+        theme       : 'bootstrap-v4',
+        timeout     : 5000,
+        animation   : {
+                        open: 'animated bounceInRight',
+                        close: 'animated bounceOutRight'
+                      }
+      }).show();
+    };
+
+		$(document).on("click","#go",function(){
+		    let user = $("#login").val();
+		    let pass = $("#password").val();
+		    jsn = {username: user, password: pass};
+		    $.ajax({
+		        type: 'POST',
+		        url: window.location.pathname,
+		        contentType:'application/json',
+		        dataType :'json',
+		        timeout:30000,
+		        data:JSON.stringify(jsn),
+		        success:function(data){
+		            if (data.result)
+		            {
+		            		window.location.reload()
+		            }else{
+		                generate_alert('Проверьте правильность логина или пароля', "warning")
+		            }
+		        },
+		        error:function(e,r,x){
+		            generate_alert('Непредвиденная ошибка', "error");
+		        }
+		    })
+		})
+	</script>
+</body>
+</html>

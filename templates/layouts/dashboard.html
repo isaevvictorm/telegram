@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        {% include "./layouts/component/head.html" %}
+    </head>
+    <script>
+      function generate_alert(text, type) {
+        new Noty({
+          text        : text,
+          type        : type,
+          dismissQueue: true,
+          layout      : 'topRight',
+          theme       : 'bootstrap-v4',
+          timeout     : 5000,
+          animation   : {
+                          open: 'animated bounceInRight',
+                          close: 'animated bounceOutRight'
+                        }
+        }).show();
+      };
+    </script>
+    <body>
+        {% include "./layouts/component/navbar.html" %}
+        <div class="page-content">
+            <div class="custom-container"></div>
+            {% include "./layouts/component/sidebar.html" %}
+
+            <div class="content-wrapper">
+                <div class="page-header page-header-light">
+                  <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
+                    <div class="d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                            {% if data.breadcrumb %}
+                              {% for breadcrumb in data.breadcrumb %}
+                                <li class="breadcrumb-item"><a href="{{breadcrumb.link}}">{{breadcrumb.name}}</a></li>
+                              {% endfor %}
+                            {% else %}
+
+                            {% endif %}
+                        </ol>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="content">
+                      <div class="row">
+                          <div class="col-md-12">
+                              {% block content %}{% endblock %}
+                          </div>
+                      </div>
+                </div>
+
+                {% include "./layouts/component/footer.html" %}
+            </div>
+        </div>
+
+        {% include "./layouts/component/scripts.html" %}
+    </body>
+</html>

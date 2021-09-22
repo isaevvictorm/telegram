@@ -1,0 +1,256 @@
+.form-check {
+    padding-left: 0px !important;
+}
+
+.direct-chat-text_green p {
+    border-radius: 5px;
+    padding: 0.2rem 0.2rem;
+    background: #00B060;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+    display: inherit;
+    text-align: center;
+}
+
+.loader {
+  border: 10px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 10px solid #3498db;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 3s linear infinite; /* Safari */
+  animation: spin 3s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.direct-chat-text_yelow p {
+    border-radius: 5px;
+    padding: 0.2rem 0.2rem;
+    background: #FEC600;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+    display: inherit;
+    text-align: center;
+}
+
+.direct-chat-text_warning p {
+    border-radius: 5px;
+    padding: 0.2rem 0.2rem;
+    background: #FF9900;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+    display: inherit;
+    text-align: center;
+}
+
+.direct-chat-text_blue p {
+    border-radius: 5px;
+    padding: 0.2rem 0.2rem;
+    background: #057C9E;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+    display: inherit;
+    text-align: center;
+}
+
+.direct-chat-text_red p {
+    border-radius: 5px;
+    padding: 0.2rem 0.2rem;
+    background: #FF4040;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+    text-align: center;
+}
+
+.nav-sidebar .nav-link {
+    padding: 0.60rem 1.25rem;
+}
+
+.body-top-button-container {
+    display: flex;
+}
+.body-top-button-container div {
+    margin-right: 30px;
+}
+
+.price-loader {
+    width: 230px;
+    line-height: 30px;
+}
+
+.flexbox > *:first-child {
+    margin-left: 0;
+}
+.flexbox {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.box-body {
+    padding: 1.25rem;
+	  -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+
+.fa {
+    font-size: xx-large;
+}
+
+
+.font-weight-200
+{
+    font-weight: 200 !important;
+}
+
+.font-weight-300
+{
+    font-weight: 300 !important;
+}
+
+.font-weight-400
+{
+    font-weight: 400 !important;
+}
+
+.font-weight-500
+{
+    font-weight: 500 !important;
+}
+
+.font-weight-600
+{
+    font-weight: 600 !important;
+}
+
+.font-weight-700
+{
+    font-weight: 700 !important;
+}
+
+.font-weight-800
+{
+    font-weight: 800 !important;
+}
+
+.font-weight-900
+{
+    font-weight: 900 !important;
+}
+
+.font-weight-light
+{
+    font-weight: 100 !important;
+}
+
+.font-weight-normal
+{
+    font-weight: 400 !important;
+}
+
+.font-weight-medium
+{
+    font-weight: 500 !important;
+}
+
+.font-weight-bold
+{
+    font-weight: 700 !important;
+}
+
+.font-size-0
+{
+    font-size: 0 !important;
+}
+
+.font-size-10
+{
+    font-size: 0.7143rem !important;
+}
+
+.font-size-12
+{
+    font-size: 0.8571rem !important;
+}
+
+.font-size-14
+{
+    font-size: 1rem !important;
+}
+
+.font-size-16
+{
+    font-size: 1.143rem !important;
+}
+
+.font-size-18
+{
+    font-size: 1.286rem !important;
+}
+
+.font-size-20
+{
+    font-size: 1.429rem !important;
+}
+
+.font-size-24
+{
+    font-size: 1.714rem !important;
+}
+
+.font-size-26
+{
+    font-size: 1.857rem !important;
+}
+
+.font-size-30
+{
+    font-size: 2.143rem !important;
+	line-height: 1.2;
+}
+
+.font-size-40
+{
+    font-size: 2.857rem !important;
+	line-height: 1.2;
+}
+
+.font-size-50
+{
+    font-size: 3.571rem !important;
+	line-height: 1.2;
+}
+
+.font-size-60
+{
+    font-size: 4.286rem !important;
+	line-height: 1.2;
+}
+
+.font-size-70
+{
+    font-size: 5rem !important;
+	line-height: 1.2;
+}
+
+
+.font-size-80
+{
+    font-size: 5.714rem !important;
+	line-height: 1.2;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, body, h1, h2, h3, h4, h5, h6 {
+    font-family: Poppins, sans-serif;
+    text-shadow: none;
+}
