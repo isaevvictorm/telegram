@@ -8,12 +8,8 @@ def sql_exec(query):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
         conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format(str(setting['BOT']['TOKEN']).split(':')[0])))
         cursor = conn.cursor()
-        cursor.executescript("""
-            BEGIN TRANSACTION;
-
+        cursor.execute("""
             {0}
-
-            COMMIT;
         """.format(query))
         records = cursor.fetchall()
         if len(records) > 0:

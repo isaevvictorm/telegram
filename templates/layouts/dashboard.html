@@ -18,8 +18,38 @@
                         }
         }).show();
       };
+
+      $(document).ready(function () {
+         //var url = window.location;
+         //const allLinks = document.querySelectorAll('.nav-item a');
+         //const currentLink = [...allLinks].filter(e => {
+        //     return e.href == url;
+         //});
+
+         //if (currentLink.length > 0) {
+         //      currentLink[0].classList.add("active");
+         //}
+
+         var url2 = window.location;
+         const allLinks2 = document.querySelectorAll('.nav-item.nav-item-submenu a');
+         const currentLink2 = [...allLinks2].filter(e => {
+             return e.href == url2;
+         });
+         if(localStorage.getItem('sidebar') == '') {
+             document.getElementById('div_sidebar').classList.remove('sidebar-xs');
+         }
+         if(localStorage.getItem('sidebar') == 'sidebar-xs') {
+             document.getElementById('div_sidebar').classList.add('sidebar-xs');
+         }
+         if (currentLink2.length > 0) {
+             currentLink2[0].closest(".nav-item-submenu").classList.add("nav-item-open");
+             currentLink2[0].classList.add("active");
+             currentLink2[0].closest(".nav-group-sub").style.display = "block";
+         }
+     });
     </script>
-    <body>
+
+    <body id = "div_sidebar">
         {% include "./layouts/component/navbar.html" %}
         <div class="page-content">
             <div class="custom-container"></div>
@@ -27,13 +57,17 @@
 
             <div class="content-wrapper">
                 <div class="page-header page-header-light">
-                  <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
+                  <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline" style="height: 40px;">
                     <div class="d-flex">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/">Главная</a></li>
                             {% if data.breadcrumb %}
                               {% for breadcrumb in data.breadcrumb %}
-                                <li class="breadcrumb-item"><a href="{{breadcrumb.link}}">{{breadcrumb.name}}</a></li>
+                                  {% if breadcrumb.link != '#' %}
+                                    <li class="breadcrumb-item"><a href="{{breadcrumb.link}}">{{breadcrumb.name}}</a></li>
+                                  {% else %}
+                                    <li class="breadcrumb-item"><span>{{breadcrumb.name}}</span></li>
+                                  {% endif %}
                               {% endfor %}
                             {% else %}
 

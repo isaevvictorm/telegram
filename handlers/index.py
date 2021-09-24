@@ -3,7 +3,7 @@ from concurrent.futures import ThreadPoolExecutor
 from aiohttp import web
 from aiohttp_jinja2 import template
 import asyncio
-from .module import Auth
+from .modules import Auth
 
 class Handler:
     @template("index.html")
@@ -11,7 +11,7 @@ class Handler:
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.login.first_name), 'last_name':str(a.login.last_name), 'login': a.login.login, 'admin': a.login.admin}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin}}
         else:
             return web.HTTPFound('/login')
 

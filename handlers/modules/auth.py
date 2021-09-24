@@ -1,7 +1,7 @@
 
 from aiohttp_session import get_session
 from hashlib import sha256
-import db
+from . import db
 
 class User:
     login = None
@@ -13,16 +13,7 @@ class User:
     admin = None
     #=============<<<
 
-    async def get(self, login):
-        #=============>>>
-        # users = Данные из БД
-        #=============<<<
-        for user in users:
-            if str(user['login']).lower() == str(login).lower():
-                return User().set_data(login, user['first_name'], user['last_name'], user['admin'])
-        raise Exception("Пользователь не найден...")
-
-    def set_data(self, login, first_name, last_name, admin):
+    def set(self, login, first_name, last_name, admin):
         self.login = login
         self.first_name = first_name
         self.last_name = last_name
@@ -32,17 +23,11 @@ class User:
 class Auth:
     def __init__(self, request):
         self.request = request
-        self.login = None
-        self.first_name = None
-        self.last_name = None
-        self.admin = None
+        self.user = None
 
     async def init(self):
         session = await get_session(self.request)
-        self.login = await self.get_user(session.get('login'))
-        self.first_name = await self.get_user(session.get('first_name'))
-        self.last_name = await self.get_user(session.get('last_name'))
-        self.admin = await self.get_user(session.get('admin'))
+        self.user = await self.get_user(session.get('login'))
         return None
 
     async def is_logged(self):
@@ -53,33 +38,48 @@ class Auth:
             return False
 
     async def authenticate(self, login, password):
-        #=============>>>
-        # users = Данные из БД
-        #=============<<<
+        dt = db.sql_exec('''
+            Select login, first_name, last_name, admin, password from User
+        ''')
+        users = []
+        for row in dt:
+            users.append({
+                "login":row[0],
+                "first_name":row[1],
+                "last_name":row[2],
+                "admin":row[3],
+                "password":row[4]
+            })
         for user in users:
-            if str(user['login']).lower() == str(login).lower() and str(user['password']).lower() == str(password).lower():
-                return User().set_data(str(login), str(user['first_name']), str(user['last_name']), str(user['admin']))
+            if str(user['login']).lower() == str(login).lower() and str(user['password']).lower() == sha256(password.encode('utf-8')).hexdigest().lower():
+                return User().set(str(login), str(user['first_name']), str(user['last_name']), str(user['admin']))
         return None
 
     async def get_user(self, login):
-        #=============>>>
-        # users = Данные из БД
-        #=============<<<
-        for user in users:
-            if str(user['login']).lower() == str(login).lower():
-                u = type("CpUser",(),user)()
-                return u
+        dt = db.sql_exec('''
+            Select login, first_name, last_name, admin from User WHERE login = '{0}'
+        '''.format(login))
+        if dt:
+            users = []
+            for row in dt:
+                users.append({
+                    "login":row[0],
+                    "first_name":row[1],
+                    "last_name":row[2],
+                    "admin":row[3]
+                })
+            for user in users:
+                if str(user['login']).lower() == str(login).lower():
+                    u = type("CpUser",(),user)()
+                    return u
         return None
 
     async def logout(self):
         session = await get_session(self.request)
         session['login'] = None
-        session['first_name'] = None
-        session['last_name'] = None
-        session['admin'] = None
         return True
 
-    async def login(self):
+    async def sign(self):
         try:
             session = await get_session(self.request)
             if self.request.content_type == "application/json":
@@ -89,13 +89,11 @@ class Auth:
                 u = await self.authenticate(login, password)
                 if u:
                     session['login'] = u.login
-                    session['first_name'] = u.first_name
-                    session['last_name'] = u.last_name
-                    session['admin'] = u.admin
                     return True
                 else:
                     return False
             else:
                 return False
         except Exception as ee:
-            print('ERROR login():', str(ee))
+            print('Ошибка авторизации:', str(ee))
+            return False
