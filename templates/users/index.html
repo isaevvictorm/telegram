@@ -1,0 +1,257 @@
+{% extends './layouts/dashboard.html' %}
+
+{% block content %}
+
+<link rel = "stylesheet" href = "static/css/switchery.css">
+
+<script>
+
+function refresh_table(data){
+  document.getElementById('loader_reports').hidden = false;
+  document.getElementById('table_users').hidden = true;
+  table = $('#table_users').DataTable();
+  table.destroy();
+  $('#table_users').DataTable( {
+        dom: 'f<"d-none d-sm-block"B><"datatable-scroll"t>ip',
+        lengthMenu: [ [-1], ["Все"] ],
+        buttons: [ {
+                extend: 'excel',
+                text: 'Выгрузить в Excel',
+                filename: "message_list",
+                exportOptions: {
+                  columns: '.export',
+                },
+                title: "CMS | V-BOT | Список польхователей",
+                sheetName: "Отчет",
+            }
+        ],
+        "language": {
+              "lengthMenu": "Выводить _MENU_ элементов на страницу",
+              "zeroRecords": "Нет ни одного элемента",
+              "info": "Всего элементов: _MAX_",
+              "infoEmpty": "Нет данных",
+              "infoFiltered": "(фильтр из _MAX_ элементов)",
+              "search": "Поиск:",
+              "searchPlaceholder": "Введите значение"
+        },
+        "scrollX": false,
+        "autoWidth": true,
+        data: data,
+        columns: [
+            {  data: 'login', className: "text-center export"},
+            {  data: 'first_name', className: "text-center export"},
+            {  data: 'last_name', className: "text-center export"},
+            {  data: 'admin', className: "text-center export"},
+            {  data: 'date_insert', className: "text-center export"},
+            {  data: 'login', className: "text-center", "mRender": function(data, type, full){
+                return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_edit" class="dropdown-item"><i class="icon-pencil"></i>Изменить</a><a id = "btn_delete" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
+              }
+            }
+        ],
+        columnsDef: [{}]
+  });
+  document.getElementById('loader_reports').hidden = true;
+  document.getElementById('table_users').hidden = false;
+};
+
+$(document).ready(function(){
+  get_table();
+});
+
+
+
+$(document).on('click', '#btn_add', function(e){
+    e.preventDefault();
+    if (document.getElementById('login').value == ""){
+      generate_alert("Придумайте логин... ", "error");
+      return false;
+    }
+    if (document.getElementById('first_name').value == ""){
+      generate_alert("Заполните имя пользователя... ", "error");
+      return false;
+    }
+    if (document.getElementById('last_name').value == ""){
+      generate_alert("Заполните фамилию пользователя... ", "error");
+      return false;
+    }
+    if (document.getElementById('password1').value == ""){
+      generate_alert("Придумайте пароль... ", "error");
+      return false;
+    }
+    if (document.getElementById('password1').value === document.getElementById('password2').value){
+      data = {
+        login: document.getElementById('login').value,
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        password: document.getElementById('password1').value,
+        admin: document.getElementById('admin').value
+      }
+      console.log(data);
+      $.ajax({
+        type: 'POST',
+        url: '/users',
+        data: JSON.stringify({"method":"add", "data": data}),
+        success: function(response){
+            if (response.result){
+              table = $('#table_users').DataTable();
+              table.row.add( response.table[0] ).draw();
+              generate_alert("Пользователь успешно добавлен.", "success");
+              $('.bd-example-modal-lg-add_user').modal('toggle');
+            }
+            else {
+              generate_alert("При добавлении пользователя возникла ошибка: " + response.err, "error");
+            }
+        },
+        dataType:"json",
+        error:function(response){
+            generate_alert('Непредвиденна ошибка', "error");
+        },
+      });
+    }
+    else{
+      generate_alert("Пароли не совпадают... ", "error");
+      document.getElementById('password2').focus();
+      return false;
+    }
+});
+
+function get_table(){
+    $.ajax({
+      type: 'POST',
+      url: '/users',
+      data: JSON.stringify({"method":"get_users"}),
+      success: function(response){
+          if (response.result){
+            refresh_table(response.table);
+          }
+          else {
+            generate_alert("При получении данных возникла ошибка: " + response.err, "error");
+          }
+      },
+      dataType:"json",
+      error:function(response){
+          generate_alert('Непредвиденна ошибка', "error");
+      },
+    });
+};
+
+$(document).on('click', '#btn_delete', function(){
+    table = $('#table_users').DataTable();
+    var row  = $(this).parents('tr')[0];
+    var data = table.row( row ).data();
+    var login  = data.login;
+    if (login == "{{data.login}}"){
+      generate_alert("Вы не можете удалить свою учетную запись....", "error");
+      return false;
+    }
+    $.ajax({
+      type: 'POST',
+      url: '/users',
+      data: JSON.stringify({"method":"delete", "login":login}),
+      success: function(response){
+          if (response.result){
+            generate_alert("Пользователь успешно удален.", "success");
+            table.row( row ).remove().draw();
+          }
+          else {
+            generate_alert("При удалениии данных возникла ошибка: " + response.err, "error");
+          }
+      },
+      dataType:"json",
+      error:function(response){
+          generate_alert('Непредвиденна ошибка', "error");
+      },
+    });
+});
+
+</script>
+
+
+<div class = "card col-md-12">
+  <div class="card-body">
+      <h5>Пользователи</h5>
+  </div>
+  <div class="card-body">
+    Список пользователей системы чат-бота
+  </div>
+  <div class="card-body">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-user">Добавить</button>
+  </div>
+  <div class="card-body">
+       <div class="loader" id="loader_reports"></div>
+       <table id="table_users" class="table table-striped table-hover table-bordered hover" style="width:100%" hidden>
+           <thead>
+           <tr role="row">
+             <th>Логин</th>
+             <th>Имя</th>
+             <th>Фамилия</th>
+             <th>Админ</th>
+             <th>Дата добавления</th>
+             <th>Управление</th>
+           </tr>
+           </thead>
+           <tfoot>
+           <tr role="row">
+             <th>Логин</th>
+             <th>Имя</th>
+             <th>Фамилия</th>
+             <th>Админ</th>
+             <th>Дата добавления</th>
+             <th>Управление</th>
+           </tr>
+           </tfoot>
+           <tbody>
+           </tbody>
+       </table>
+     </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-lg-add-user" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Добавление пользователя</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                  <label for="field_url">Логин:</label>
+                  <input type="text" class="col-md-12 form-control" id = "login" placeholder="Придумайте логин...."></input>
+                </div>
+                <div class="form-group">
+                  <label for="first_name">Имя:</label>
+                  <input type="text" class="col-md-12 form-control" id = "first_name" placeholder="Введите имя пользователя..."></input>
+                </div>
+                <div class="form-group">
+                  <label for="last_name">Фамилия:</label>
+                  <input type="text" class="col-md-12 form-control" id = "last_name" placeholder="Введите фамилию пользователя..."></input>
+                </div>
+                <div class="form-group">
+                  <label for="password1">Пароль:</label>
+                  <input type="password" class="col-md-12 form-control" id = "password1" placeholder="Придумайте пароль..."></input>
+                </div>
+                <div class="form-group">
+                  <label for="password2">Повторите пароль:</label>
+                  <input type="password" class="col-md-12 form-control" id = "password2" placeholder="Повторите пароль..."></input>
+                </div>
+                <div class="form-group">
+                  <label for="admin">Сделать администратором:</label>
+                  <select type="text" class="col-md-12 form-control" id = "admin">
+                    <option value = 0>Нет</option>
+                    <option value = 1>Да</option>
+                  </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" id = "btn_add" class="btn btn-primary">Добавить</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.22/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/sc-2.0.3/datatables.min.js"></script>
+
+{% endblock %}

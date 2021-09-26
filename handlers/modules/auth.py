@@ -38,7 +38,7 @@ class Auth:
             return False
 
     async def authenticate(self, login, password):
-        dt = db.sql_exec('''
+        dt = db.execute('''
             Select login, first_name, last_name, admin, password from User
         ''')
         users = []
@@ -56,7 +56,7 @@ class Auth:
         return None
 
     async def get_user(self, login):
-        dt = db.sql_exec('''
+        dt = db.execute('''
             Select login, first_name, last_name, admin from User WHERE login = '{0}'
         '''.format(login))
         if dt:

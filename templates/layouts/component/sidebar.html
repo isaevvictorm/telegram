@@ -15,13 +15,13 @@
           <div class="sidebar-user-material-body">
               <div class="card-body text-center">
                   <h6 class="mb-0 text-white text-shadow-dark" id = "username">
-                    {% if data.fullname %}
-                    {{data.fullname}}
+                    {% if data.first_name %}
+                    {{data.first_name}}
                     {% else %}
                     Вы вошли как гость
                     {% endif %}
                   </h6>
-                  <span class="font-size-sm text-white text-shadow-dark" id = "userid"><input id = "userid_val" type="text" Value = "{% if data.userid %}{{data.userid}}{% else %}Гость{% endif %}" hidden></input>{% if data.userid %}{{data.userid}}{% else %}Гость{% endif %}</span>
+                  <span class="font-size-sm text-white text-shadow-dark" id = "userid"><input id = "userid_val" type="text" Value = "{% if data.login %}{{data.login}}{% else %}Гость{% endif %}" hidden></input>{% if data.login %}{{data.login}}{% else %}Гость{% endif %}</span>
               </div>
           </div>
       </div>
@@ -34,7 +34,7 @@
                         <span>Главная страница</span>
                     </a>
                 </li>
-                {% if (data.admin == '1') %}
+                {% if (data.admin == 1) %}
                     <li class="nav-item nav-item-submenu">
                         <a href="#" class="nav-link"><i class="icon-cog"></i><span>Управление</span></a>
                         <ul class="nav nav-group-sub" data-submenu-title="Управление" style="display: none;">

@@ -2,7 +2,7 @@ from .modules import db
 
 def migration():
     # Таблица "Пользователи"
-    db.sql_exec('''
+    db.executescript('''
         CREATE TABLE "User" (
             `login` TEXT PRIMARY KEY,
             `password` TEXT,
@@ -14,7 +14,7 @@ def migration():
     ''')
 
     # Добавляем учетную запись администратора "первого эшелона"
-    db.sql_exec('''
+    db.executescript('''
         INSERT INTO User (login, password, first_name, last_name, admin)
         Select
             'admin' as login,
@@ -26,7 +26,7 @@ def migration():
     ''')
 
     # Таблица "Контакты (Пользователи чата)"
-    db.sql_exec('''
+    db.executescript('''
         CREATE TABLE "Contact" (
             `user_id` INTEGER PRIMARY KEY,
             `first_name` TEXT,
@@ -40,7 +40,7 @@ def migration():
     ''')
 
     # Таблица "Чаты"
-    db.sql_exec('''
+    db.executescript('''
         CREATE TABLE "Chat" (
             `chat_id` INTEGER PRIMARY KEY,
             `first_name` TEXT,
@@ -52,7 +52,7 @@ def migration():
     ''')
 
     # Таблица "Сообщения"
-    db.sql_exec('''
+    db.executescript('''
         CREATE TABLE "Message" (
             `message_id` INTEGER PRIMARY KEY,
             `chat_id` INTEGER,
