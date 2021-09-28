@@ -77,16 +77,16 @@
                   </div>
                 </div>
 
-                <div class="content">
-                      <div class="row">
-                          <div class="col-md-12">
-                              {% block content %}{% endblock %}
-                          </div>
-                      </div>
-                </div>
+
+                {% block content %}
+
+                {% endblock %}
+
 
                 {% include "./layouts/component/footer.html" %}
-            </div>
+                </div>
+
+
         </div>
 
         {% include "./layouts/component/scripts.html" %}

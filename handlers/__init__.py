@@ -4,3 +4,4 @@ from .index import index
 from .login import login
 from .login import logout
 from .users import users
+from .chats import chats

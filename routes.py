@@ -15,4 +15,7 @@ routes=[
     # ---------------------------
     web.post('/users',users.post),
     web.get('/users',users.get),
+
+    web.post('/chats',chats.post),
+    web.get('/chats',chats.get),
 ]
