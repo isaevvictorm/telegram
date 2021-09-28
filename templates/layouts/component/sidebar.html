@@ -29,7 +29,7 @@
       <div class="card card-sidebar-mobile">
           <ul class="nav nav-sidebar" data-nav-type="accordion">
                 <li class="nav-item">
-                    <a href="/" class="nav-link active">
+                    <a href="/" class="nav-link">
                         <i class="icon-library2"></i>
                         <span>Главная страница</span>
                     </a>
@@ -38,10 +38,25 @@
                     <li class="nav-item nav-item-submenu">
                         <a href="#" class="nav-link"><i class="icon-cog"></i><span>Управление</span></a>
                         <ul class="nav nav-group-sub" data-submenu-title="Управление" style="display: none;">
-                            <li class="nav-item"><a href="/users" class="nav-link"><i class="icon-cog"></i><span>Пользователи</span></a></li>
+                            <li class="nav-item"><a href="/users" class="nav-link"><i class="icon-arrow-right22"></i><span>Пользователи</span></a></li>
                         </ul>
                     </li>
-                  {% endif %}
+                {% endif %}
+                {% if (data.admin == 1) %}
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link"><i class="icon-books"></i><span>Словари</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Управление" style="display: none;">
+                            <li class="nav-item"><a href="/synonym" class="nav-link"><i class="icon-arrow-right22"></i><span>Синонимы</span></a></li>
+                            <li class="nav-item"><a href="/knowledge" class="nav-link"><i class="icon-arrow-right22"></i><span>База знаний</span></a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a href="/chats" class="nav-link">
+                        <i class="icon-bubbles5"></i>
+                        <span>Чаты</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

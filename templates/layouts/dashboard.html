@@ -20,15 +20,15 @@
       };
 
       $(document).ready(function () {
-         //var url = window.location;
-         //const allLinks = document.querySelectorAll('.nav-item a');
-         //const currentLink = [...allLinks].filter(e => {
-        //     return e.href == url;
-         //});
+         var url = window.location;
+         const allLinks = document.querySelectorAll('.nav-item a');
+         const currentLink = [...allLinks].filter(e => {
+             return e.href == url;
+         });
 
-         //if (currentLink.length > 0) {
-         //      currentLink[0].classList.add("active");
-         //}
+         if (currentLink.length > 0) {
+               currentLink[0].classList.add("active");
+         }
 
          var url2 = window.location;
          const allLinks2 = document.querySelectorAll('.nav-item.nav-item-submenu a');
