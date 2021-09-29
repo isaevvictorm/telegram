@@ -70,9 +70,9 @@ class Handler:
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin, 'breadcrumb':[{'name':'Пользователи', 'link':'/users'}]}}
         else:
-            return web.HTTPFound('/login=redirect=users')
+            return web.HTTPFound('/login?redirect=users')
 
     async def post(self, request):
         jsn = await request.json()
