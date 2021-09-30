@@ -47,7 +47,7 @@ def migration():
             `last_name` TEXT,
             `username` TEXT,
             `type` TEXT,
-            `date` INTEGER,
+            `date` INTEGER
         );
     ''')
 
@@ -62,5 +62,5 @@ def migration():
     ''')
 
     db.executescript('''
-        ALTER TABLE "Message" add from_me int
+        ALTER TABLE "Message" add from_me int;
     ''')

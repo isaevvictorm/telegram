@@ -18,7 +18,7 @@ def execute(query):
             return None
     except sqlite3.Error as e:
         if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
-            print('Ошибка БД: ' + str(e))
+            print('Error DB: ' + str(e))
         return None
 
 def executescript(query):
@@ -41,5 +41,5 @@ def executescript(query):
             return None
     except sqlite3.Error as e:
         if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
-            print('Ошибка БД: ' + str(e))
+            print('Error DB: ' + str(e))
         return None
