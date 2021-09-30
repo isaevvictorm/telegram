@@ -1,9 +1,8 @@
 # Скачиваем репозиторий с git в папку /var/www/проект/
 ```python
-apt-get install git -y
-git init
-git remote add origin https://github.com/isaevvictorm/telegram.git
-git pull https://github.com/isaevvictorm/telegram.git main
+sudo git init
+ssh-keygen -t ed25519 -C "isaevvictorm@example.com"
+sudo git pull git@github.com:isaevvictorm/telegram.git main
 ```
 # Автоматическая установка из /var/www/проект/
 chmod +x install.sh

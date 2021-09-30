@@ -6,6 +6,16 @@ import asyncio
 from .modules import Auth
 from .modules import db
 
+def send_message(jsn):
+    dt = db.execute('''
+    INSERT INTO Message (chat_id, text, from_me)
+    SELECT
+        '{0}' as chat_id,
+        '{1}' as text,
+        1 as from_me
+    '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
+    return True
+
 class Handler:
     @template("chats/index.html")
     async def get(self, request):
@@ -19,6 +29,15 @@ class Handler:
     async def post(self, request):
         jsn = await request.json()
         method = jsn['method']
+        if method == "send_message":
+            try:
+                result = await do(send_message, jsn)
+                if result:
+                    return web.json_response({'result':True, 'err': None})
+                else:
+                    return web.json_response({'result':False, 'err': None})
+            except Exception as ee:
+                return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "get_users":
             try:
                 table = await do(get_users, jsn)
