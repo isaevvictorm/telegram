@@ -28,7 +28,7 @@ SERVER_IP = '0.0.0.0'
 try:
     response = requests.get('http://ifconfig.me/ip')
     SERVER_IP = response.content.decode()
-    print('IP-адрес сервера:', SERVER_IP)
+    print('IP-address server:', SERVER_IP)
 except Exception as ee:
     print('Ошибка:', str(ee))
 
