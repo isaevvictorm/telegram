@@ -19,7 +19,7 @@ def get_token():
             bot.set_webhook(url='https://{0}:{1}/{2}/'.format(setting['SERVER_IP'], setting['WEBHOOK_PORT'], token), certificate=open(os.path.join(os.getcwd() + "/", setting['WEBHOOK_SSL_CERT']), 'r'))
         else:
             print('Error webhook: SERT not found')
-    return token[0][0] if token and len(token) > 0 else None
+    return token
 
 bot = telebot.TeleBot(get_token())
 
