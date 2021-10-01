@@ -35,12 +35,10 @@ class Handler:
         return web.json_response({"result":"success"})
 
     async def post(self, request):
-        if request.match_info.get("token") == TOKEN:
-            request_body_jsn = await request.json()
-            update = telebot.types.Update.de_json(request_body_jsn)
-            bot.process_new_updates([update])
-            return web.Response()
-        else:
-            return web.Response(status = 403)
+        #request.match_info.get("token")
+        request_body_jsn = await request.json()
+        update = telebot.types.Update.de_json(request_body_jsn)
+        bot.process_new_updates([update])
+        return web.Response()
 
 telegram = Handler()
