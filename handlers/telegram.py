@@ -11,7 +11,7 @@ def get_token():
     dt = db.execute('''
         SELECT token FROM Webhook WHERE status = 1;
     ''', True)
-    token = dt[0][0] if len(dt) > 0 else None
+    token = dt[0][0] if dt and len(dt) > 0 else None
     if token:
         bot = telebot.TeleBot(token)
         bot.remove_webhook()
@@ -19,10 +19,9 @@ def get_token():
             bot.set_webhook(url='https://{0}:{1}/{2}/'.format(setting['SERVER_IP'], setting['WEBHOOK_PORT'], get_token()), certificate=open(os.path.join(os.getcwd() + "/", setting['WEBHOOK_SSL_CERT']), 'r'))
         else:
             print('Error webhook: SERT not found')
-    return token[0][0] if len(token) > 0 else None
+    return token[0][0] if token and len(token) > 0 else None
 
-token = get_token()
-bot = telebot.TeleBot(token)
+bot = telebot.TeleBot(get_token())
 
 @bot.message_handler(content_types=["text"])
 def text_command(message):

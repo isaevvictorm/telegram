@@ -84,3 +84,5 @@ def migration():
             `date` INTEGER
         );
     ''')
+
+    return True
