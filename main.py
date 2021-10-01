@@ -4,7 +4,6 @@ import jinja2
 from aiohttp import web
 from routes import routes
 import ssl
-import requests
 import os
 import pathlib
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
@@ -22,22 +21,11 @@ def make_app(app):
 migration.migration()
 
 # -============================
-# - Получаем IP - адрес сервера
-# -============================
-SERVER_IP = '0.0.0.0'
-try:
-    response = requests.get('http://ifconfig.me/ip')
-    SERVER_IP = response.content.decode()
-    print('IP-address server:', SERVER_IP)
-except Exception as ee:
-    print('Ошибка:', str(ee))
-
-# -============================
 # - Проверяем наличие сертификата
 # - и создаем его если нет
 # -============================
-if not os.path.exists(setting["WEBHOOK_SSL_CERT"]):
-    os.system('openssl req -newkey rsa:2048 -sha256 -nodes -keyout webhook_pkey.key -x509 -days 365 -out webhook_cert.pem -subj "/C=US/ST=Moscow/L=Moscow/O=bot/CN={0}"'.format(SERVER_IP))
+if not os.path.exists(os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_CERT"])):
+    os.system('openssl req -newkey rsa:2048 -sha256 -nodes -keyout webhook_pkey.key -x509 -days 365 -out webhook_cert.pem -subj "/C=US/ST=Moscow/L=Moscow/O=bot/CN={0}"'.format(setting['SERVER_IP']))
 
 # -============================
 # - Указываем путь к шаблонам
@@ -55,7 +43,7 @@ try:
     # - Добавляем сертификат
     # -============================
     context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    context.load_cert_chain(setting["WEBHOOK_SSL_CERT"], setting["WEBHOOK_SSL_PRIV"])
+    context.load_cert_chain(os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_CERT"]), os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_PRIV"]))
     web.run_app(
         make_app(app),
         host=setting["WEBHOOK_HOST"],
@@ -73,4 +61,4 @@ except:
             port=setting["WEBHOOK_PORT"],
         )
     except Exception as ee:
-        print("Ошибка запуска: ", str(ee))
+        print("Error: ", str(ee))

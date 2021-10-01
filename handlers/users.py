@@ -13,7 +13,7 @@ async def do(func, arg_obj):
     return await loop.run_in_executor(executor, func, arg_obj)
 
 def get_users(jsn, login = None):
-    where = "1='{0}'".format(login) if login else '1=1'
+    where = "login='{0}'".format(login) if login else '1=1'
     records = db.execute('''
         SELECT
             login,

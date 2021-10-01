@@ -40,7 +40,7 @@ class Auth:
     async def authenticate(self, login, password):
         dt = db.execute('''
             Select login, first_name, last_name, admin, password from User
-        ''')
+        ''',True)
         users = []
         for row in dt:
             users.append({
@@ -58,7 +58,7 @@ class Auth:
     async def get_user(self, login):
         dt = db.execute('''
             Select login, first_name, last_name, admin from User WHERE login = '{0}'
-        '''.format(login))
+        '''.format(login), True)
         if dt:
             users = []
             for row in dt:

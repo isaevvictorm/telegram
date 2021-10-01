@@ -9,9 +9,10 @@ def migration():
             `first_name` TEXT,
             `last_name` TEXT,
             `admin` INTEGER,
+            `date_remove` datetime,
             `date_insert` datetime default current_timestamp
         );
-    ''')
+    ''', True)
 
     # Добавляем учетную запись администратора "первого эшелона"
     db.executescript('''
@@ -23,7 +24,29 @@ def migration():
             'Admin' as last_name,
             1 as admin
         WHERE NOT EXISTS (SELECT * FROM User WHERE admin = 1);
-    ''')
+    ''', True)
+
+    # Таблица "Webhook"
+    db.executescript('''
+        CREATE TABLE "Webhook" (
+            `webhook_id` INTEGER PRIMARY KEY,
+            `name` TEXT,
+            `token` TEXT,
+            `admin` TEXT,
+            `status` INTEGER,
+            `date_insert` datetime default current_timestamp
+        );
+    ''', True)
+
+    db.executescript('''
+        INSERT INTO Webhook (name, token, admin, status)
+        Select
+            'debug' as name,
+            '980164770:AAEJw2Hy9YGKNlw_DW0Bo5KgPm4yXQaPrOU' as token,
+            '658586931' as admin,
+            1 as status
+        WHERE NOT EXISTS (SELECT * FROM Webhook);
+    ''', True)
 
     # Таблица "Контакты (Пользователи чата)"
     db.executescript('''
@@ -57,10 +80,7 @@ def migration():
             `message_id` INTEGER PRIMARY KEY,
             `chat_id` INTEGER,
             `text` TEXT,
+            `from_me` INTEGER,
             `date` INTEGER
         );
-    ''')
-
-    db.executescript('''
-        ALTER TABLE "Message" add from_me int;
     ''')
