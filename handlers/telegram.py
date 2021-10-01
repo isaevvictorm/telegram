@@ -23,7 +23,7 @@ def get_token():
 
 bot = telebot.TeleBot(get_token())
 
-@bot.message_handler(content_types=["text"])
+@bot.message_handler()
 def text_command(message):
     try:
         bot.send_message(message.chat.id, str(message))
