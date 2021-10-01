@@ -23,7 +23,14 @@ def get_token():
 
 bot = telebot.TeleBot(get_token())
 
-@bot.message_handler()
+@bot.message_handler(content_types=["text"])
+def text_command(message):
+    try:
+        bot.send_message(message.chat.id, str(message))
+    except Exception as ee:
+        print(str(ee))
+
+@bot.message_handler(content_types=["photo"])
 def text_command(message):
     try:
         bot.send_message(message.chat.id, str(message))
