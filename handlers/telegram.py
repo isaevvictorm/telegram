@@ -7,7 +7,6 @@ import os
 from .modules import db, setting
 from telebot import types
 
-
 def get_token():
     dt = db.execute('''
         SELECT token FROM Webhook WHERE status = 1;

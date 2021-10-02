@@ -2,7 +2,6 @@ from handlers import setting, migration
 import aiohttp_jinja2
 import jinja2
 from aiohttp import web
-from routes import routes
 import ssl
 import os
 import pathlib
@@ -18,7 +17,7 @@ def make_app(app):
 # -============================
 # - Создание таблиц БД и их обновление
 # -============================
-result = migration.migration()
+migration.migration()
 
 # -============================
 # - Указываем путь к шаблонам
@@ -28,6 +27,7 @@ aiohttp_jinja2.setup(app, loader = jinja2.FileSystemLoader(setting["TEMPLATE_DIR
 # -===========================================
 # - Указываем роуты и пути к файлам со стилями
 # -===========================================
+from routes import routes
 app.add_routes(routes)
 app.router.add_static('/static', pathlib.Path(os.getcwd() + '/static'), show_index = True)
 

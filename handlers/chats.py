@@ -17,14 +17,17 @@ def send_message(jsn):
     SELECT
         '{0}' as chat_id,
         '{1}' as text,
-        1 as from_me
+        1 as from_me;
     '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
     return True
 
 def get_message(jsn):
     try:
         dt = db.execute('''
-            SELECT * from Message
+            SELECT
+                * 
+            from
+                Message;
         ''')
         return dt, None
     except Exception as ee:
