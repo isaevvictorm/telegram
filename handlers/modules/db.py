@@ -15,17 +15,17 @@ def get_database():
         if len(records) > 0:
             return records[0][0]
         else:
-            return 'system'
+            return 'debug'
     except sqlite3.Error as e:
         if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
             print('Error DB: ' + str(e))
-        return 'system'
+        return 'debug'
 
 def execute(query, system = None):
     try:
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
-        conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(get_database()).split(':')[1])))
+        conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(get_database()).split(':')[0])))
         cursor = conn.cursor()
         cursor.execute("""
             {0}
@@ -44,7 +44,7 @@ def executescript(query, system = None):
     try:
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
-        conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(get_database()).split(':')[1])))
+        conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(get_database()).split(':')[0])))
         cursor = conn.cursor()
         cursor.executescript("""
             BEGIN TRANSACTION;

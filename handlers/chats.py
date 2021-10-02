@@ -16,6 +16,15 @@ def send_message(jsn):
     '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
     return True
 
+def get_message(jsn):
+    try:
+        dt = db.execute('''
+            SELECT * from Message
+        ''')
+        return dt, None
+    except Exception as ee:
+        return None, str(ee)
+
 class Handler:
     @template("chats/index.html")
     async def get(self, request):
@@ -47,15 +56,13 @@ class Handler:
                     return web.json_response({'result':True, 'err': None, 'table':[]})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
-        if method == "add":
+        if method == "get_message":
             try:
-                table, err = await do(add, jsn)
+                table, err = await do(get_message, jsn)
                 if err:
                     return web.json_response({'result':False, 'err': str(err), 'table':[]})
-                elif table and len(table) > 0:
-                    return web.json_response({'result':True, 'err': None, 'table':table})
                 else:
-                    return web.json_response({'result':False, 'err': "Не удалось добавить пользователя.", 'table':[]})
+                    return web.json_response({'result':True, 'err': None, 'table':table})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "delete":

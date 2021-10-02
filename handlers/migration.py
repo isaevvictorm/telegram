@@ -38,20 +38,10 @@ def migration():
         );
     ''', True)
 
-    db.executescript('''
-        INSERT INTO Webhook (name, token, admin, status)
-        Select
-            'debug' as name,
-            '980164770:AAEJw2Hy9YGKNlw_DW0Bo5KgPm4yXQaPrOU' as token,
-            '658586931' as admin,
-            1 as status
-        WHERE NOT EXISTS (SELECT * FROM Webhook);
-    ''', True)
-
     # Таблица "Контакты (Пользователи чата)"
     db.executescript('''
         CREATE TABLE "Contact" (
-            `user_id` INTEGER PRIMARY KEY,
+            `user_id` TEXT PRIMARY KEY,
             `first_name` TEXT,
             `last_name` TEXT,
             `username` TEXT,
@@ -65,23 +55,32 @@ def migration():
     # Таблица "Чаты"
     db.executescript('''
         CREATE TABLE "Chat" (
-            `chat_id` INTEGER PRIMARY KEY,
+            `chat_id` TEXT PRIMARY KEY,
             `first_name` TEXT,
             `last_name` TEXT,
             `username` TEXT,
             `type` TEXT,
-            `date` INTEGER
+            `date` INTEGER,
+            `date_insert` datetime default current_timestamp
         );
     ''')
 
     # Таблица "Сообщения"
     db.executescript('''
         CREATE TABLE "Message" (
-            `message_id` INTEGER PRIMARY KEY,
-            `chat_id` INTEGER,
+            `rid` INTEGER PRIMARY KEY AUTOINCREMENT,
+            `content_type` TEXT,
+            `message_id` INTEGER,
+            `from_user__id` TEXT,
+            `is_bot` INTEGER,
+            `chat__id` TEXT,
             `text` TEXT,
             `from_me` INTEGER,
-            `date` INTEGER
+            `date` INTEGER,
+            `caption` TEXT,
+            `file_id` TEXT,
+            `file_unique_id` TEXT,
+            `date_insert` datetime default current_timestamp
         );
     ''')
 

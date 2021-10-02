@@ -11,7 +11,7 @@ def get_token():
     dt = db.execute('''
         SELECT token FROM Webhook WHERE status = 1;
     ''', True)
-    token = dt[0][0] if dt and len(dt) > 0 else None
+    token = dt[0][0] if dt and len(dt) > 0 else setting['TOKEN_DEBUG']
     if token:
         bot = telebot.TeleBot(token)
         bot.remove_webhook()
@@ -26,14 +26,60 @@ bot = telebot.TeleBot(get_token())
 @bot.message_handler(content_types=["text"])
 def text_command(message):
     try:
-        bot.send_message(message.chat.id, str(message))
+        dt = db.executescript('''
+            INSERT INTO Message (
+                content_type,
+                message_id,
+                from_user__id,
+                is_bot,
+                chat__id,
+                text,
+                from_me,
+                date
+            )
+            Select
+                'text' as content_type,
+                {0} as message_id,
+                '{1}' as from_user__id,
+                0 as is_bot,
+                '{2}' as chat__id,
+                '{3}' as text,
+                0 as from_me,
+                {4} as date
+        '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date))
+        bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
         print(str(ee))
 
 @bot.message_handler(content_types=["photo"])
 def text_command(message):
     try:
-        bot.send_message(message.chat.id, str(message))
+        dt = db.executescript('''
+            INSERT INTO Message (
+                content_type,
+                message_id,
+                from_user__id,
+                is_bot,
+                chat__id,
+                caption,
+                from_me,
+                date,
+                file_id,
+                file_unique_id
+            )
+            Select
+                'photo' as content_type,
+                {0} as message_id,
+                '{1}' as from_user__id,
+                0 as is_bot,
+                '{2}' as chat__id,
+                '{3}' as caption,
+                0 as from_me,
+                {4} as date,
+                '{5}' as file_id,
+                '{6}' as file_unique_id
+        '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, message.json.photo[2].file_id, message.json.photo[2].file_unique_id))
+        bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
         print(str(ee))
 

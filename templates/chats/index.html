@@ -167,6 +167,28 @@
 </div>
 
 <script >
+
+$(document).ready(function(){
+  getMessage();
+});
+
+function getMessage(){
+    $.ajax({
+      type: 'POST',
+      url: '/chats',
+      data: JSON.stringify({"method":"get_message"}),
+      success: function(response){
+          if (response.result){
+            console.log(response);
+          }
+          else {
+            console.log(response);
+          }
+      },
+      dataType:"json",
+    });
+};
+
 function newMessage() {
 	message = $(".message-input textarea").val();
 	if($.trim(message) == '') {
