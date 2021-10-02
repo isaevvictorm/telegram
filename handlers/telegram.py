@@ -78,7 +78,7 @@ def text_command(message):
                 {4} as date,
                 '{5}' as file_id,
                 '{6}' as file_unique_id;
-        '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, json.loads(message.json)['photo'][2]['file_id'], json.loads(message.json)['photo'][2]['file_unique_id']))
+        '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, json.dumps(message.json)['photo'][2]['file_id'], json.dumps(message.json)['photo'][2]['file_unique_id']))
         bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
         print(str(ee))
