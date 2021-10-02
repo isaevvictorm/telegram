@@ -45,7 +45,7 @@ def text_command(message):
                 '{2}' as chat__id,
                 '{3}' as text,
                 0 as from_me,
-                {4} as date
+                {4} as date;
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date))
         bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
@@ -77,7 +77,7 @@ def text_command(message):
                 0 as from_me,
                 {4} as date,
                 '{5}' as file_id,
-                '{6}' as file_unique_id
+                '{6}' as file_unique_id;
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, message.json.photo[2].file_id, message.json.photo[2].file_unique_id))
         bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
