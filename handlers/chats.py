@@ -6,6 +6,11 @@ import asyncio
 from .modules import Auth
 from .modules import db
 
+async def do(func, arg_obj):
+    loop = asyncio.get_event_loop()
+    executor = ThreadPoolExecutor(max_workers = 100)
+    return await loop.run_in_executor(executor, func, arg_obj)
+
 def send_message(jsn):
     dt = db.execute('''
     INSERT INTO Message (chat_id, text, from_me)
