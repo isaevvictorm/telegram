@@ -1,3 +1,16 @@
+# Скачиваем NGNIX
+sudo apt update -y
+sudo apt install nginx -y
+sudo ufw allow 'Nginx Full'
+
+1. Проверка №1
+systemctl status nginx
+2. Проверка №2
+http://IP_адрес_вашего_сервера
+
+sudo systemctl stop nginx
+sudo systemctl start nginx
+
 # Скачиваем репозиторий с git в папку /var/www/проект/
 ```python
 sudo git init
