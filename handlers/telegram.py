@@ -16,7 +16,7 @@ def get_token():
         bot = telebot.TeleBot(token)
         bot.remove_webhook()
         if os.path.exists(os.path.join(os.getcwd() + "/", setting['WEBHOOK_SSL_CERT'])):
-            bot.set_webhook(url='https://{0}:{1}/{2}/'.format(setting['SERVER_IP'], setting['WEBHOOK_PORT'], token), certificate=open(os.path.join(os.getcwd() + "/", setting['WEBHOOK_SSL_CERT']), 'r'))
+            bot.set_webhook(url='https://{0}:{1}/{2}/'.format(setting['DOMEN'] if len(setting['DOMEN']) > 0 else setting['SERVER_IP'], setting['WEBHOOK_PORT'], token), certificate=open(os.path.join(os.getcwd() + "/", setting['WEBHOOK_SSL_CERT']), 'r'))
         else:
             print('Error webhook: SERT not found')
     return token
