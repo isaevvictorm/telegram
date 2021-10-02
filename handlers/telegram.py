@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from concurrent.futures import ThreadPoolExecutor
 from aiohttp import web
 import asyncio
 import telebot
@@ -6,6 +7,11 @@ import json
 import os
 from .modules import db, setting
 from telebot import types
+
+async def do(func, arg_obj):
+    loop = asyncio.get_event_loop()
+    executor = ThreadPoolExecutor(max_workers=100)
+    return await loop.run_in_executor(executor, func, arg_obj)
 
 def get_token():
     dt = db.execute('''
