@@ -1,4 +1,4 @@
-#[program:telegram]
+#!/bin/bash
 
 cd /var/www/telegram/
 git pull git@github.com:isaevvictorm/telegram.git main
