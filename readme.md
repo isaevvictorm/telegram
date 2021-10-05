@@ -1,16 +1,3 @@
-# Скачиваем NGNIX
-sudo apt update -y
-sudo apt install nginx -y
-sudo ufw allow 'Nginx Full'
-
-1. Проверка №1
-systemctl status nginx
-2. Проверка №2
-http://IP_адрес_вашего_сервера
-
-sudo systemctl stop nginx
-sudo systemctl start nginx
-
 # Скачиваем репозиторий с git в папку /var/www/проект/
 ```python
 sudo git init
@@ -19,9 +6,20 @@ eval `ssh-agent -s`
 ssh-add
 git pull git@github.com:isaevvictorm/telegram.git main
 ```
+
+# Сертификат NGNIX
+sudo systemctl stop nginx
+cd /var/www/telegram/startup/golang/LetsEncryptHandler
+./LetsEncryptHandler
+rm ./certs/your_domain.ru
+curl https://your_domain.ru
+[ctrl+c]
+systemctl start nginx
+
 # Автоматическая установка из /var/www/проект/
 chmod +x install.sh
 ./install.sh
+chmod +x restart
 
 # Первые шаги
 1. Копируем файл "config_default.json" и переименовываем его в "config.json"
@@ -29,6 +27,4 @@ chmod +x install.sh
 3. Указываем токен и имя бота в файле "config.json"
 
 # Запускаем проект из /var/www/проект/
-```python
-pm2 start main.py --interpreter=python3.8
-```
+./restart

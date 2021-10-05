@@ -2,9 +2,12 @@
 echo "Разворачиваем необходимое ПО (Python3.8, необходимые библиотеки и др.)"
 
 sudo apt update -y
+sudo apt install nginx -y
+sudo ufw allow 'Nginx Full'
+sudo apt install golang -y
+
 sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:deadsnakes/ppa -y
-sudo apt update -y
 
 sudo apt install python3.8 -y
 sudo apt-get install python3-pip -y
