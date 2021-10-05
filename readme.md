@@ -15,7 +15,9 @@ sudo systemctl start nginx
 ```python
 sudo git init
 ssh-keygen -t ed25519 -C "isaevvictorm@example.com"
-sudo git pull git@github.com:isaevvictorm/telegram.git main
+eval `ssh-agent -s`
+ssh-add
+git pull git@github.com:isaevvictorm/telegram.git main
 ```
 # Автоматическая установка из /var/www/проект/
 chmod +x install.sh
