@@ -1,6 +1,6 @@
 #[program:telegram]
 
 cd /var/www/telegram/
-sudo git pull git@github.com:isaevvictorm/telegram.git main
+git pull git@github.com:isaevvictorm/telegram.git main
 pm2 delete telegram
 pm2 start "python3.8 main.py" --name=telegram
