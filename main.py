@@ -39,7 +39,7 @@ try:
     #context.load_cert_chain(os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_CERT"]), os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_PRIV"]))
     web.run_app(
         make_app(app),
-        host=setting["WEBHOOK_HOST"],
+        #host=setting["WEBHOOK_HOST"],
         port=setting["WEBHOOK_PORT"],
         #ssl_context=context,
     )
