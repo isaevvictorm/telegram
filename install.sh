@@ -4,7 +4,9 @@ echo "Разворачиваем необходимое ПО (Python3.8, нео�
 sudo apt update -y
 sudo apt install nginx -y
 sudo ufw allow 'Nginx Full'
-sudo apt install golang -y
+
+sudo add-apt-repository ppa:certbot/certbot -y
+sudo apt install python-certbot-nginx -y
 
 sudo apt install software-properties-common -y
 sudo add-apt-repository ppa:deadsnakes/ppa -y

@@ -6,20 +6,13 @@ eval `ssh-agent -s`
 ssh-add
 git pull git@github.com:isaevvictorm/telegram.git main
 ```
-
-# Сертификат NGNIX
-sudo systemctl stop nginx
-cd /var/www/telegram/startup/golang/LetsEncryptHandler
-./LetsEncryptHandler
-rm ./certs/your_domain.ru
-curl https://your_domain.ru
-[ctrl+c]
-systemctl start nginx
-
 # Автоматическая установка из /var/www/проект/
 chmod +x install.sh
 ./install.sh
 chmod +x restart
+
+# Сертификат NGNIX
+https://www.digitalocean.com/community/tutorials/nginx-let-s-encrypt-ubuntu-18-04-ru
 
 # Первые шаги
 1. Копируем файл "config_default.json" и переименовываем его в "config.json"

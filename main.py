@@ -31,27 +31,14 @@ from routes import routes
 app.add_routes(routes)
 app.router.add_static('/static', pathlib.Path(os.getcwd() + '/static'), show_index = True)
 
-try:
-    # -============================
-    # - Добавляем сертификат
-    # -============================
-    #context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-    #context.load_cert_chain(os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_CERT"]), os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_PRIV"]))
-    web.run_app(
-        make_app(app),
-        #host=setting["WEBHOOK_HOST"],
-        port=setting["WEBHOOK_PORT"],
-        #ssl_context=context,
-    )
-except:
-    # -============================
-    # - Без сертификата
-    # -============================
-    try:
-        web.run_app(
-            make_app(app),
-            host=setting["WEBHOOK_HOST"],
-            port=setting["WEBHOOK_PORT"],
-        )
-    except Exception as ee:
-        print("Error: ", str(ee))
+# -============================
+# - Добавляем сертификат
+# -============================
+#context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+#context.load_cert_chain(os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_CERT"]), os.path.join(os.getcwd() + "/", setting["WEBHOOK_SSL_PRIV"]))
+web.run_app(
+    make_app(app),
+    #host=setting["WEBHOOK_HOST"],
+    port=setting["WEBHOOK_PORT"],
+    #ssl_context=context,
+)
