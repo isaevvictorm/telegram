@@ -32,6 +32,7 @@ app.add_routes(routes)
 app.router.add_static('/static', pathlib.Path(os.getcwd() + '/static'), show_index = True)
 
 try:
+    print('asd'/123)
     # -============================
     # - Добавляем сертификат
     # -============================
