@@ -11,7 +11,7 @@ import (
 func main() {
 	certManager := autocert.Manager{
 		Prompt:     autocert.AcceptTOS,
-		HostPolicy: autocert.HostWhitelist("665973-cq09215.tmweb.ru", "109.68.212.102"), //Your domain here
+		HostPolicy: autocert.HostWhitelist("665973-cq09215.tmweb.ru", "irvicorp.ru"), //Your domain here
 		Cache:      autocert.DirCache("./certs"),             //Folder for storing certificates
 	}
 

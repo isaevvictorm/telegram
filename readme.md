@@ -27,4 +27,4 @@ chmod +x restart
 3. Указываем токен и имя бота в файле "config.json"
 
 # Запускаем проект из /var/www/проект/
-./restart
+/var/www/telegram/restart
