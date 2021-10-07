@@ -61,7 +61,6 @@ $(document).ready(function(){
 
 
 $(document).on('click', '#btn_add', function(e){
-    e.preventDefault();
     if (document.getElementById('login').value == ""){
       generate_alert("Придумайте логин... ", "error");
       return false;
