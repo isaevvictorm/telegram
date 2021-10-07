@@ -99,8 +99,11 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "delete":
             try:
-                result, error = await do(delete, jsn)
-                return web.json_response({"result":result,"err":error})
+                result, err = await do(delete, jsn)
+                if result:
+                    return web.json_response({"result":True, "err": None})
+                else:
+                    return web.json_response({"result":False,"err": str(err)})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})
 

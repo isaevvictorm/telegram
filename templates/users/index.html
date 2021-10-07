@@ -146,7 +146,7 @@ $(document).on('click', '#btn_delete', function(){
     $.ajax({
       type: 'POST',
       url: '/users',
-      data: JSON.stringify({"method":"delete", "login":login}),
+      data: JSON.stringify({"method":"delete", "login": login}),
       success: function(response){
           if (response.result){
             generate_alert("Пользователь успешно удален.", "success");
