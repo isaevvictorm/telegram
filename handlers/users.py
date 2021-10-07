@@ -57,7 +57,7 @@ def add(jsn):
 def delete(jsn):
     user_id = jsn['login']
     try:
-        records = db.execute("""
+        records = db.executescript("""
             DELETE FROM User where login = {0};
         """.format(user_id), True)
     except Exception as ee:
