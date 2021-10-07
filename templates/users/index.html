@@ -96,7 +96,7 @@ $(document).on('click', '#btn_add', function(e){
               table = $('#table_users').DataTable();
               table.row.add( response.table[0] ).draw();
               generate_alert("Пользователь успешно добавлен.", "success");
-              $('.bd-example-modal-lg-add_user').modal('toggle');
+              $('.bd-example-modal-lg-add-user').modal('toggle');
             }
             else {
               generate_alert("При добавлении пользователя возникла ошибка: " + response.err, "error");
