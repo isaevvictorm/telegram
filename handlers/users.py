@@ -22,7 +22,7 @@ def get_users(jsn, login = None):
             admin,
             date_insert
         FROM User WHERE ({0});
-    '''.format(where))
+    '''.format(where), True)
     table = []
     for row in records:
         table_row = {
@@ -44,7 +44,7 @@ def add(jsn):
             '{2}' last_name,
             '{3}' password,
             {4} admin;
-    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['admin']))
+    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['admin']), True)
     # ==========================
     # Предусмотреть вывод ошибок
     # ==========================>>>
@@ -59,7 +59,7 @@ def delete(jsn):
     try:
         records = db.execute("""
             DELETE FROM User where login = {0};
-        """.format(user_id))
+        """.format(user_id), True)
     except Exception as ee:
         return False, str(ee)
     return True, None
