@@ -13,7 +13,7 @@ async def do(func, arg_obj):
 
 def send_message(jsn):
     dt = db.execute('''
-    INSERT INTO Message (chat_id, text, from_me)
+    INSERT INTO Message  (chat_id, text, from_me)
     SELECT
         '{0}' as chat_id,
         '{1}' as text,
@@ -21,11 +21,45 @@ def send_message(jsn):
     '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
     return True
 
+def get_contacts(jsn):
+    records = db.execute('''
+        Select
+            first_name,
+            last_name,
+            text as message,
+            date_insert
+        from
+        (
+            SELECT
+                first_name,
+                last_name,
+                t2.text,
+                t2.date_insert,
+                row_number() over (partition by t2.chat_id order by date_insert desc) as mx
+            FROM
+                Contact t1
+                inner join
+                Message t2 on t1.user_id = t2.chat_id
+            WHERE
+                date_answer is null
+        )tt where mx = 1;
+    ''')
+    table = []
+    for row in records:
+        table_row = {
+            "first_name": row[0],
+            "last_name": row[1],
+            "message": row[2],
+            "date_insert": str(row[3]),
+        }
+        table.append(table_row)
+    return table
+
 def get_message(jsn):
     try:
         dt = db.execute('''
             SELECT
-                * 
+                *
             from
                 Message;
         ''')
@@ -55,9 +89,9 @@ class Handler:
                     return web.json_response({'result':False, 'err': None})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
-        if method == "get_users":
+        if method == "get_contacts":
             try:
-                table = await do(get_users, jsn)
+                table = await do(get_contacts, jsn)
                 if len(table) > 0:
                     return web.json_response({'result':True, 'err': None, 'table':table})
                 else:

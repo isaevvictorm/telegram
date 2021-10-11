@@ -7,7 +7,7 @@
 <div id="frame">
 	<div id="sidepanel">
 		<div id="contacts">
-			<ul>
+			<ul id = contacts_ul>
 				<li class="contact">
 					<div class="wrap">
 						<span class="contact-status online"></span>
@@ -176,10 +176,23 @@ function getMessage(){
     $.ajax({
       type: 'POST',
       url: '/chats',
-      data: JSON.stringify({"method":"get_message"}),
+      data: JSON.stringify({"method":"get_contacts"}),
       success: function(response){
           if (response.result){
-            console.log(response);
+            for (var i = 0; i < response.table.length; i++) {
+							$('#contacts_ul').append('\
+							<li class="contact">\
+								<div class="wrap">\
+									<span class="contact-status online"></span>\
+									<img src="static/img/user.png" alt="" />\
+									<div class="meta">\
+										<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name'</p>\
+										<p class="preview">'+response.table[i].message+'</p>\
+									</div>\
+								</div>\
+							</li>\
+							')
+            }
           }
           else {
             console.log(response);
