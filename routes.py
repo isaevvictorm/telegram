@@ -15,7 +15,14 @@ routes=[
     # ---------------------------
     web.post('/users',users.post),
     web.get('/users',users.get),
-
+    # ---------------------------
+    # Управление чатами
+    # ---------------------------
     web.post('/chats',chats.post),
     web.get('/chats',chats.get),
+    # ---------------------------
+    # Список контактов
+    # ---------------------------
+    web.post('/contacts',contacts.post),
+    web.get('/contacts',contacts.get),
 ]

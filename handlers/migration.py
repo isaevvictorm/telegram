@@ -44,11 +44,17 @@ def migration():
             `user_id` TEXT PRIMARY KEY,
             `first_name` TEXT,
             `last_name` TEXT,
+            `patronymic` TEXT,
+            `birthday` date,
             `username` TEXT,
             `is_bot` TEXT,
             `language_code` TEXT,
             `phone_number` TEXT,
-            `date` INTEGER
+            `city` TEXT,
+            `email` TEXT,
+            `skype` TEXT,
+            `date` INTEGER,
+            `date_insert` datetime default current_timestamp
         );
     ''')
 
@@ -80,6 +86,7 @@ def migration():
             `caption` TEXT,
             `file_id` TEXT,
             `file_unique_id` TEXT,
+            `date_answer` datetime,
             `date_insert` datetime default current_timestamp
         );
     ''')

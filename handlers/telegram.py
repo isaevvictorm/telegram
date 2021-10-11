@@ -11,7 +11,10 @@ def get_token():
     dt = db.execute('''
         SELECT token FROM Webhook WHERE status = 1;
     ''', True)
-    token = dt[0][0] if dt and len(dt) > 0 else setting['TOKEN_DEBUG']
+    try:
+        token = dt[0][0] if dt and len(dt) > 0 else setting['TOKEN_DEBUG']
+    except:
+        token = setting['TOKEN_DEBUG']
     if token:
         bot = telebot.TeleBot(token)
         bot.remove_webhook()
@@ -77,6 +80,29 @@ def text_command(message):
                 '{6}' as file_unique_id;
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, json.dumps(message.json)['photo'][2]['file_id'], json.dumps(message.json)['photo'][2]['file_unique_id']))
         bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
+    except Exception as ee:
+        print(str(ee))
+
+@bot.message_handler(commands=["start"])
+def start_command(message):
+    try:
+        dt = db.executescript('''
+            INSERT INTO Contact (
+                user_id,
+                first_name,
+                last_name,
+                username
+            )
+            Select
+                '{0}' user_id,
+                '{1}' first_name,
+                '{2}' last_name,
+                '{3}' username;
+        '''.format( message.from_user.id,
+                    message.from_user.first_name,
+                    message.from_user.last_name,
+                    message.from_user.username))
+        bot.send_message(message.chat.id, str('Привет! Меня зовут Харпер, могу я чем-то помочь?'))
     except Exception as ee:
         print(str(ee))
 
