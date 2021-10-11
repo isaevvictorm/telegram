@@ -88,18 +88,14 @@ $(document).on('click', '#btn_delete', function(){
     table = $('#table_contacts').DataTable();
     var row  = $(this).parents('tr')[0];
     var data = table.row( row ).data();
-    var login  = data.login;
-    if (login == "{{data.login}}"){
-      generate_alert("Вы не можете удалить свою учетную запись....", "error");
-      return false;
-    }
+    var login  = data.user_id;
     $.ajax({
       type: 'POST',
-      url: '/users',
+      url: '/contacts',
       data: JSON.stringify({"method":"delete", "login": login}),
       success: function(response){
           if (response.result){
-            generate_alert("Пользователь успешно удален.", "success");
+            generate_alert("Контакт успешно удален.", "success");
             table.row( row ).remove().draw();
           }
           else {
@@ -140,7 +136,7 @@ $(document).on('click', '#btn_delete', function(){
                <th>Город</th>
                <th>E-mail</th>
                <th>Skype</th>
-               <th>date_insert</th>
+               <th>Дата добавления</th>
                <th>Управление</th>
              </tr>
              </thead>
@@ -156,7 +152,7 @@ $(document).on('click', '#btn_delete', function(){
                <th>Город</th>
                <th>E-mail</th>
                <th>Skype</th>
-               <th>date_insert</th>
+               <th>Дата добавления</th>
                <th>Управление</th>
              </tr>
              </tfoot>
