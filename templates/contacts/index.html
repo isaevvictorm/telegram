@@ -38,12 +38,18 @@ function refresh_table(data){
         "autoWidth": true,
         data: data,
         columns: [
-            {  data: 'login', className: "text-center export"},
+            {  data: 'user_id', className: "text-center export"},
             {  data: 'first_name', className: "text-center export"},
             {  data: 'last_name', className: "text-center export"},
-            {  data: 'admin', className: "text-center export"},
+            {  data: 'patronymic', className: "text-center export"},
+            {  data: 'birthday', className: "text-center export"},
+            {  data: 'username', className: "text-center export"},
+            {  data: 'phone_number', className: "text-center export"},
+            {  data: 'city', className: "text-center export"},
+            {  data: 'email', className: "text-center export"},
+            {  data: 'skype', className: "text-center export"},
             {  data: 'date_insert', className: "text-center export"},
-            {  data: 'login', className: "text-center", "mRender": function(data, type, full){
+            {  data: 'user_id', className: "text-center", "mRender": function(data, type, full){
                 return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_edit" class="dropdown-item"><i class="icon-pencil"></i>Изменить</a><a id = "btn_delete" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
               }
             }
@@ -124,21 +130,33 @@ $(document).on('click', '#btn_delete', function(){
          <table id="table_contacts" class="table table-striped table-hover table-bordered hover" style="width:100%" hidden>
              <thead>
              <tr role="row">
-               <th>Логин</th>
+               <th>#</th>
                <th>Имя</th>
                <th>Фамилия</th>
-               <th>Админ</th>
-               <th>Дата добавления</th>
+               <th>Отчество</th>
+               <th>День рождения</th>
+               <th>Логин</th>
+               <th>Телефон</th>
+               <th>Город</th>
+               <th>E-mail</th>
+               <th>Skype</th>
+               <th>date_insert</th>
                <th>Управление</th>
              </tr>
              </thead>
              <tfoot>
              <tr role="row">
-               <th>Логин</th>
+               <th>#</th>
                <th>Имя</th>
                <th>Фамилия</th>
-               <th>Админ</th>
-               <th>Дата добавления</th>
+               <th>Отчество</th>
+               <th>День рождения</th>
+               <th>Логин</th>
+               <th>Телефон</th>
+               <th>Город</th>
+               <th>E-mail</th>
+               <th>Skype</th>
+               <th>date_insert</th>
                <th>Управление</th>
              </tr>
              </tfoot>
