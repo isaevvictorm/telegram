@@ -72,7 +72,7 @@ class Handler:
         method = jsn['method']
         if method == "get_contacts":
             try:
-                table = await do(get_users, jsn)
+                table = await do(get_contacts, jsn)
                 if len(table) > 0:
                     return web.json_response({'result':True, 'err': None, 'table':table})
                 else:
