@@ -88,11 +88,11 @@ $(document).on('click', '#btn_delete', function(){
     table = $('#table_contacts').DataTable();
     var row  = $(this).parents('tr')[0];
     var data = table.row( row ).data();
-    var login  = data.user_id;
+    var user_id  = data.user_id;
     $.ajax({
       type: 'POST',
       url: '/contacts',
-      data: JSON.stringify({"method":"delete", "login": login}),
+      data: JSON.stringify({"method":"delete", "user_id": user_id}),
       success: function(response){
           if (response.result){
             generate_alert("Контакт успешно удален.", "success");
