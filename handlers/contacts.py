@@ -28,7 +28,7 @@ def get_contacts(jsn, user_id = None):
             skype,
             date_insert
         FROM Contact WHERE ({0});
-    '''.format(where), True)
+    '''.format(where))
     table = []
     for row in records:
         table_row = {
@@ -52,7 +52,7 @@ def delete(jsn):
     try:
         records = db.executescript("""
             DELETE FROM Contact where user_id = '{0}';
-        """.format(user_id), True)
+        """.format(user_id))
     except Exception as ee:
         return False, str(ee)
     return True, None
