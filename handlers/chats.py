@@ -35,11 +35,11 @@ def get_contacts(jsn):
                 last_name,
                 t2.text,
                 t2.date_insert,
-                row_number() over (partition by t2.chat_id order by date_insert desc) as mx
+                row_number() over (partition by t2.chat__id order by t2.date_insert desc) as mx
             FROM
                 Contact t1
                 inner join
-                Message t2 on t1.user_id = t2.chat_id
+                Message t2 on t1.user_id = t2.chat__id
             WHERE
                 date_answer is null
         )tt where mx = 1;
