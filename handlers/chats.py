@@ -42,7 +42,7 @@ def get_contacts(jsn):
                 Message t2 on t1.user_id = t2.chat__id
             WHERE
                 date_answer is null
-        )tt where mx = 1;
+        )tt where mx = 1
     ''')
     table = []
     for row in records:
