@@ -71,14 +71,14 @@ class Handler:
         jsn = await request.json()
         method = jsn['method']
         if method == "get_contacts":
-            #try:
-            table = await do(get_contacts, jsn)
-            if len(table) > 0:
-                return web.json_response({'result':True, 'err': None, 'table':table})
-            else:
-                return web.json_response({'result':True, 'err': None, 'table':[]})
-            #except Exception as ee:
-            #    return web.json_response({"result":False,"err":str(ee),"table":[]})
+            try:
+                table = await do(get_contacts, jsn)
+                if len(table) > 0:
+                    return web.json_response({'result':True, 'err': None, 'table':table})
+                else:
+                    return web.json_response({'result':True, 'err': None, 'table':[]})
+            except Exception as ee:
+                return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "delete":
             try:
                 result, err = await do(delete, jsn)

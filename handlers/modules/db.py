@@ -34,11 +34,11 @@ def execute(query, system = None):
         if len(records) > 0:
             return records
         else:
-            return None
+            return []
     except sqlite3.Error as e:
         if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
             print('Error DB: ' + str(e))
-        return None
+        return []
 
 def executescript(query, system = None):
     try:
@@ -57,8 +57,8 @@ def executescript(query, system = None):
         if len(records) > 0:
             return records
         else:
-            return None
+            return []
     except sqlite3.Error as e:
         if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
             print('Error DB: ' + str(e))
-        return None
+        return []
