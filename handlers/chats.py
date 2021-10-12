@@ -34,6 +34,7 @@ def get_contacts(jsn):
             SELECT
                 t1.user_id,
                 first_name,
+                username,
                 last_name,
                 max(t2.date_insert) as date_insert
             FROM
@@ -45,6 +46,7 @@ def get_contacts(jsn):
             GROUP BY
                 first_name,
                 last_name,
+                username,
                 t1.user_id
         )t1
         inner join
