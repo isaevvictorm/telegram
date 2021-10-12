@@ -180,7 +180,7 @@ function getContacts(){
       success: function(response){
           if (response.result){
             for (var i = 0; i < response.table.length; i++) {
-							$('#contacts_ul').append('\
+							$('#contacts_ul').prepend('\
 							<li class="contact">\
 								<div class="wrap">\
 									<span class="contact-status online"></span>\
