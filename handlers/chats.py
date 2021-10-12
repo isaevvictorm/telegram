@@ -26,6 +26,7 @@ def get_contacts(jsn):
         Select
             t1.first_name,
             t1.last_name,
+            t1.username,
             t2.text as message,
             t1.date_insert
         from
@@ -48,7 +49,7 @@ def get_contacts(jsn):
         )t1
         inner join
         Message t2 on t1.user_id = t2.chat__id and t1.date_insert = t2.date_insert
-
+        order by t2.date_insert desc
         ;
     ''')
     table = []
