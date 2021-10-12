@@ -24,23 +24,32 @@ def send_message(jsn):
 def get_contacts(jsn):
     records = db.execute('''
         Select
-            first_name,
-            last_name,
-            text as message,
-            date_insert
+            t1.first_name,
+            t1.last_name,
+            t2.text as message,
+            t1.date_insert
         from
         (
             SELECT
+                t1.user_id,
                 first_name,
                 last_name,
-                t2.text,
-                t2.date_insert,
-                row_number() over (partition by t2.chat__id order by t2.date_insert desc) as mx
+                max(t2.date_insert) as date_insert
             FROM
                 Contact t1
                 inner join
                 Message t2 on t1.user_id = t2.chat__id
-        )tt where mx = 1
+            WHERE
+                date_answer is null
+            GROUP BY
+                first_name,
+                last_name,
+                t1.user_id
+        )t1
+        inner join
+        Message t2 on t1.user_id = t2.chat__id and t1.date_insert = t2.date_insert
+
+        ;
     ''')
     table = []
     for row in records:
