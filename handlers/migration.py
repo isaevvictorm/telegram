@@ -87,7 +87,7 @@ def migration():
     # ----------------------
     # Таблица "Сообщения"
     # ----------------------
-    db.executescript('''
+    db.exec('''
         CREATE TABLE "Message" (
             `rid` INTEGER PRIMARY KEY AUTOINCREMENT,
             `content_type` TEXT,
