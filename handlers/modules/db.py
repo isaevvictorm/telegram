@@ -33,45 +33,37 @@ class DBResult:
 
 class DB:
 
-    conn = None
-
     def __init__(self, system = False):
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
-        self.conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(setting['TOKEN']).split(':')[0])))
-
-    def __del__(self):
-        self.conn.close()
-
-    def close(self):
-        self.conn.close()
 
     def exec(self, query):
         try:
-            cursor = self.conn.cursor()
-            lst=[]
-            cursor.execute(query)
-            try:
-                row = cursor.fetchone()
-                columns = [column[0] for column in cursor.description]
-                column_d = cursor.description
-                while row:
-                    row_dct=dict()
-                    for i in range(0,len(row)):
-                        row_dct.update({columns[i]:row[i]})
-                    lst.append(row_dct)
+            with sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(setting['TOKEN']).split(':')[0]))) as conn:
+                cursor = self.conn.cursor()
+                lst=[]
+                cursor.execute(query)
+                try:
                     row = cursor.fetchone()
-                if not lst:
-                    return DBResult(True,cursor.rowcount,[],columns,None,column_d)
-                return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
-            except sqlite3.Error as ee:
-                if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
-                    self.conn.commit()
-                    return  DBResult(True,cursor.rowcount,[],[],None,None)
-                else:
+                    columns = [column[0] for column in cursor.description]
+                    column_d = cursor.description
+                    while row:
+                        row_dct=dict()
+                        for i in range(0,len(row)):
+                            row_dct.update({columns[i]:row[i]})
+                        lst.append(row_dct)
+                        row = cursor.fetchone()
+                    if not lst:
+                        return DBResult(True,cursor.rowcount,[],columns,None,column_d)
+                    return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
+                except sqlite3.Error as ee:
+                    if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
+                        self.conn.commit()
+                        return  DBResult(True,cursor.rowcount,[],[],None,None)
+                    else:
+                        return  DBResult(False,0,[],[],ee,None)
+                except Exception as ee:
                     return  DBResult(False,0,[],[],ee,None)
-            except Exception as ee:
-                return  DBResult(False,0,[],[],ee,None)
         except Exception as e:
             return DBResult(False,0,[],[],e,None)
 
