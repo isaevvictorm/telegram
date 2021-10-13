@@ -7,7 +7,15 @@ import os
 from .modules import DB, setting
 from telebot import types
 
+# -============================
+# - Токен
+# -============================
 bot = telebot.TeleBot(setting['TOKEN'])
+try:
+    bot.remove_webhook()
+    bot.set_webhook(url='https://{0}/{1}/'.format(setting['DOMAIN'], setting['TOKEN']))
+except Exception as ee:
+    print(ee)
 
 @bot.message_handler(commands=['start', 'help'])
 def start_command(message):

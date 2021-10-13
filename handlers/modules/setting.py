@@ -12,13 +12,6 @@ except Exception as ee:
     print("Error: ({0})".format(str(ee)))
 
 # -============================
-# - Токен
-# -============================
-bot = telebot.TeleBot(setting['TOKEN'])
-bot.remove_webhook()
-bot.set_webhook(url='https://{0}/{1}/'.format(setting['DOMAIN'], setting['TOKEN']))
-
-# -============================
 # - Получаем IP - адрес сервера
 # -============================
 try:
