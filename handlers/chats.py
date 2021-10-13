@@ -4,7 +4,7 @@ from aiohttp import web
 from aiohttp_jinja2 import template
 import asyncio
 from .modules import Auth
-from .modules import db
+from .modules import DB
 
 async def do(func, arg_obj):
     loop = asyncio.get_event_loop()
@@ -12,17 +12,19 @@ async def do(func, arg_obj):
     return await loop.run_in_executor(executor, func, arg_obj)
 
 def send_message(jsn):
-    dt = db.execute('''
-    INSERT INTO Message  (chat_id, text, from_me)
-    SELECT
-        '{0}' as chat_id,
-        '{1}' as text,
-        1 as from_me;
-    '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
+    db = DB()
+    dt = db.exec('''
+        INSERT INTO Message  (chat_id, text, from_me)
+        SELECT
+            '{0}' as chat_id,
+            '{1}' as text,
+            1 as from_me;
+        '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
     return True
 
 def get_contacts(jsn):
-    records = db.execute('''
+    db = DB()
+    dt = db.exec('''
         Select
             t1.first_name,
             t1.last_name,
@@ -56,21 +58,22 @@ def get_contacts(jsn):
         ;
     ''')
     table = []
-    for row in records:
+    for row in dt.table:
         table_row = {
-            "first_name": row[0],
-            "last_name": row[1],
-            "message": row[2],
-            "date_insert": str(row[3]),
-            "username": str(row[4]),
-            "user_id": str(row[5]),
+            "first_name": row['first_name'],
+            "last_name": row['last_name'],
+            "message": row['message'],
+            "date_insert": str(row['date_insert']),
+            "username": str(row['username']),
+            "user_id": str(row['user_id']),
         }
         table.append(table_row)
     return table
 
 def get_message(jsn):
     try:
-        dt = db.execute('''
+        db = DB()
+        dt = db.exec('''
             SELECT
                 text as message,
                 from_me
@@ -81,15 +84,17 @@ def get_message(jsn):
             order by
                 date_insert asc;
         '''.format(jsn['chat__id']))
+        if dt.err:
+            return False, [], str(dt.err)
         table = []
-        for row in records:
+        for row in dt.table:
             table_row = {
-                "first_name": row[0],
-                "last_name": row[1],
-                "message": row[2],
-                "date_insert": str(row[3]),
-                "username": str(row[4]),
-                "user_id": str(row[5]),
+                "first_name": row['first_name'],
+                "last_name": row['last_name'],
+                "message": row['message'],
+                "date_insert": str(row['date_insert']),
+                "username": str(row['username']),
+                "user_id": str(row['user_id']),
             }
             table.append(table_row)
         return True, table, None
