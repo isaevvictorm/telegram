@@ -61,9 +61,12 @@ class DB:
                 if not lst:
                     return DBResult(True,cursor.rowcount,[],columns,None,column_d)
                 return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
-            except sqlite3.Error:
-                self.conn.commit()
-                return  DBResult(True,cursor.rowcount,[],[],None,None)
+            except sqlite3.Error as ee:
+                if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
+                    self.conn.commit()
+                    return  DBResult(True,cursor.rowcount,[],[],None,None)
+                else:
+                    return  DBResult(False,0,[],[],ee,None)
             except Exception as ee:
                 return  DBResult(False,0,[],[],ee,None)
         except Exception as e:

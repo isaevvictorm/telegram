@@ -4,7 +4,7 @@ import asyncio
 import telebot
 import json
 import os
-from .modules import db, setting
+from .modules import DB, setting
 from telebot import types
 
 bot = telebot.TeleBot(setting['TOKEN'])
@@ -12,7 +12,8 @@ bot = telebot.TeleBot(setting['TOKEN'])
 @bot.message_handler(commands=['start', 'help'])
 def start_command(message):
     try:
-        dt = db.executescript('''
+        db = DB()
+        dt = db.exec('''
             INSERT INTO Contact (
                 user_id,
                 first_name,
@@ -35,7 +36,8 @@ def start_command(message):
 @bot.message_handler(content_types=["text"])
 def text_command(message):
     try:
-        dt = db.executescript('''
+        db = DB()
+        dt = db.exec('''
             INSERT INTO Message (
                 content_type,
                 message_id,
@@ -63,7 +65,8 @@ def text_command(message):
 @bot.message_handler(content_types=["photo"])
 def text_command(message):
     try:
-        dt = db.executescript('''
+        db = DB()
+        dt = db.exec('''
             INSERT INTO Message (
                 content_type,
                 message_id,
