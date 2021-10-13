@@ -38,7 +38,7 @@ class DB:
     def __init__(self, system = False):
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
-        self.conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(setting['TOKEN']).split(':')[0])), autocommit=True)
+        self.conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(setting['TOKEN']).split(':')[0])))
 
     def __del__(self):
         self.conn.close()
