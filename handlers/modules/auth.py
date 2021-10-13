@@ -39,7 +39,7 @@ class Auth:
 
     async def authenticate(self, login, password):
         db = DB(True)
-        dt = db.execute('''
+        dt = db.exec('''
             Select login, first_name, last_name, admin, password from User
         ''')
         print(str(dt.table))
@@ -59,7 +59,7 @@ class Auth:
 
     async def get_user(self, login):
         db = DB(True)
-        dt = db.execute('''
+        dt = db.exec('''
             Select login, first_name, last_name, admin from User WHERE login = '{0}'
         '''.format(login))
         if dt:
