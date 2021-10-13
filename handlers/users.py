@@ -62,7 +62,7 @@ def delete(jsn):
     user_id = jsn['login']
     try:
         db = DB(True)
-        dt = db.exec(("""
+        dt = db.exec("""
             DELETE FROM User where login = '{0}';
         """.format(user_id))
         if dt.err:
