@@ -1,7 +1,7 @@
 
 from aiohttp_session import get_session
 from hashlib import sha256
-from . import db
+from .db import DB
 
 class User:
     login = None
@@ -38,9 +38,10 @@ class Auth:
             return False
 
     async def authenticate(self, login, password):
+        db = DB(True)
         dt = db.execute('''
             Select login, first_name, last_name, admin, password from User
-        ''',True)
+        ''')
         users = []
         for row in dt:
             users.append({

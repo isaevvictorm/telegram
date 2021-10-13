@@ -35,15 +35,15 @@ class DB:
 
     conn = None
 
-    def __init__(self):
+    def __init__(self, system = False):
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
-        self.conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(get_database()).split(':')[0])), autocommit=True)
+        self.conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(setting['TOKEN']).split(':')[0])), autocommit=True)
 
     def __del__(self):
         self.conn.close()
 
-    def exec(self,query):
+    def exec(self, query):
         try:
             cursor = self.conn.cursor()
             lst=[]
