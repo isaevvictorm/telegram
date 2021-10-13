@@ -1,6 +1,8 @@
 import sqlite3
 import os
 from .setting import setting
+import traceback
+
 
 def get_database():
     try:
@@ -64,11 +66,11 @@ class DB:
                         conn.commit()
                         return  DBResult(True,cursor.rowcount,[],[],None,None)
                     else:
-                        return  DBResult(False,0,[],[],ee,None)
+                        return  DBResult(False,0,[],[],str(traceback.format_exc()),None)
                 except Exception as ee:
-                    return  DBResult(False,0,[],[],ee,None)
+                    return  DBResult(False,0,[],[],str(traceback.format_exc()),None)
         except Exception as e:
-            return DBResult(False,0,[],[],e,None)
+            return DBResult(False,0,[],[],str(traceback.format_exc()),None)
 
 def execute(query, system = None):
     try:
