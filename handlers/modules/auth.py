@@ -43,13 +43,13 @@ class Auth:
             Select login, first_name, last_name, admin, password from User
         ''')
         users = []
-        for row in dt:
+        for row in dt.table:
             users.append({
-                "login":row[0],
-                "first_name":row[1],
-                "last_name":row[2],
-                "admin":row[3],
-                "password":row[4]
+                "login":row['login'],
+                "first_name":row['first_name'],
+                "last_name":row['last_name'],
+                "admin":row['admin'],
+                "password":row['password']
             })
         for user in users:
             if str(user['login']).lower() == str(login).lower() and str(user['password']).lower() == sha256(password.encode('utf-8')).hexdigest().lower():
@@ -57,17 +57,18 @@ class Auth:
         return None
 
     async def get_user(self, login):
+        db = DB(True)
         dt = db.execute('''
             Select login, first_name, last_name, admin from User WHERE login = '{0}'
-        '''.format(login), True)
+        '''.format(login))
         if dt:
             users = []
-            for row in dt:
+            for row in dt.table:
                 users.append({
-                    "login":row[0],
-                    "first_name":row[1],
-                    "last_name":row[2],
-                    "admin":row[3]
+                    "login":row['login'],
+                    "first_name":row['first_name'],
+                    "last_name":row['last_name'],
+                    "admin":row['admin']
                 })
             for user in users:
                 if str(user['login']).lower() == str(login).lower():
