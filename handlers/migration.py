@@ -1,8 +1,11 @@
-from .modules import db
+from .modules import DB
 
-def migration():
+def migration_system():
+    db = DB(True)
+    # ----------------------
     # Таблица "Пользователи"
-    db.executescript('''
+    # ----------------------
+    db.exec('''
         CREATE TABLE "User" (
             `login` TEXT PRIMARY KEY,
             `password` TEXT,
@@ -12,10 +15,11 @@ def migration():
             `date_remove` datetime,
             `date_insert` datetime default current_timestamp
         );
-    ''', True)
-
+    ''')
+    # ----------------------
     # Добавляем учетную запись администратора "первого эшелона"
-    db.executescript('''
+    # ----------------------
+    db.exec('''
         INSERT INTO User (login, password, first_name, last_name, admin)
         Select
             'admin' as login,
@@ -24,10 +28,11 @@ def migration():
             'Admin' as last_name,
             1 as admin
         WHERE NOT EXISTS (SELECT * FROM User WHERE admin = 1);
-    ''', True)
-
+    ''')
+    # ----------------------
     # Таблица "Webhook"
-    db.executescript('''
+    # ----------------------
+    db.exec('''
         CREATE TABLE "Webhook" (
             `webhook_id` INTEGER PRIMARY KEY,
             `name` TEXT,
@@ -36,10 +41,16 @@ def migration():
             `status` INTEGER,
             `date_insert` datetime default current_timestamp
         );
-    ''', True)
+    ''')
 
+    return True
+
+def migration():
+    db = DB()
+    # ----------------------
     # Таблица "Контакты (Пользователи чата)"
-    db.executescript('''
+    # ----------------------
+    db.exec('''
         CREATE TABLE "Contact" (
             `user_id` TEXT PRIMARY KEY,
             `first_name` TEXT,
@@ -58,8 +69,10 @@ def migration():
         );
     ''')
 
+    # ----------------------
     # Таблица "Чаты"
-    db.executescript('''
+    # ----------------------
+    db.exec('''
         CREATE TABLE "Chat" (
             `chat_id` TEXT PRIMARY KEY,
             `first_name` TEXT,
@@ -71,7 +84,9 @@ def migration():
         );
     ''')
 
+    # ----------------------
     # Таблица "Сообщения"
+    # ----------------------
     db.executescript('''
         CREATE TABLE "Message" (
             `rid` INTEGER PRIMARY KEY AUTOINCREMENT,
