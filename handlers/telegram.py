@@ -37,7 +37,6 @@ def start_command(message):
                     message.from_user.first_name,
                     message.from_user.last_name,
                     message.from_user.username))
-        db.close()
         bot.send_message(message.chat.id, str('Привет! Меня зовут Харпер, могу я чем-то помочь?'))
     except Exception as ee:
         print(str(ee))
@@ -67,7 +66,6 @@ def text_command(message):
                 0 as from_me,
                 {4} as date;
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date))
-        db.close()
         bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
         print(str(ee))
@@ -101,7 +99,6 @@ def text_command(message):
                 '{5}' as file_id,
                 '{6}' as file_unique_id;
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, json.dumps(message.json)['photo'][2]['file_id'], json.dumps(message.json)['photo'][2]['file_unique_id']))
-        db.close()
         bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
     except Exception as ee:
         print(str(ee))
