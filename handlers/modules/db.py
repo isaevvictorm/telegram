@@ -50,17 +50,20 @@ class DB:
                 cursor.execute(query)
                 try:
                     row = cursor.fetchone()
-                    columns = [column[0] for column in cursor.description]
-                    column_d = cursor.description
-                    while row:
-                        row_dct=dict()
-                        for i in range(0,len(row)):
-                            row_dct.update({columns[i]:row[i]})
-                        lst.append(row_dct)
-                        row = cursor.fetchone()
-                    if not lst:
-                        return DBResult(True,cursor.rowcount,[],columns,None,column_d)
-                    return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
+                    if cursor.description:
+                        columns = [column[0] for column in cursor.description]
+                        column_d = cursor.description
+                        while row:
+                            row_dct=dict()
+                            for i in range(0,len(row)):
+                                row_dct.update({columns[i]:row[i]})
+                            lst.append(row_dct)
+                            row = cursor.fetchone()
+                        if not lst:
+                            return DBResult(True,cursor.rowcount,[],columns,None,column_d)
+                        return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
+                    else:
+                        return  DBResult(True,cursor.rowcount,[],[],None,None)
                 except sqlite3.Error as ee:
                     if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
                         conn.commit()
