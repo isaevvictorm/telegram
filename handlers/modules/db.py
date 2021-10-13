@@ -43,6 +43,9 @@ class DB:
     def __del__(self):
         self.conn.close()
 
+    def close(self):
+        self.conn.close()
+
     def exec(self, query):
         try:
             cursor = self.conn.cursor()
@@ -71,7 +74,6 @@ class DB:
                 return  DBResult(False,0,[],[],ee,None)
         except Exception as e:
             return DBResult(False,0,[],[],e,None)
-
 
 def execute(query, system = None):
     try:
