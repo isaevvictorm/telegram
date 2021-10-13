@@ -98,5 +98,5 @@ class Auth:
             else:
                 return False
         except Exception as ee:
-            print('Ошибка авторизации:', str(ee))
+            print('Error:', str(ee))
             return False
