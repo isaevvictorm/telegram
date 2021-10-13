@@ -21,6 +21,55 @@ def get_database():
             print('Error DB: ' + str(e))
         return 'debug'
 
+class DBResult:
+
+    def __init__(self, result, row_count, table, columns, err, column_description):
+        self.result=result
+        self.row_count=row_count
+        self.table = table
+        self.columns=columns
+        self.column_description = column_description
+        self.err = err
+
+class DB:
+
+    conn = None
+
+    def __init__(self):
+        if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
+            os.makedirs(os.path.join(os.getcwd() + '/database/'))
+        self.conn = sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(get_database()).split(':')[0])), autocommit=True)
+
+    def __del__(self):
+        self.conn.close()
+
+    def exec(self,query):
+        try:
+            cursor = self.conn.cursor()
+            lst=[]
+            cursor.execute(query)
+            try:
+                row = cursor.fetchone()
+                columns = [column[0] for column in cursor.description]
+                column_d = cursor.description
+                while row:
+                    row_dct=dict()
+                    for i in range(0,len(row)):
+                        row_dct.update({columns[i]:row[i]})
+                    lst.append(row_dct)
+                    row = cursor.fetchone()
+                if not lst:
+                    return DBResult(True,cursor.rowcount,[],columns,None,column_d)
+                return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
+            except sqlite3.Error:
+                self.conn.commit()
+                return  DBResult(True,cursor.rowcount,[],[],None,None)
+            except Exception as ee:
+                return  DBResult(False,0,[],[],ee,None)
+        except Exception as e:
+            return DBResult(False,0,[],[],e,None)
+
+
 def execute(query, system = None):
     try:
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):

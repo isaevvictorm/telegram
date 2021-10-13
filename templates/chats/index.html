@@ -7,7 +7,7 @@
 <div id="frame">
 	<div id="sidepanel">
 		<div id="contacts">
-			<ul id = contacts_ul>
+			<ul id = "contacts_ul">
 				<li class="contact">
 					<div class="wrap">
 						<span class="contact-status online"></span>
@@ -112,7 +112,7 @@
 			</div>
 		</div>
 		<div class="messages">
-			<ul>
+			<ul id = "messages_ul">
 				<li class="sent">
 					<img src="static/img/user.png" alt="" />
 					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
@@ -181,7 +181,7 @@ function getContacts(){
           if (response.result){
             for (var i = 0; i < response.table.length; i++) {
 							$('#contacts_ul').prepend('\
-							<li class="contact">\
+							<li class="contact selected-contact" user_id = "'+response.table[i].user_id+'">\
 								<div class="wrap">\
 									<span class="contact-status online"></span>\
 									<img src="static/img/user.png" alt="" />\

@@ -28,7 +28,8 @@ def get_contacts(jsn):
             t1.last_name,
             t2.text as message,
             t1.date_insert,
-            t1.username
+            t1.username,
+            t1.user_id
         from
         (
             SELECT
@@ -62,6 +63,7 @@ def get_contacts(jsn):
             "message": row[2],
             "date_insert": str(row[3]),
             "username": str(row[4]),
+            "user_id": str(row[5]),
         }
         table.append(table_row)
     return table
@@ -70,13 +72,29 @@ def get_message(jsn):
     try:
         dt = db.execute('''
             SELECT
-                *
+                text as message,
+                from_me
             from
-                Message;
-        ''')
-        return dt, None
+                Message
+            WHERE
+                chat__id = '{0}'
+            order by
+                date_insert asc;
+        '''.format(jsn['chat__id']))
+        table = []
+        for row in records:
+            table_row = {
+                "first_name": row[0],
+                "last_name": row[1],
+                "message": row[2],
+                "date_insert": str(row[3]),
+                "username": str(row[4]),
+                "user_id": str(row[5]),
+            }
+            table.append(table_row)
+        return True, table, None
     except Exception as ee:
-        return None, str(ee)
+        return False, [], str(ee)
 
 class Handler:
     @template("chats/index.html")
@@ -111,11 +129,11 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "get_message":
             try:
-                table, err = await do(get_message, jsn)
-                if err:
-                    return web.json_response({'result':False, 'err': str(err), 'table':[]})
-                else:
+                result, table, err = await do(get_message, jsn)
+                if result:
                     return web.json_response({'result':True, 'err': None, 'table':table})
+                else:
+                    return web.json_response({'result':False, 'err': str(err), 'table':[]})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "delete":
