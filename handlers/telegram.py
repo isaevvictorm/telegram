@@ -7,21 +7,7 @@ import os
 from .modules import db, setting
 from telebot import types
 
-def get_token():
-    dt = db.execute('''
-        SELECT token FROM Webhook WHERE status = 1;
-    ''', True)
-    try:
-        token = dt[0][0] if dt and len(dt) > 0 else setting['TOKEN_DEBUG']
-    except:
-        token = setting['TOKEN_DEBUG']
-    if token:
-        bot = telebot.TeleBot(token)
-        bot.remove_webhook()
-        bot.set_webhook(url='https://{0}/{1}/'.format(setting['DOMAIN'], token))
-    return token
-
-bot = telebot.TeleBot(get_token())
+bot = telebot.TeleBot(setting['TOKEN'])
 
 @bot.message_handler(commands=['start', 'help'])
 def start_command(message):
