@@ -83,20 +83,20 @@ class Auth:
         return True
 
     async def sign(self):
-        try:
-            session = await get_session(self.request)
-            if self.request.content_type == "application/json":
-                jsn = await self.request.json()
-                login = str(jsn['login'])
-                password = str(jsn['password'])
-                u = await self.authenticate(login, password)
-                if u:
-                    session['login'] = u.login
-                    return True
-                else:
-                    return False
+        #try:
+        session = await get_session(self.request)
+        if self.request.content_type == "application/json":
+            jsn = await self.request.json()
+            login = str(jsn['login'])
+            password = str(jsn['password'])
+            u = await self.authenticate(login, password)
+            if u:
+                session['login'] = u.login
+                return True
             else:
                 return False
-        except Exception as ee:
-            print('Error:', str(ee))
+        else:
             return False
+        #except Exception as ee:
+        #    print('Error:', str(ee))
+        #    return False
