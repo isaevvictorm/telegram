@@ -42,6 +42,7 @@ class Auth:
         dt = db.execute('''
             Select login, first_name, last_name, admin, password from User
         ''')
+        print(str(dt.table))
         users = []
         for row in dt.table:
             users.append({
