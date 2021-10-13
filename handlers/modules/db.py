@@ -33,9 +33,9 @@ class DBResult:
 
 class DB:
 
-    system = False
+    system = None
 
-    def __init__(self, system = False):
+    def __init__(self, system = None):
         self.system = system
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
