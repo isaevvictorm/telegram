@@ -4,7 +4,7 @@ from aiohttp import web
 from aiohttp_jinja2 import template
 import asyncio
 from .modules import Auth
-from .modules import db
+from .modules import DB
 from hashlib import sha256
 
 async def do(func, arg_obj):
@@ -14,7 +14,8 @@ async def do(func, arg_obj):
 
 def get_contacts(jsn, user_id = None):
     where = "user_id='{0}'".format(user_id) if user_id else '1=1'
-    records = db.execute('''
+    db = DB()
+    dt = db.exec('''
         SELECT
             user_id,
             first_name,
@@ -30,19 +31,19 @@ def get_contacts(jsn, user_id = None):
         FROM Contact WHERE ({0});
     '''.format(where))
     table = []
-    for row in records:
+    for row in dt.table:
         table_row = {
-            "user_id": row[0],
-            "first_name": row[1],
-            "last_name": row[2],
-            "patronymic": row[3],
-            "birthday": row[4],
-            "username": row[5],
-            "phone_number": row[6],
-            "city": row[7],
-            "email": row[8],
-            "skype": row[9],
-            "date_insert": str(row[10]),
+            "user_id": row['user_id'],
+            "first_name": row['first_name'],
+            "last_name": row['last_name'],
+            "patronymic": row['patronymic'],
+            "birthday": row['birthday'],
+            "username": row['username'],
+            "phone_number": row['phone_number'],
+            "city": row['city'],
+            "email": row['email'],
+            "skype": row['skype'],
+            "date_insert": str(row['date_insert']),
         }
         table.append(table_row)
     return table
@@ -50,9 +51,12 @@ def get_contacts(jsn, user_id = None):
 def delete(jsn):
     user_id = jsn['user_id']
     try:
-        records = db.executescript("""
+        db = DB()
+        dt = db.exec("""
             DELETE FROM Contact where user_id = '{0}';
         """.format(user_id))
+        if dt.err:
+            return False, str(dt.err)
     except Exception as ee:
         return False, str(ee)
     return True, None
