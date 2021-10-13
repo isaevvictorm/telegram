@@ -4,7 +4,7 @@ from aiohttp import web
 from aiohttp_jinja2 import template
 import asyncio
 from .modules import Auth
-from .modules import db
+from .modules import DB
 from hashlib import sha256
 
 async def do(func, arg_obj):
@@ -14,7 +14,8 @@ async def do(func, arg_obj):
 
 def get_users(jsn, login = None):
     where = "login='{0}'".format(login) if login else '1=1'
-    records = db.execute('''
+    db = DB(True)
+    dt = db.exec('''
         SELECT
             login,
             first_name,
@@ -22,9 +23,9 @@ def get_users(jsn, login = None):
             admin,
             date_insert
         FROM User WHERE ({0});
-    '''.format(where), True)
+    '''.format(where))
     table = []
-    for row in records:
+    for row in dt.table:
         table_row = {
             "login": row[0],
             "first_name": row[1],
@@ -36,7 +37,8 @@ def get_users(jsn, login = None):
     return table
 
 def add(jsn):
-    result = db.executescript('''
+    db = DB(True)
+    dt = db.exec('''
         INSERT INTO User (login, first_name, last_name, password, admin)
         SELECT
             '{0}' login,
@@ -44,12 +46,14 @@ def add(jsn):
             '{2}' last_name,
             '{3}' password,
             {4} admin;
-    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['admin']), True)
+    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['admin']))
     # ==========================
     # Предусмотреть вывод ошибок
     # ==========================>>>
-    if str(result).lower().find("unique") > -1:
+    if str(dt.err).lower().find("unique") > -1:
         return [], "Пользователь с таким логином уже существует."
+    elif dt.err:
+        return [], str(dt.err)
     # ==========================<<<
     table = get_users(jsn, jsn['data']['login'])
     return table, None
@@ -57,9 +61,12 @@ def add(jsn):
 def delete(jsn):
     user_id = jsn['login']
     try:
-        records = db.executescript("""
+        db = DB(True)
+        dt = db.exec(("""
             DELETE FROM User where login = '{0}';
-        """.format(user_id), True)
+        """.format(user_id))
+        if dt.err:
+            return False, str(dt.err)
     except Exception as ee:
         return False, str(ee)
     return True, None
