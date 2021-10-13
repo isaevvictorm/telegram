@@ -42,8 +42,8 @@ class DB:
 
     def exec(self, query):
         try:
-            with sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if system else str(setting['TOKEN']).split(':')[0]))) as conn:
-                cursor = self.conn.cursor()
+            with sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if self.system else str(setting['TOKEN']).split(':')[0]))) as conn:
+                cursor = conn.cursor()
                 lst=[]
                 cursor.execute(query)
                 try:
@@ -61,7 +61,7 @@ class DB:
                     return  DBResult(True,cursor.rowcount,lst,columns,None,column_d)
                 except sqlite3.Error as ee:
                     if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
-                        self.conn.commit()
+                        conn.commit()
                         return  DBResult(True,cursor.rowcount,[],[],None,None)
                     else:
                         return  DBResult(False,0,[],[],ee,None)
