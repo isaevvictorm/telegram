@@ -141,7 +141,8 @@ $('.submit.sent').click(function() {
 
 $(document).on('click', '.contact', function(){
 	$(this).addClass('active');
-	console.log($(".contact.active .preview").text());
+	console.log($(".contact.active .name").text());
+	$(".current_cl").text($(".contact.active .name").text());
 });
 
 $('.submit.replies').click(function() {
