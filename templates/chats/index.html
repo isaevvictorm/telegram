@@ -15,7 +15,7 @@
 	<div class="content">
 		<div class="contact-profile">
 			<img src="static/img/user.png" alt="" />
-			<p>Harvey Specter</p>
+			<p class = "current_cl">Harvey Specter</p>
 			<div class="social-media">
 				<i class="fa fa-facebook" aria-hidden="true"></i>
 				<i class="fa fa-twitter" aria-hidden="true"></i>
@@ -136,12 +136,12 @@ $('.submit.sent').click(function() {
 	if($.trim(message) == '') {
 		return false;
 	}
-  newMessage();
+  newMessage(message);
 });
 
 $(document).on('click', '.contact', function(){
 	$(this).addClass('active');
-	console.log('Выбрали агента');
+	console.log($(".contact.active div div .name").val())
 });
 
 $('.submit.replies').click(function() {
@@ -149,7 +149,7 @@ $('.submit.replies').click(function() {
 	if($.trim(message) == '') {
 		return false;
 	}
-  newReplies();
+  newReplies(message);
 });
 
 </script>
