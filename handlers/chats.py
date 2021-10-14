@@ -22,9 +22,9 @@ def send_message(jsn):
                 '{1}' as text,
                 {2} as from_me
                 '{3}' as answer_for;
-            '''.format(jsn['chat_id'] if 'chat_id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['answer_for'] if 'answer_for' in jsn else ''))
+            '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['answer_for'] if 'answer_for' in jsn else ''))
         bot = telebot.TeleBot(setting['TOKEN'])
-        bot.send_message(jsn['chat_id'] if 'chat_id' in jsn else '', jsn['text'] if 'text' in jsn else 'Спасибо за Ваше сообщение, мы скоро на него ответим...')
+        bot.send_message(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else 'Спасибо за Ваше сообщение, мы скоро на него ответим...')
         return True, None
     except Exception as ee:
         return False, str(ee)

@@ -88,7 +88,7 @@ function getContacts(){
     });
 };
 
-function newReplies(message, time = '') {
+function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
 	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
   $('.message-input textarea').focus();
@@ -96,7 +96,7 @@ function newReplies(message, time = '') {
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 };
 
-function newMessage(message, name = 'Абонент', time = '2021-09-31 23:38') {
+function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38') {
 	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
   $('.message-input textarea').focus();
@@ -111,7 +111,7 @@ $('.submit.sent').click(function() {
 	}
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-  newMessage(message, time = t);
+  newMessage(message, 'Вы', time = t);
 });
 
 $('.submit.replies').click(function() {
@@ -175,8 +175,6 @@ $(document).on('click', '.contact', function(){
 		dataType:"json",
 	});
 });
-
-
 
 </script>
 
