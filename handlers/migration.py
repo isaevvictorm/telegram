@@ -101,9 +101,14 @@ def migration():
             `caption` TEXT,
             `file_id` TEXT,
             `file_unique_id` TEXT,
+            `answer_for` text,
             `date_answer` datetime,
             `date_insert` datetime default current_timestamp
         );
+    ''')
+
+    db.exec('''
+        Alter table Message add answer_for TEXT;
     ''')
 
     return True

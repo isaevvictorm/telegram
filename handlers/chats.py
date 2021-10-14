@@ -5,6 +5,7 @@ from aiohttp_jinja2 import template
 import asyncio
 from .modules import Auth
 from .modules import DB
+from .modules import setting
 
 async def do(func, arg_obj):
     loop = asyncio.get_event_loop()
@@ -12,15 +13,21 @@ async def do(func, arg_obj):
     return await loop.run_in_executor(executor, func, arg_obj)
 
 def send_message(jsn):
-    db = DB()
-    dt = db.exec('''
-        INSERT INTO Message  (chat_id, text, from_me)
-        SELECT
-            '{0}' as chat_id,
-            '{1}' as text,
-            1 as from_me;
-        '''.format(jsn['chat_id'], jsn['text'], jsn['from_me']))
-    return True
+    try:
+        db = DB()
+        dt = db.exec('''
+            INSERT INTO Message  (chat__id, text, from_me, answer_for)
+            SELECT
+                '{0}' as chat_id,
+                '{1}' as text,
+                {2} as from_me
+                '{3}' as answer_for;
+            '''.format(jsn['chat_id'] if 'chat_id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['answer_for'] if 'answer_for' in jsn else ''))
+        bot = telebot.TeleBot(setting['TOKEN'])
+        bot.send_message(jsn['chat_id'] if 'chat_id' in jsn else '', jsn['text'] if 'text' in jsn else 'Спасибо за Ваше сообщение, мы скоро на него ответим...')
+        return True, None
+    except Exception as ee:
+        return False, str(ee)
 
 def get_contacts(jsn):
     db = DB()
@@ -77,6 +84,7 @@ def get_message(jsn):
         db = DB()
         dt = db.exec('''
             SELECT
+                rid,
                 text as message,
                 from_me,
                 date_insert
@@ -92,6 +100,7 @@ def get_message(jsn):
         table = []
         for row in dt.table:
             table_row = {
+                "rid": row['rid'],
                 "message": row['message'],
                 "from_me": row['from_me'],
                 "date_insert": row['date_insert'],

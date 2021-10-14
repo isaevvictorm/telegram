@@ -15,7 +15,7 @@
 	<div class="content">
 		<div class="contact-profile">
 			<img src="static/img/user.png" alt="" />
-			<p class = "current_cl">Harvey Specter</p>
+			<p class = "current_cl"></p>
 			<div class="social-media">
 				<i class="fa fa-facebook" aria-hidden="true"></i>
 				<i class="fa fa-twitter" aria-hidden="true"></i>
@@ -24,38 +24,7 @@
 		</div>
 		<div class="messages">
 			<ul id = "messages_ul">
-				<li class="sent">
-					<img src="static/img/user.png" alt="" />
-					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-				</li>
-				<li class="replies">
-					<img src="static/img/user.png" alt="" />
-					<p>When you're backed against the wall, break the god damn thing down.</p>
-				</li>
-				<li class="replies">
-					<img src="static/img/user.png" alt="" />
-					<p>Excuses don't win championships.</p>
-				</li>
-				<li class="sent">
-					<img src="static/img/user.png" alt="" />
-					<p>Oh yeah, did Michael Jordan tell you that?</p>
-				</li>
-				<li class="replies">
-					<img src="static/img/user.png" alt="" />
-					<p>No, I told him that.</p>
-				</li>
-				<li class="replies">
-					<img src="static/img/user.png" alt="" />
-					<p>What are your choices when someone puts a gun to your head?</p>
-				</li>
-				<li class="sent">
-					<img src="static/img/user.png" alt="" />
-					<p>What are you talking about? You do what they say or they shoot you.</p>
-				</li>
-				<li class="replies">
-					<img src="static/img/user.png" alt="" />
-					<p>Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>
-				</li>
+
 			</ul>
 		</div>
     <div class="message-input">
@@ -119,7 +88,7 @@ function getContacts(){
     });
 };
 
-function newMessage(message, time = '') {
+function newReplies(message, time = '') {
 	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
   $('.message-input textarea').focus();
@@ -127,7 +96,7 @@ function newMessage(message, time = '') {
 	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 };
 
-function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38') {
+function newMessage(message, name = 'Абонент', time = '2021-09-31 23:38') {
 	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
   $('.message-input textarea').focus();
@@ -143,6 +112,37 @@ $('.submit.sent').click(function() {
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
   newMessage(message, time = t);
+});
+
+$('.submit.replies').click(function() {
+	message = $(".message-input textarea").val();
+	name = $(".contact.active .name").text();
+	var d = new Date();
+	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
+	if($.trim(message) == '') {
+		return false;
+	}
+	jsn = {
+		"method":"send_message",
+		"chat__id": $(".contact.active").attr('user_id');
+		"from_me": 1,
+		"text": message,
+		"answer_for": "test";
+	}
+	$.ajax({
+		type: 'POST',
+		url: '/chats',
+		data: JSON.stringify(jsn),
+		success: function(response){
+				if (response.result){
+					newReplies(message, name, t);
+				}
+				else {
+					console.log(response);
+				}
+		},
+		dataType:"json",
+	});
 });
 
 $(document).on('click', '.contact', function(){
@@ -176,16 +176,7 @@ $(document).on('click', '.contact', function(){
 	});
 });
 
-$('.submit.replies').click(function() {
-	message = $(".message-input textarea").val();
-	name = $(".contact.active .name").text();
-	var d = new Date();
-	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
-	if($.trim(message) == '') {
-		return false;
-	}
-  newReplies(message, name, t);
-});
+
 
 </script>
 
