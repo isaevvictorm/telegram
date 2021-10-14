@@ -93,14 +93,18 @@ function getContacts(){
 						// contact-status [away, inline, busy]
 						// contact [active, selected-contact]
             for (var i = 0; i < response.table.length; i++) {
+							var from = response.table[i].last_name+' '+response.table[i].first_name
+							if (response.table[i].from_me == 0){
+								from = 'Вы'
+							}
 							$('#contacts_ul').prepend('\
 							<li class="contact" user_id = "'+response.table[i].user_id+'">\
 								<div class="wrap">\
 									<span class="contact-status online"></span>\
 									<img src="static/img/user.png" alt="" />\
 									<div class="meta">\
-										<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name+' (' +response.table[i].username+')'+'</p>\
-										<p class="preview">'+response.table[i].message+'</p>\
+										<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name+'</p>\
+										<p class="preview">'+from+': '+response.table[i].message+'</p>\
 									</div>\
 								</div>\
 							</li>\

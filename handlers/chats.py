@@ -31,7 +31,8 @@ def get_contacts(jsn):
             t2.text as message,
             t1.date_insert,
             t1.username,
-            t1.user_id
+            t1.user_id,
+            t2.from_me
         from
         (
             SELECT
@@ -66,6 +67,7 @@ def get_contacts(jsn):
             "date_insert": str(row['date_insert']),
             "username": str(row['username']),
             "user_id": str(row['user_id']),
+            "from_me": row['from_me'],
         }
         table.append(table_row)
     return table
