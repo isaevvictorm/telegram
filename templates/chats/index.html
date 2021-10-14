@@ -140,7 +140,9 @@ $('.submit.sent').click(function() {
 });
 
 $(document).on('click', '.contact', function(){
+	$('#contacts_ul').empty();
 	$(this).addClass('active');
+	var name = $(".contact.active .name").text();
 	$(".current_cl").text($(".contact.active .name").text());
 	$.ajax({
 		type: 'POST',
@@ -151,7 +153,12 @@ $(document).on('click', '.contact', function(){
 					// contact-status [away, inline, busy]
 					// contact [active, selected-contact]
 					for (var i = 0; i < response.table.length; i++) {
-						console.log(response.table[i]);
+						if (response.table[i].from_me == 0){
+							newReplies(response.table[i].message, name, response.table[i].date_insert)
+						}
+						else{
+							newMessage(message, time = response.table[i].date_insert)
+						}
 					}
 				}
 				else {
