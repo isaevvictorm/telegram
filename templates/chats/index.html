@@ -124,10 +124,10 @@ $('.submit.replies').click(function() {
 	}
 	jsn = {
 		"method":"send_message",
-		"chat__id": $(".contact.active").attr('user_id');
+		"chat__id": $(".contact.active").attr('user_id'),
 		"from_me": 1,
 		"text": message,
-		"answer_for": "test";
+		"answer_for": "test",
 	}
 	$.ajax({
 		type: 'POST',
