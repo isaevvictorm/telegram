@@ -140,7 +140,9 @@ $('.submit.sent').click(function() {
 	if($.trim(message) == '') {
 		return false;
 	}
-  newMessage(message);
+	var d = new Date();
+	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+  newMessage(message, time = t);
 });
 
 $(document).on('click', '.contact', function(){
@@ -176,10 +178,13 @@ $(document).on('click', '.contact', function(){
 
 $('.submit.replies').click(function() {
 	message = $(".message-input textarea").val();
+	name = $(".contact.active .name").text();
+	var d = new Date();
+	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
 	if($.trim(message) == '') {
 		return false;
 	}
-  newReplies(message);
+  newReplies(message, name, t);
 });
 
 </script>
