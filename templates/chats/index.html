@@ -93,9 +93,9 @@ function getContacts(){
 						// contact-status [away, inline, busy]
 						// contact [active, selected-contact]
             for (var i = 0; i < response.table.length; i++) {
-							var from = response.table[i].last_name+' '+response.table[i].first_name
+							var from = 'Вы'
 							if (response.table[i].from_me == 0){
-								from = 'Вы'
+								from = response.table[i].last_name+' '+response.table[i].first_name
 							}
 							$('#contacts_ul').prepend('\
 							<li class="contact" user_id = "'+response.table[i].user_id+'">\
