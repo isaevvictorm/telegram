@@ -27,11 +27,11 @@ def get_users(jsn, login = None):
     table = []
     for row in dt.table:
         table_row = {
-            "login": row[0],
-            "first_name": row[1],
-            "last_name": row[2],
-            "admin": row[3],
-            "date_insert": row[4],
+            "login": row['login'],
+            "first_name": row['first_name'],
+            "last_name": row['last_name'],
+            "admin": row['admin'],
+            "date_insert": row['date_insert'],
         }
         table.append(table_row)
     return table
