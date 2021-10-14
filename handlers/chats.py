@@ -76,7 +76,8 @@ def get_message(jsn):
         dt = db.exec('''
             SELECT
                 text as message,
-                from_me
+                from_me,
+                date_insert
             from
                 Message
             WHERE
@@ -89,12 +90,9 @@ def get_message(jsn):
         table = []
         for row in dt.table:
             table_row = {
-                "first_name": row['first_name'],
-                "last_name": row['last_name'],
                 "message": row['message'],
-                "date_insert": str(row['date_insert']),
-                "username": str(row['username']),
-                "user_id": str(row['user_id']),
+                "from_me": row['from_me'],
+                "date_insert": row['date_insert'],
             }
             table.append(table_row)
         return True, table, None

@@ -141,8 +141,25 @@ $('.submit.sent').click(function() {
 
 $(document).on('click', '.contact', function(){
 	$(this).addClass('active');
-	console.log($(".contact.active .name").text());
 	$(".current_cl").text($(".contact.active .name").text());
+	$.ajax({
+		type: 'POST',
+		url: '/chats',
+		data: JSON.stringify({"method":"get_message", "chat__id": $(".contact.active").attr('user_id')}),
+		success: function(response){
+				if (response.result){
+					// contact-status [away, inline, busy]
+					// contact [active, selected-contact]
+					for (var i = 0; i < response.table.length; i++) {
+						console.log(response.table[i]);
+					}
+				}
+				else {
+					console.log(response);
+				}
+		},
+		dataType:"json",
+	});
 });
 
 $('.submit.replies').click(function() {
