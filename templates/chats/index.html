@@ -140,15 +140,15 @@ $('.submit.sent').click(function() {
 });
 
 $(document).on('click', '.contact', function(){
-	$('#contacts_ul').empty();
+	$('#messages_ul').empty();
 	$(this).addClass('active');
 	var name = $(".contact.active .name").text();
-	console.log($(".contact.active").attr('user_id'));
+	var id = $(".contact.active").attr('user_id');
 	$(".current_cl").text($(".contact.active .name").text());
 	$.ajax({
 		type: 'POST',
 		url: '/chats',
-		data: JSON.stringify({"method":"get_message", "chat__id": 0}),
+		data: JSON.stringify({"method":"get_message", "chat__id": id}),
 		success: function(response){
 				if (response.result){
 					// contact-status [away, inline, busy]
