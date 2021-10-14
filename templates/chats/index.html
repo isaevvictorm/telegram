@@ -139,7 +139,7 @@ $('.submit.sent').click(function() {
   newMessage();
 });
 
-$('.contact').click(function() {
+$(document).on('click', '.contact', function(){
 	$(this).addClass('active');
 	console.log('Выбрали агента');
 });
