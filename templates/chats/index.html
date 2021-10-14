@@ -94,7 +94,7 @@ function getContacts(){
 						// contact [active, selected-contact]
             for (var i = 0; i < response.table.length; i++) {
 							$('#contacts_ul').prepend('\
-							<li class="contact selected-contact" user_id = "'+response.table[i].user_id+'">\
+							<li class="contact active" user_id = "'+response.table[i].user_id+'">\
 								<div class="wrap">\
 									<span class="contact-status online"></span>\
 									<img src="static/img/user.png" alt="" />\
