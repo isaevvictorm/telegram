@@ -106,17 +106,6 @@ function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38')
 
 $('.submit.sent').click(function() {
 	message = $(".message-input textarea").val();
-	if($.trim(message) == '') {
-		return false;
-	}
-	var d = new Date();
-	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-  newMessage(message, 'Вы', time = t);
-});
-
-$('.submit.replies').click(function() {
-	message = $(".message-input textarea").val();
-	name = $(".contact.active .name").text();
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
 	if($.trim(message) == '') {
@@ -135,7 +124,7 @@ $('.submit.replies').click(function() {
 		data: JSON.stringify(jsn),
 		success: function(response){
 				if (response.result){
-					newReplies(message, name, t);
+					newMessage(message, 'Вы', t);
 				}
 				else {
 					console.log(response);
@@ -143,6 +132,17 @@ $('.submit.replies').click(function() {
 		},
 		dataType:"json",
 	});
+});
+
+$('.submit.replies').click(function() {
+	message = $(".message-input textarea").val();
+	name = $(".contact.active .name").text();
+	if($.trim(message) == '') {
+		return false;
+	}
+	var d = new Date();
+	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+  newMessage(message, name, time = t);
 });
 
 $(document).on('click', '.contact', function(){

@@ -125,13 +125,13 @@ class Handler:
         method = jsn['method']
         if method == "send_message":
             try:
-                result = await do(send_message, jsn)
+                result, err = await do(send_message, jsn)
                 if result:
                     return web.json_response({'result':True, 'err': None})
                 else:
-                    return web.json_response({'result':False, 'err': None})
+                    return web.json_response({'result':False, 'err': str(dt.err)})
             except Exception as ee:
-                return web.json_response({"result":False,"err":str(ee),"table":[]})
+                return web.json_response({"result":False,"err":str(ee)})
         if method == "get_contacts":
             try:
                 table = await do(get_contacts, jsn)
