@@ -142,7 +142,7 @@ $('.submit.replies').click(function() {
 	}
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-  newMessage(message, name, time = t);
+  newReplies(message, name, time = t);
 });
 
 $(document).on('click', '.contact', function(){
@@ -164,7 +164,7 @@ $(document).on('click', '.contact', function(){
 							newReplies(response.table[i].message, name, response.table[i].date_insert)
 						}
 						else{
-							newMessage(message, time = response.table[i].date_insert)
+							newMessage(response.table[i].message, 'Вы', response.table[i].date_insert)
 						}
 					}
 				}
