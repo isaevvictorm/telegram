@@ -156,6 +156,7 @@ $(document).on('click', '.contact', function(){
 	var name = $(".contact.active .name").text();
 	$(".contact.active .name").hidden = true;
 	document.getElementById('loader_reports').hidden = false;
+	document.getElementById('messages_ul').hidden = true;
 	$(".current_cl").text('');
 	var id = $(".contact.active").attr('user_id');
 
@@ -181,6 +182,7 @@ $(document).on('click', '.contact', function(){
 				}
 				$(".contact.active .name").hidden = false;
 				document.getElementById('loader_reports').hidden = true;
+				document.getElementById('messages_ul').hidden = false;
 				$(".current_cl").text($(".contact.active .name").text());
 		},
 		dataType:"json",
