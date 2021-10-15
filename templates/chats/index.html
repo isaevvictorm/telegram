@@ -154,7 +154,7 @@ $(document).on('click', '.contact', function(){
 	$('#messages_ul').empty();
 	$(this).addClass('active');
 	var name = $(".contact.active .name").text();
-	$(".contact.active .name").hidden = true;
+	$(".contact-profile img").hidden = true;
 	document.getElementById('loader_reports').hidden = false;
 	document.getElementById('messages_ul').hidden = true;
 	$(".current_cl").text('');
@@ -176,14 +176,18 @@ $(document).on('click', '.contact', function(){
 							newMessage(response.table[i].message, 'Вы', response.table[i].date_insert)
 						}
 					}
+					$(".contact-profile img").hidden = false;
+					document.getElementById('loader_reports').hidden = true;
+					document.getElementById('messages_ul').hidden = false;
+					$(".current_cl").text($(".contact.active .name").text());
 				}
 				else {
 					console.log(response);
+					$(".contact-profile img").hidden = false;
+					document.getElementById('loader_reports').hidden = true;
+					document.getElementById('messages_ul').hidden = false;
+					$(".current_cl").text($(".contact.active .name").text());
 				}
-				$(".contact.active .name").hidden = false;
-				document.getElementById('loader_reports').hidden = true;
-				document.getElementById('messages_ul').hidden = false;
-				$(".current_cl").text($(".contact.active .name").text());
 		},
 		dataType:"json",
 	});
