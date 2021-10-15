@@ -89,7 +89,6 @@ function getContacts(){
 };
 
 function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
-	var docHeight = $(document).height();
 	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
   //$('.message-input textarea').focus();
@@ -98,8 +97,9 @@ function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
 	docHeight += 93;
 };
 
+var docHeight = $(document).height();
+
 function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38') {
-	var docHeight = $(document).height();
 	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
   //$('.message-input textarea').focus();
