@@ -15,7 +15,7 @@
 	<div class="content">
 		<div class="contact-profile">
 			<div class="loader" id="loader_reports" style="border: 10px solid #2c3e50; border-top: 10px solid #3498db;" hidden></div>
-			<img src="static/img/user.png" class = "pic" alt="" />
+			<img src="static/img/user.png" id = "pic" alt= "" />
 			<p class = "current_cl"></p>
 			<div class="social-media">
 				<i class="fa fa-facebook" aria-hidden="true"></i>
@@ -153,7 +153,7 @@ $(document).on('click', '.contact', function(){
 	$('#messages_ul').empty();
 	$(this).addClass('active');
 	var name = $(".contact.active .name").text();
-	$(".contact-profile .pic").hidden = true;
+	document.getElementById('pic').hidden = true;
 	document.getElementById('loader_reports').hidden = false;
 	document.getElementById('messages_ul').hidden = true;
 	$(".current_cl").text('');
@@ -179,7 +179,7 @@ $(document).on('click', '.contact', function(){
 				else {
 					console.log(response);
 				}
-				$(".contact-profile .pic").hidden = false;
+				document.getElementById('pic').hidden = false;
 				document.getElementById('loader_reports').hidden = true;
 				document.getElementById('messages_ul').hidden = false;
 				$(".current_cl").text($(".contact.active .name").text());
