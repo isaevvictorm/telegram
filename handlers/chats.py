@@ -6,6 +6,7 @@ import asyncio
 from .modules import Auth
 from .modules import DB
 from .modules import setting
+import telebot
 
 async def do(func, arg_obj):
     loop = asyncio.get_event_loop()
