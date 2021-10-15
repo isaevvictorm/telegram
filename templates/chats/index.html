@@ -93,8 +93,7 @@ function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
 	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
-	//$(".messages").scrollTop($(".messages").prop('scrollHeight'));
-	$(".messages").scrollTop(docHeight);
+	$(".messages").animate({ scrollTop: docHeight + 93 }, 1000);
 	docHeight += 93;
 };
 
@@ -104,9 +103,7 @@ function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38')
 	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
-	//$(".messages").animate({ scrollTop: docHeight + 93 }, "fast");
-	//$(".messages").scrollTop($(".messages").prop('scrollHeight'));
-	$(".messages").scrollTop(docHeight);
+	$(".messages").animate({ scrollTop: docHeight + 93 }, 1000);
 	docHeight += 93;
 };
 
