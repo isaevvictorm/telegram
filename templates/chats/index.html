@@ -97,6 +97,12 @@ function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
 	docHeight += 93;
 };
 
+function newMessage_wa(message, name = 'Вы', time = '2021-09-31 23:38') {
+	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
+	$('.message-input textarea').val(null);
+	$('.contact.active .preview').html('<span>Вы: </span>' + message);
+};
+
 var docHeight = $(document).height();
 
 function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38') {
@@ -105,6 +111,12 @@ function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38')
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
 	$(".messages").animate({ scrollTop: docHeight + 93 }, "fast");
 	docHeight += 93;
+};
+
+function newReplies_wa(message, name = 'Абонент', time = '2021-09-31 23:38') {
+	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
+	$('.message-input textarea').val(null);
+	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
 };
 
 $('.submit.sent').click(function() {
@@ -169,12 +181,15 @@ $(document).on('click', '.contact', function(){
 					// contact [active, selected-contact]
 					for (var i = 0; i < response.table.length; i++) {
 						if (response.table[i].from_me == 0){
-							newReplies(response.table[i].message, name, response.table[i].date_insert)
+							newReplies_wa(response.table[i].message, name, response.table[i].date_insert)
+							docHeight += 93;
 						}
 						else{
-							newMessage(response.table[i].message, 'Вы', response.table[i].date_insert)
+							newMessage_wa(response.table[i].message, 'Вы', response.table[i].date_insert)
+							docHeight += 93;
 						}
 					}
+					$(".messages").animate({ scrollTop: docHeight + 93 }, "fast");
 				}
 				else {
 					console.log(response);
