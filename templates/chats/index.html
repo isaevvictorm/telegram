@@ -14,6 +14,7 @@
 	</div>
 	<div class="content">
 		<div class="contact-profile">
+			<div class="loader" id="loader_reports" style="border: 10px solid #2c3e50; border-top: 10px solid #3498db;" hidden></div>
 			<img src="static/img/user.png" alt="" />
 			<p class = "current_cl"></p>
 			<div class="social-media">
@@ -23,7 +24,6 @@
 			</div>
 		</div>
 		<div class="messages">
-			<div class="loader" id="loader_reports"></div>
 			<ul id = "messages_ul" hidden>
 
 			</ul>
@@ -154,8 +154,11 @@ $(document).on('click', '.contact', function(){
 	$('#messages_ul').empty();
 	$(this).addClass('active');
 	var name = $(".contact.active .name").text();
+	$(".contact.active .name").hidden = true;
+	document.getElementById('loader_reports').hidden = false;
+	$(".current_cl").text('');
 	var id = $(".contact.active").attr('user_id');
-	$(".current_cl").text($(".contact.active .name").text());
+
 	$.ajax({
 		type: 'POST',
 		url: '/chats',
@@ -176,6 +179,9 @@ $(document).on('click', '.contact', function(){
 				else {
 					console.log(response);
 				}
+				$(".contact.active .name").hidden = false;
+				document.getElementById('loader_reports').hidden = true;
+				$(".current_cl").text($(".contact.active .name").text());
 		},
 		dataType:"json",
 	});
