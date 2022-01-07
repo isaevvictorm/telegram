@@ -6,5 +6,6 @@
     "AMDIN": "658586931",
     "TEMPLATE_DIR": "./templates",
     "DEBUG": 0,
-    "DIST": 0.4
+    "DIST": 0.4,
+    "SYMBOL": "абвгдеёжзийклмнопрстуфхцчшщЪьэюя- abcdefghijklmnopqrstuvwxyz"
 }

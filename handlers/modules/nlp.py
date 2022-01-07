@@ -4,6 +4,14 @@ from .setting import setting
 import random
 import nltk 
 
+
+def filter_text(text):
+    text = text.lower()
+    text = [c for c in text if c in setting['SYMBOL']]
+    text = ''.join(text)
+    return text
+
+
 def fill_dialog():
     db = DB()
     dt = db.exec('''
@@ -23,11 +31,12 @@ def fill_dialog():
         qa_by_word_dataset = {}
 
         for question, answer in dictionary:
+            question = filter_text(question)
             words = question.split(' ')
             for word in words:
                 if word not in qa_by_word_dataset:
                     qa_by_word_dataset[word] = []
-                qa_by_word_dataset[word].append((question,answer))
+                qa_by_word_dataset[word].append((question, answer))
 
         qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < 1000}
 
@@ -67,6 +76,7 @@ def get_answer_failure():
 
 def get_answer_dialog(text):
     if dialog:
+        text = filter_text(text)
         # -----------------------------------------
         # Получение ответа из диалогов
         # -----------------------------------------
