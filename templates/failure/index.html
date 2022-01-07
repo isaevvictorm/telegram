@@ -9,8 +9,7 @@
 function refresh_table(data){
   document.getElementById('loader_reports').hidden = false;
   document.getElementById('table_data').hidden = true;
-  table = $('#table_data').DataTable();
-  table.destroy();
+  $('#table_data').DataTable().destroy();
   $('#table_data').DataTable( {
         dom: 'f<"d-none d-sm-block"B><"datatable-scroll"t>ip',
         lengthMenu: [ [-1], ["Все"] ],
@@ -156,6 +155,7 @@ $(document).on('click', '#btn_delete', function(){
                 <tr role="row">
                     <th>#</th>
                     <th>Текст</th>
+                    <th>Дата добавления</th>
                     <th>Управление</th>
                 </tr>
                 </thead>
@@ -163,6 +163,7 @@ $(document).on('click', '#btn_delete', function(){
                 <tr role="row">
                     <th>#</th>
                     <th>Текст</th>
+                    <th>Дата добавления</th>
                     <th>Управление</th>
                 </tr>
                 </tfoot>
