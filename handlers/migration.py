@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from .modules import DB
 import os
 import codecs
@@ -167,7 +169,7 @@ def migration():
                     answer = answer[2:]
 
                     print(question, answer)
-                    
+
     except Exception as ee:
         print('Error load dialogues:', ee)
 
