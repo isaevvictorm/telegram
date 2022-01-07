@@ -75,15 +75,16 @@ def get_answer_dialog(text):
         for word in words:
             if word in dialog:
                 qa += dialog[word]
-        qa = set(qa)
-        result = []
+        qa = list(set(qa))[:1000]
+        results = []
 
         for question, answer in qa:
             dist = nltk.edit_distance(question, text)
             dist_percent = dist / len(question)
-            result.append([dist_percent, question, answer])
+            results.append([dist_percent, question, answer])
 
-            dist_percent, question, answer = min(result, key=lambda pair:pair[0])
+        if results:
+            dist_percent, question, answer = min(results, key=lambda pair:pair[0])
             if dist_percent < setting['DIST']:
                 return answer
     else:
