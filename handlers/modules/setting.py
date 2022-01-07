@@ -3,6 +3,7 @@ import os
 import requests
 
 setting = None
+
 try:
     print('Setting:', os.path.join(os.getcwd() + "/", "config.json"))
     with open(os.path.join(os.getcwd() + "/", "config.json")) as f:
