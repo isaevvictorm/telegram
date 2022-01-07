@@ -71,7 +71,14 @@ def text_command(message):
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date))
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
-        bot.send_message(message.chat.id, generate_answer(message.text))
+        answer = generate_answer(message.text)
+        bot.send_message(message.chat.id,  answer)
+        jsn = {
+            "chat__id": message.chat.id,
+            "from_me": 1,
+            "text": answer,
+	    }
+        save_answer(jsn)
     except Exception as ee:
         print(str(ee))
 
@@ -107,10 +114,30 @@ def text_command(message):
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
         
-        bot.send_message(message.chat.id,  generate_answer(message.text))
-    
+        answer = generate_answer(message.text)
+        bot.send_message(message.chat.id,  answer)
+        jsn = {
+            "chat__id": message.chat.id,
+            "from_me": 1,
+            "text": answer,
+	    }
+        save_answer(jsn)
     except Exception as ee:
         print(str(ee))
+
+def save_answer(jsn):
+    try:
+        db = DB()
+        dt = db.exec('''
+            INSERT INTO Message  (chat__id, text, from_me)
+            SELECT
+                '{0}' as chat_id,
+                '{1}' as text,
+                {2} as from_me;
+            '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else ''))
+        return True, None
+    except Exception as ee:
+        return False, str(ee)
 
 class Handler:
     async def get(self, request):

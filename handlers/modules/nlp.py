@@ -91,4 +91,4 @@ def generate_answer(text):
     if answer:
         return answer
     
-    return "Ожидайте, я ищу ответ на Ваш вопрос..."
+    return "Ожидайте, я ищу ответ на Ваше сообщение..."
