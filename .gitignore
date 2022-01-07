@@ -1,5 +1,4 @@
-webhook_cert.pem
-webhook_pkey.pem
 config.json
 database/
+startup/
 __pycache__

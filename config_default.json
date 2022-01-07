@@ -4,7 +4,6 @@
     "DOMAIN": "example.ru",
     "TOKEN": "980164770:AAEJw2Hy9YGKNlw_DW0Bo5KgPm4yXQaPrOU",
     "AMDIN": "658586931",
-    "WEBHOOK_SSL_CERT": "webhook_cert.pem",
-    "WEBHOOK_SSL_PRIV": "webhook_pkey.key",
-    "TEMPLATE_DIR": "./templates"
+    "TEMPLATE_DIR": "./templates",
+    "DEBUG": 0
 }

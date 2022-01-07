@@ -11,7 +11,6 @@ from telebot import types
 # - Токен
 # -============================
 
-
 bot = telebot.TeleBot(setting['TOKEN'])
 try:
     bot.remove_webhook()

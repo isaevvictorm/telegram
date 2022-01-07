@@ -15,16 +15,13 @@ class DBResult:
 
 class DB:
 
-    system = None
-
-    def __init__(self, system = None):
-        self.system = system
+    def __init__(self):
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
 
     def exec(self, query):
         try:
-            with sqlite3.connect(os.path.join(os.getcwd() + '/database/', "{0}.db".format('system' if self.system else str(setting['TOKEN']).split(':')[0]))) as conn:
+            with sqlite3.connect(os.path.join(os.getcwd() + '/database/', "database.db")) as conn:
                 cursor = conn.cursor()
                 lst=[]
                 cursor.execute(query)
@@ -45,12 +42,12 @@ class DB:
                     else:
                         return  DBResult(True,cursor.rowcount,[],[],None,None)
                 except sqlite3.Error as ee:
-                    if str(e).lower().find('already') == -1 and str(e).lower().find('duplicate') == -1:
+                    if str(ee).lower().find('already') == -1 and str(ee).lower().find('duplicate') == -1:
                         conn.commit()
                         return  DBResult(True,cursor.rowcount,[],[],None,None)
                     else:
                         return  DBResult(False,0,[],[],str(traceback.format_exc()),None)
                 except Exception as ee:
                     return  DBResult(False,0,[],[],str(traceback.format_exc()),None)
-        except Exception as e:
+        except Exception as ee:
             return DBResult(False,0,[],[],str(traceback.format_exc()),None)
