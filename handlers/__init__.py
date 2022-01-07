@@ -7,3 +7,4 @@ from .users import users
 from .contacts import contacts
 from .chats import chats
 from .failure import failure
+from .intent import intent

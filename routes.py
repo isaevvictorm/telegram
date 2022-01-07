@@ -30,4 +30,9 @@ routes=[
     # ---------------------------
     web.post('/failure',failure.post),
     web.get('/failure',failure.get),
+    # ---------------------------
+    # Список знаний
+    # ---------------------------
+    web.post('/intent',intent.post),
+    web.get('/intent',intent.get),
 ]

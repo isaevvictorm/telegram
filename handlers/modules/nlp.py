@@ -2,14 +2,17 @@ from .db import DB
 from .setting import setting
 import random
 import nltk 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.feature_extraction.text import CountVectorizer, TfidVectorizer
+from sklearn.svm import LenearSVC
 
 
 def filter_text(text):
     text = text.lower()
-    text = [c for c in text if c not in str(setting['SYMBOL'])]
+    text = [c for c in text if c not in str(setting['FILTER'])]
     text = ''.join(text)
     return text
-
 
 def fill_dialog():
     db = DB()
@@ -95,8 +98,8 @@ def get_answer_dialog(text):
 
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
-            if dist_percent < setting['DIST']:
-                return str(question + '-----' + answer)
+            if dist_percent <= setting['DIST']:
+                return answer
     else:
         return
 

@@ -29,6 +29,7 @@ python3.8 -m pip install jinja2
 python3.8 -m pip install pathlib
 python3.8 -m pip install cryptography
 python3.8 -m pip install nltk
+python3.8 -m pip install -U scikit-learn
 
 sudo apt install nodejs -y
 sudo apt install npm -y
