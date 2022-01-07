@@ -1,7 +1,8 @@
 import os
 import codecs
+import io
 
-with codecs.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), "r", "utf_8_sig") as f:
+with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', encoding="utf-8", errors='replace') as f:
     content = f.read()
 
     dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
