@@ -96,7 +96,7 @@ def get_answer_dialog(text):
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
             if dist_percent < setting['DIST']:
-                return answer
+                return str(question + '-----' + answer)
     else:
         return
 
