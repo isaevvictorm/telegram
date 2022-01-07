@@ -93,6 +93,8 @@ def get_answer_dialog(text):
             dist_percent = dist / len(question)
             results.append([dist_percent, question, answer])
 
+        print(results)
+        
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
             if dist_percent < setting['DIST']:
