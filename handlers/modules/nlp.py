@@ -50,7 +50,7 @@ def get_answer_failure():
     if len(dictionary) == 0:
         return
     else:
-        return dictionary[random(0, len(dictionary))]
+        return str(dictionary[random(0, len(dictionary)-1)])
 
 
 def get_answer_dialog(text):
