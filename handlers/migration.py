@@ -157,6 +157,7 @@ def migration():
      
             with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', encoding="utf-8", errors='replace') as f:
                 content = f.read()
+                return True
                 dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
                 
                 for replicas in dialogues:
