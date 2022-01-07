@@ -133,9 +133,9 @@ def migration():
     # Таблица "Ответы"
     # ----------------------
     db.exec('''
-        CREATE TABLE "Response" (
-            id_response INTEGER PRIMARY KEY AUTOINCREMENT,
-            text_response TEXT,
+        CREATE TABLE "Answer" (
+            id_answer INTEGER PRIMARY KEY AUTOINCREMENT,
+            text_answer TEXT,
             id_intent INTEGER,
             date_insert datetime default current_timestamp,
             FOREIGN KEY(id_intent) REFERENCES Intent(id_intent)

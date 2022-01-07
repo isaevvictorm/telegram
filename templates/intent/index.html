@@ -51,42 +51,120 @@ function refresh_table(data){
   document.getElementById('table_data').hidden = false;
 };
 
+
+function refresh_table_example(data){
+  document.getElementById('loader_table_example').hidden = false;
+  document.getElementById('table_example').hidden = true;
+  $('#table_example').DataTable().destroy();
+  $('#table_example').DataTable( {
+        dom: 'f<"d-none d-sm-block"><""t>ip',
+        lengthMenu: [ [10], ["10"] ],
+        "language": {
+              "lengthMenu": "Выводить _MENU_ элементов на страницу",
+              "zeroRecords": "Нет ни одного элемента",
+              "info": "Всего элементов: _MAX_",
+              "infoEmpty": "Нет данных",
+              "infoFiltered": "(фильтр из _MAX_ элементов)",
+              "search": "Поиск:",
+              "searchPlaceholder": "Введите значение"
+        },
+        "scrollX": false,
+        "autoWidth": true,
+        data: data,
+        columns: [
+            {  data: 'text_example', className: "export"},
+            {  data: 'id_example', className: "text-center", "mRender": function(data, type, full){
+                return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_delete_example" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
+              }
+            }
+        ],
+        columnsDef: [{}]
+  });
+  document.getElementById('loader_table_example').hidden = true;
+  document.getElementById('table_example').hidden = false;
+};
+
+function refresh_table_answer(data){
+  document.getElementById('loader_table_answer').hidden = false;
+  document.getElementById('table_answer').hidden = true;
+  $('#table_answer').DataTable().destroy();
+  $('#table_answer').DataTable( {
+        dom: 'f<"d-none d-sm-block"><""t>ip',
+        lengthMenu: [ [10], ["10"] ],
+        "language": {
+              "lengthMenu": "Выводить _MENU_ элементов на страницу",
+              "zeroRecords": "Нет ни одного элемента",
+              "info": "Всего элементов: _MAX_",
+              "infoEmpty": "Нет данных",
+              "infoFiltered": "(фильтр из _MAX_ элементов)",
+              "search": "Поиск:",
+              "searchPlaceholder": "Введите значение"
+        },
+        "scrollX": false,
+        "autoWidth": false,
+        data: data,
+        columns: [
+            {  data: 'text_answer', className: "export"},
+            {  data: 'id_answer', className: "text-center", "mRender": function(data, type, full){
+                return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_delete_answer" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
+              }
+            }
+        ],
+        columnsDef: [{}]
+  });
+  document.getElementById('loader_table_answer').hidden = true;
+  document.getElementById('table_answer').hidden = false;
+};
+
 $(document).ready(function(){
   get_table();
+  refresh_table_example([])
+  refresh_table_answer([])
 });
 
-
-
 $(document).on('click', '#btn_add', function(e){
-    if (document.getElementById('txt').value == ""){
+    if (document.getElementById('name_intent').value == ""){
       generate_alert("Введите текст заглушки... ", "error");
       return false;
     }
-    data = {
-        rid: -1,
-        text: document.getElementById('txt').value,
-        date_insert: "Только что..."
+    example = $('#table_example').DataTable().data();
+    answer = $('#table_answer').DataTable().data();
+
+    jsn = {
+        method: "add_intent",
+        example: example,
+        answer: answer,
+        name_intent: document.getElementById('name_intent').value
     }
-    $.ajax({
-    type: 'POST',
-    url: '/intent',
-    data: JSON.stringify({"method":"add", "data": data}),
-    success: function(response){
-        if (response.result){
-            table = $('#table_data').DataTable();
-            table.row.add( data ).draw();
-            generate_alert("Заглушка успешно добавлена.", "success");
-            $('.bd-example-modal-lg-add-failure').modal('toggle');
-        }
-        else {
-            generate_alert("При добавлении пользователя возникла ошибка: " + response.err, "error");
-        }
-    },
-    dataType:"json",
-    error:function(response){
-        generate_alert('Непредвиденна ошибка', "error");
-    },
-    });
+    console.log(jsn)
+});
+
+$(document).on('click', '.btn_add_answer', function(e){
+    if (document.getElementById('new_answer').value == ""){
+      generate_alert("Введите текст ответа... ", "error");
+      return false;
+    }
+    data = {
+        id_answer: -1,
+        text_answer: document.getElementById('new_answer').value.replace(/\n/g, '<br/>'),
+        date_insert: '',
+    }
+    table = $('#table_answer').DataTable();
+    table.row.add( data ).draw();
+});
+
+$(document).on('click', '.btn_add_example', function(e){
+    if (document.getElementById('new_example').value == ""){
+      generate_alert("Введите текст вопроса... ", "error");
+      return false;
+    }
+    data = {
+        id_example: -1,
+        text_example: document.getElementById('new_example').value.replace(/\n/g, '<br/>'),
+        date_insert: '',
+    }
+    table = $('#table_example').DataTable();
+    table.row.add( data ).draw();
 });
 
 function get_table(){
@@ -133,6 +211,55 @@ $(document).on('click', '#btn_delete', function(){
     });
 });
 
+$(document).on('click', '#btn_delete_answer', function(){
+    table = $('#table_answer').DataTable();
+    var row  = $(this).parents('tr')[0];
+    var data = table.row( row ).data();
+    $.ajax({
+      type: 'POST',
+      url: '/intent',
+      data: JSON.stringify({"method":"delete_answer", "id_answer": data.id_intent}),
+      success: function(response){
+          if (response.result){
+            generate_alert("Запись успешно удалена.", "success");
+            table.row( row ).remove().draw();
+          }
+          else {
+            generate_alert("При удалениии данных возникла ошибка: " + response.err, "error");
+          }
+      },
+      dataType:"json",
+      error:function(response){
+          generate_alert('Непредвиденна ошибка', "error");
+      },
+    });
+});
+
+$(document).on('click', '#btn_delete_example', function(){
+    table = $('#table_example').DataTable();
+    var row  = $(this).parents('tr')[0];
+    var data = table.row( row ).data();
+    $.ajax({
+      type: 'POST',
+      url: '/intent',
+      data: JSON.stringify({"method":"delete_example", "id_example": data.id_example}),
+      success: function(response){
+          if (response.result){
+            generate_alert("Запись успешно удалена.", "success");
+            table.row( row ).remove().draw();
+          }
+          else {
+            generate_alert("При удалениии данных возникла ошибка: " + response.err, "error");
+          }
+      },
+      dataType:"json",
+      error:function(response){
+          generate_alert('Непредвиденна ошибка', "error");
+      },
+    });
+});
+
+
 </script>
 
 <div class="content">
@@ -177,15 +304,72 @@ $(document).on('click', '#btn_delete', function(){
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title">Добавление заглушки</h5>
+                  <h5 class="modal-title">Добавление записи</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                      <label for="txt">Текст:</label>
-                      <textarea class="col-md-12 form-control" id = "txt" placeholder="Введите текст заглушки...."></textarea>
+                      <label for="txt">Название:</label>
+                      <input class="col-md-12 form-control" id = "name_intent" placeholder="Введите название статьи..."></input>
+                    </div>
+                    <div class="row">
+                        <div class=col-md-6>
+                            <div class="form-group">
+                                <textarea class="col-md-12 form-control" id = "new_example" placeholder="Введите вопрос..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success btn_add_example">Добавить вопрос</button>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="loader" id="loader_table_example" hidden></div>
+                                <table id="table_example" class="table table-striped table-hover table-bordered hover" style="width:100%">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>Вопросы</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr role="row">
+                                            <th>Вопросы</th>
+                                            <th></th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class=col-md-6>
+                            <div class="form-group">
+                                <textarea class="col-md-12 form-control" id = "new_answer" placeholder="Введите ответ..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success btn_add_answer">Добавить ответ</button>
+                            </div>
+                            <div class="form-group">
+                                <div class="loader" id="loader_table_answer" hidden></div>
+                                <table id="table_answer" class="table table-striped table-hover table-bordered hover" style="width:100%">
+                                        <thead>
+                                        <tr role="row">
+                                            <th>Ответы</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr role="row">
+                                            <th>Ответы</th>
+                                            <th></th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

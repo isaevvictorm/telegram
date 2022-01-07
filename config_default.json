@@ -7,5 +7,5 @@
     "TEMPLATE_DIR": "./templates",
     "DEBUG": 0,
     "DIST": 0.4,
-    "SYMBOL": "абвгдеёжзийклмнопрстуфхцчшщЪьэюя- abcdefghijklmnopqrstuvwxyz"
+    "FILTER": "абвгдеёжзийклмнопрстуфхцчшщЪьэюя- abcdefghijklmnopqrstuvwxyz"
 }
