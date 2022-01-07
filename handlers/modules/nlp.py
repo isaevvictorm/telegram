@@ -81,11 +81,16 @@ def get_answer_dialog(text):
         # Получение ответа из диалогов
         # -----------------------------------------
         words = text.split(' ')
+        print(words)
+
         qa = []
         for word in words:
             if word in dialog:
                 qa += dialog[word]
         qa = list(set(qa))[:1000]
+
+        print(qa)
+        
         results = []
 
         for question, answer in qa:
@@ -94,7 +99,7 @@ def get_answer_dialog(text):
             results.append([dist_percent, question, answer])
 
         print(results)
-        
+
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
             if dist_percent < setting['DIST']:
