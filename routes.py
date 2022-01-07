@@ -31,5 +31,3 @@ routes=[
     web.post('/failure',failure.post),
     web.get('/failure',failure.get),
 ]
-
-]
