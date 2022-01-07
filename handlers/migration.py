@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
-
 from .modules import DB
 import os
 import io
-
 
 def migration():
     db = DB()

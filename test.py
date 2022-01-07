@@ -2,12 +2,10 @@ import os
 import codecs
 import io
 
-with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', encoding="utf-8", errors='replace') as f:
+with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', encoding="utf-8", errors='') as f:
     content = f.read()
-
-    dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
     
-    for replicas in dialogues:
+    for replicas in [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]:
         if len(replicas) < 2:
             continue
         
@@ -15,5 +13,4 @@ with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', e
         question = question[2:]
         answer = answer[2:]
 
-        print([question, answer])
-
+        print(question, answer)
