@@ -4,7 +4,7 @@ import asyncio
 import telebot
 import json
 import os
-from .modules import DB, setting
+from .modules import DB, setting, generate_answer
 from telebot import types
 
 # -============================
@@ -106,7 +106,9 @@ def text_command(message):
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date, json.dumps(message.json)['photo'][2]['file_id'], json.dumps(message.json)['photo'][2]['file_unique_id']))
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
-        bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
+        
+        bot.send_message(message.chat.id,  generate_answer(message.text))
+    
     except Exception as ee:
         print(str(ee))
 
@@ -115,7 +117,6 @@ class Handler:
         return web.json_response({"result":"success"})
 
     async def post(self, request):
-        #request.match_info.get("token")
         request_body_jsn = await request.json()
         update = telebot.types.Update.de_json(request_body_jsn)
         bot.process_new_updates([update])

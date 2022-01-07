@@ -56,7 +56,7 @@ db = DB()
 
 db.exec('''
     CREATE TABLE "Dialog" (
-        id_template INTEGER PRIMARY KEY AUTOINCREMENT,
+        rid INTEGER PRIMARY KEY AUTOINCREMENT,
         question TEXT,
         response TEXT,
         flag_correct INTEGER default 1,
@@ -65,25 +65,31 @@ db.exec('''
 ''')
 
 dt = db.exec('''
-    Select count(*) as cnt from Dialog;
+    Select question, response from Dialog;
 ''')
-print('Count:', dt.table[0]['cnt'])
-if str(dt.table[0]['cnt']) == '0':
 
-    mass = []
+cnt_rows = len(dt.table)
+curr = [[row['question'], row['response']] for row in dt.table]
+mass = []
 
-    with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', encoding="utf-8", errors='replace') as f:
-        content = f.read()
-        for replicas in [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]:
-            if len(replicas) < 2:
-                continue
-            
-            question, answer = replicas[:2]
-            question = question[2:]
-            answer = answer[2:]
+with io.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), newline='', encoding="utf-8", errors='replace') as f:
+    content = f.read()
+    i = 0
+    for replicas in [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]:
+        print('Строка:', i)
+        if len(replicas) < 2:
+            continue
+        
+        question, answer = replicas[:2]
+        question = question[2:]
+        answer = answer[2:]
 
+        if [question, answer] not in curr:
             db.exec('''
                 INSERT INTO Dialog (question, response) values ('{0}', '{1}');
             '''.format(question, answer))
+            curr.append([question, answer])
+            
+        i = i + 1
 
    
