@@ -6,7 +6,7 @@ import nltk
 
 def filter_text(text):
     text = text.lower()
-    text = [c for c in text if c in str(setting['SYMBOL'])]
+    text = [c for c in text if c not in str(setting['SYMBOL'])]
     text = ''.join(text)
     return text
 
