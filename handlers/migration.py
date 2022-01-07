@@ -152,9 +152,12 @@ def migration():
     print('Count:', dt.table[0]['cnt'])
     try:
         if str(dt.table[0]['cnt']) == '0':
-            with codecs.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), "r", "utf_8_sig" ) as f:
+            
+            with codecs.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), "r", "utf_8_sig") as f:
+                
                 content = f.read()
                 dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
+                
                 for replicas in dialogues:
                     if len(replicas) < 2:
                         continue
@@ -163,9 +166,11 @@ def migration():
                     question = question[2:]
                     answer = answer[2:]
 
-                    print([question, answer])
+                    print(question, answer)
+                    
     except Exception as ee:
         print('Error load dialogues:', ee)
+
     # ----------------------
     # Таблица "IMG"
     # ----------------------

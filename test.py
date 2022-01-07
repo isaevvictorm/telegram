@@ -1,9 +1,8 @@
 import os
+import codecs
 
-with open(os.path.join(os.getcwd() + "/startup/dialogues.txt")) as f:
+with codecs.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), "r", "utf_8_sig") as f:
     content = f.read()
-    for dialogue_line in content.split('\n\n'):
-        print(dialogue_line)
 
     dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
     
