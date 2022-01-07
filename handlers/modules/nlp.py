@@ -50,7 +50,7 @@ def get_answer_failure():
     if len(dictionary) == 0:
         return
     else:
-        return dictionary[0]
+        return random.sample(dictionary, 2)[0]
 
 
 def get_answer_dialog(text):
@@ -58,7 +58,7 @@ def get_answer_dialog(text):
         # -----------------------------------------
         # Получение ответа из диалогов
         # -----------------------------------------
-        return dialog[random(0, len(dialog))]
+        return random.sample(dialog, 2)[0]
     else:
         return
 
