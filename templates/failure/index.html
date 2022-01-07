@@ -69,7 +69,7 @@ $(document).on('click', '#btn_add', function(e){
     }
     $.ajax({
     type: 'POST',
-    url: '/users',
+    url: '/failure',
     data: JSON.stringify({"method":"add", "data": data}),
     success: function(response){
         if (response.result){
@@ -92,7 +92,7 @@ $(document).on('click', '#btn_add', function(e){
 function get_table(){
     $.ajax({
       type: 'POST',
-      url: '/users',
+      url: '/failure',
       data: JSON.stringify({"method":"get"}),
       success: function(response){
           if (response.result){
@@ -115,7 +115,7 @@ $(document).on('click', '#btn_delete', function(){
     var data = table.row( row ).data();
     $.ajax({
       type: 'POST',
-      url: '/users',
+      url: '/failure',
       data: JSON.stringify({"method":"delete", "rid": data.rid}),
       success: function(response){
           if (response.result){
