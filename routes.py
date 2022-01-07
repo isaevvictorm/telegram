@@ -25,4 +25,11 @@ routes=[
     # ---------------------------
     web.post('/contacts',contacts.post),
     web.get('/contacts',contacts.get),
+    # ---------------------------
+    # Список заглушек
+    # ---------------------------
+    web.post('/failure',failure.post),
+    web.get('/failure',failure.get),
+]
+
 ]

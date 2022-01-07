@@ -12,7 +12,7 @@ async def do(func, arg_obj):
     executor = ThreadPoolExecutor(max_workers=100)
     return await loop.run_in_executor(executor, func, arg_obj)
 
-def get(jsn, login = None):
+def get_data(jsn, login = None):
     db = DB()
     dt = db.exec('''
         SELECT
@@ -71,7 +71,7 @@ class Handler:
         method = jsn['method']
         if method == "get":
             try:
-                table = await do(get, jsn)
+                table = await do(get_data, jsn)
                 if len(table) > 0:
                     return web.json_response({'result':True, 'err': None, 'table':table})
                 else:
