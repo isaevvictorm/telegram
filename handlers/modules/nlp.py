@@ -1,4 +1,3 @@
-
 from .db import DB
 from .setting import setting
 import random
@@ -7,7 +6,7 @@ import nltk
 
 def filter_text(text):
     text = text.lower()
-    text = [c for c in text if c in setting['SYMBOL']]
+    text = [c for c in text if c in str(setting['SYMBOL'])]
     text = ''.join(text)
     return text
 
@@ -26,12 +25,11 @@ def fill_dialog():
         dictionary = []
 
         for row in dt.table:
-            dictionary.append([row['question'], row['response']])
+            dictionary.append([filter_text(row['question']), row['response']])
 
         qa_by_word_dataset = {}
 
         for question, answer in dictionary:
-            question = filter_text(question)
             words = question.split(' ')
             for word in words:
                 if word not in qa_by_word_dataset:
