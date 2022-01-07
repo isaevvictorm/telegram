@@ -1,7 +1,8 @@
 
-from hashlib import sha256
 from .db import DB
+from .setting import setting
 import random
+import nltk 
 
 def fill_dialog():
     db = DB()
@@ -50,7 +51,7 @@ def get_answer_failure():
     if len(dictionary) == 0:
         return
     else:
-        return random.sample(dictionary, 2)[0]
+        return random.sample(dictionary, 1)[0]
 
 
 def get_answer_dialog(text):
@@ -58,10 +59,12 @@ def get_answer_dialog(text):
         # -----------------------------------------
         # Получение ответа из диалогов
         # -----------------------------------------
-        return random.sample(dialog, 2)[0]
+        for question, answer in dialog:
+            dist = nltk.edit_distance(text, question)
+            if dist / len(text) < setting['DIST']:
+                return answer
     else:
         return
-
 
 def get_answer_template(text):
     # -----------------------------------------

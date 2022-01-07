@@ -28,6 +28,7 @@ python3.8 -m pip install aiohttp_session
 python3.8 -m pip install jinja2
 python3.8 -m pip install pathlib
 python3.8 -m pip install cryptography
+python3.8 -m pip install nltk
 
 sudo apt install nodejs -y
 sudo apt install npm -y
