@@ -20,9 +20,20 @@ def fill_dialog():
         for row in dt.table:
             dictionary.append([row['question'], row['response']])
 
-        return dictionary
+        qa_by_word_dataset = {}
+
+        for question, answer in dictionary:
+            words = question.split(' ')
+            for word in words:
+                if word not in qa_by_word_dataset:
+                    qa_by_word_dataset[word] = []
+                qa_by_word_dataset[word].append((question,answer))
+
+        qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < 1000}
+
+        return qa_by_word_dataset
     else:
-        return []
+        return None
 
 dialog = fill_dialog()
 
@@ -55,13 +66,25 @@ def get_answer_failure():
 
 
 def get_answer_dialog(text):
-    if len(dialog) > 0:
+    if dialog:
         # -----------------------------------------
         # Получение ответа из диалогов
         # -----------------------------------------
-        for question, answer in dialog:
-            dist = nltk.edit_distance(text, question)
-            if dist / len(text) < setting['DIST']:
+        words = text.split(' ')
+        qa = []
+        for word in words:
+            if word in dialog:
+                qa += dialog[word]
+        qa = set(qa)
+        result = []
+
+        for question, answer in qa:
+            dist = nltk.edit_distance(question, text)
+            dist_percent = dist / len(question)
+            result.append([dist_percent, question, answer])
+
+            dist_percent, question, answer = min(result, key=lambda pair:pair[0])
+            if dist_percent < setting['DIST']:
                 return answer
     else:
         return
