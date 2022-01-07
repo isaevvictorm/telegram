@@ -84,7 +84,6 @@ def migration():
             chat__id TEXT,
             text TEXT,
             from_me INTEGER,
-            answer_for TEXT,
             date INTEGER,
             caption TEXT,
             file_id TEXT,
