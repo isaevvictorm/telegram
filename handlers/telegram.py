@@ -71,7 +71,7 @@ def text_command(message):
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date))
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
-        bot.send_message(message.chat.id, str('Спасибо за Ваше сообщение, мы скоро на него ответим...'))
+        bot.send_message(message.chat.id, generate_answer(message.text))
     except Exception as ee:
         print(str(ee))
 
