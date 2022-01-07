@@ -148,20 +148,22 @@ def migration():
         Select count(*) as cnt from Template;
     ''')
     print('Count:', dt.table[0]['cnt'])
-    if len(dt.table) == 0:
-        with open(os.path.join(os.getcwd() + "/startup/dialogues.txt")) as f:
-            content = f.read()
-            dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
-            for replicas in dialogues:
-                if len(replicas) < 2:
-                    continue
-                
-                question, answer = replicas[:2]
-                question = question[2:]
-                answer = answer[2:]
+    try:
+        if str(dt.table[0]['cnt']) == '0':
+            with open(os.path.join(os.getcwd() + "/startup/dialogues.txt")) as f:
+                content = f.read()
+                dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
+                for replicas in dialogues:
+                    if len(replicas) < 2:
+                        continue
+                    
+                    question, answer = replicas[:2]
+                    question = question[2:]
+                    answer = answer[2:]
 
-                print([question, answer])
-
+                    print([question, answer])
+    except Exception as ee:
+        print('Error load dialogues:', ee)
     # ----------------------
     # Таблица "IMG"
     # ----------------------
