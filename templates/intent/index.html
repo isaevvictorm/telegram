@@ -218,7 +218,7 @@ $(document).on('click', '#btn_delete_answer', function(){
     $.ajax({
       type: 'POST',
       url: '/intent',
-      data: JSON.stringify({"method":"delete_answer", "id_answer": data.id_intent}),
+      data: JSON.stringify({"method":"delete_answer", "id_answer": data.id_answer}),
       success: function(response){
           if (response.result){
             generate_alert("Запись успешно удалена.", "success");
