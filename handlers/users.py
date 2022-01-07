@@ -14,7 +14,7 @@ async def do(func, arg_obj):
 
 def get_users(jsn, login = None):
     where = "login='{0}'".format(login) if login else '1=1'
-    db = DB(True)
+    db = DB()
     dt = db.exec('''
         SELECT
             login,
@@ -37,7 +37,7 @@ def get_users(jsn, login = None):
     return table
 
 def add(jsn):
-    db = DB(True)
+    db = DB()
     dt = db.exec('''
         INSERT INTO User (login, first_name, last_name, password, admin)
         SELECT
@@ -61,7 +61,7 @@ def add(jsn):
 def delete(jsn):
     user_id = jsn['login']
     try:
-        db = DB(True)
+        db = DB()
         dt = db.exec("""
             DELETE FROM User where login = '{0}';
         """.format(user_id))
