@@ -41,7 +41,7 @@ function refresh_table(data){
             {  data: 'rid', className: "text-center export"},
             {  data: 'text', className: "text-center export"},
             {  data: 'date_insert', className: "text-center export"},
-            {  data: 'login', className: "text-center", "mRender": function(data, type, full){
+            {  data: 'rid', className: "text-center", "mRender": function(data, type, full){
                 return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_edit" class="dropdown-item"><i class="icon-pencil"></i>Изменить</a><a id = "btn_delete" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
               }
             }
@@ -66,6 +66,7 @@ $(document).on('click', '#btn_add', function(e){
     data = {
         rid: -1,
         text: document.getElementById('txt').value,
+        date_insert: "Только что..."
     }
     $.ajax({
     type: 'POST',
