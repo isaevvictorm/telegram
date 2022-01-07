@@ -149,7 +149,7 @@ def migration():
     ''')
     print('Count:', dt.table[0]['cnt'])
     if len(dt.table) == 0:
-        with open(os.path.join(os.getcwd() + "/startup/dialogues.txt"),'r') as f:
+        with open(os.path.join(os.getcwd() + "/startup/dialogues.txt")) as f:
             content = f.read()
             dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
             for replicas in dialogues:
