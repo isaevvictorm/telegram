@@ -1,5 +1,7 @@
 from .modules import DB
 import os
+import codecs
+
 
 def migration():
     db = DB()
@@ -150,7 +152,7 @@ def migration():
     print('Count:', dt.table[0]['cnt'])
     try:
         if str(dt.table[0]['cnt']) == '0':
-            with open(os.path.join(os.getcwd() + "/startup/dialogues.txt")) as f:
+            with codecs.open(os.path.join(os.getcwd() + "/startup/dialogues.txt"), "r", "utf_8_sig" ) as f:
                 content = f.read()
                 dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
                 for replicas in dialogues:
