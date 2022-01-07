@@ -145,9 +145,9 @@ def migration():
     ''')
 
     dt = db.exec('''
-        Select count(*) from Template;
+        Select count(*) as cnt from Template;
     ''')
-    print(dt.table)
+    print('Count:', dt.table[0]['cnt'])
     if len(dt.table) == 0:
         with open(os.path.join(os.getcwd() + "/startup/dialogues.txt"),'r') as f:
             content = f.read
