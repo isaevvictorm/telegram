@@ -147,12 +147,11 @@ def migration():
     dt = db.exec('''
         Select count(*) from Template;
     ''')
-    print(0)
+    print(dt.table)
     if len(dt.table) == 0:
         with open(os.path.join(os.getcwd() + "/startup/dialogues.txt"),'r') as f:
             content = f.read
             dialogues = [dialogue_line.split('\n') for dialogue_line in content.split('\n\n')]
-            qa_dataset = []
             for replicas in dialogues:
                 if len(replicas) < 2:
                     continue
