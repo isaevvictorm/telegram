@@ -12,59 +12,44 @@ async def do(func, arg_obj):
     executor = ThreadPoolExecutor(max_workers=100)
     return await loop.run_in_executor(executor, func, arg_obj)
 
-def get_users(jsn, login = None):
-    where = "login='{0}'".format(login) if login else '1=1'
+def get(jsn, login = None):
     db = DB()
     dt = db.exec('''
         SELECT
-            login,
-            first_name,
-            last_name,
-            admin,
+            rid,
+            text,
             date_insert
-        FROM User WHERE ({0});
-    '''.format(where))
+        FROM Failure;
+    ''')
     table = []
     for row in dt.table:
         table_row = {
-            "login": row['login'],
-            "first_name": row['first_name'],
-            "last_name": row['last_name'],
-            "admin": row['admin'],
-            "date_insert": row['date_insert'],
+            "rid": row['rid'],
+            "text": row['text'],
+            "date_insert": row['date_insert']
         }
         table.append(table_row)
     return table
 
 def add(jsn):
-    db = DB()
-    dt = db.exec('''
-        INSERT INTO User (login, first_name, last_name, password, admin)
-        SELECT
-            '{0}' login,
-            '{1}' first_name,
-            '{2}' last_name,
-            '{3}' password,
-            {4} admin;
-    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['admin']))
-    # ==========================
-    # Предусмотреть вывод ошибок
-    # ==========================>>>
-    if str(dt.err).lower().find("unique") > -1:
-        return [], "Пользователь с таким логином уже существует."
-    elif dt.err:
-        return [], str(dt.err)
-    # ==========================<<<
-    table = get_users(jsn, jsn['data']['login'])
-    return table, None
+    try:
+        db = DB()
+        dt = db.exec('''
+            INSERT INTO Failure (text)
+            SELECT '{0}' text
+        '''.format(jsn['data']['text']))
+        if dt.err:
+            return False. str(dt.err)
+    except Exception as ee:
+        return False, str(ee)
+    return True, None
 
 def delete(jsn):
-    user_id = jsn['login']
     try:
         db = DB()
         dt = db.exec("""
-            DELETE FROM User where login = '{0}';
-        """.format(user_id))
+            DELETE FROM Failure where rid = {0};
+        """.format(jsn['rid']))
         if dt.err:
             return False, str(dt.err)
     except Exception as ee:
@@ -72,7 +57,7 @@ def delete(jsn):
     return True, None
 
 class Handler:
-    @template("users/index.html")
+    @template("failure/index.html")
     async def get(self, request):
         a = Auth(request)
         if await a.is_logged():
@@ -84,9 +69,9 @@ class Handler:
     async def post(self, request):
         jsn = await request.json()
         method = jsn['method']
-        if method == "get_users":
+        if method == "get":
             try:
-                table = await do(get_users, jsn)
+                table = await do(get, jsn)
                 if len(table) > 0:
                     return web.json_response({'result':True, 'err': None, 'table':table})
                 else:
@@ -97,13 +82,13 @@ class Handler:
             try:
                 table, err = await do(add, jsn)
                 if err:
-                    return web.json_response({'result':False, 'err': str(err), 'table':[]})
+                    return web.json_response({'result':False, 'err': str(err)})
                 elif table and len(table) > 0:
-                    return web.json_response({'result':True, 'err': None, 'table':table})
+                    return web.json_response({'result':True, 'err': None})
                 else:
-                    return web.json_response({'result':False, 'err': "Не удалось добавить пользователя.", 'table':[]})
+                    return web.json_response({'result':False, 'err': "Не удалось добавить заглушку."})
             except Exception as ee:
-                return web.json_response({"result":False,"err":str(ee),"table":[]})
+                return web.json_response({"result":False,"err":str(ee)})
         if method == "delete":
             try:
                 result, err = await do(delete, jsn)
@@ -117,4 +102,4 @@ class Handler:
 
         return web.json_response({"result": False, "err": "Метод не найден", "data": None})
 
-users = Handler()
+failure = Handler()

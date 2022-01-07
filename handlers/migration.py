@@ -120,6 +120,17 @@ def migration():
     ''')
 
     # ----------------------
+    # Таблица "Заглушек"
+    # ----------------------
+    db.exec('''
+        CREATE TABLE "Failure" (
+            rid INTEGER PRIMARY KEY AUTOINCREMENT,
+            text TEXT,
+            date_insert datetime default current_timestamp
+        );
+    ''')
+
+    # ----------------------
     # Таблица "Ответы"
     # ----------------------
     db.exec('''

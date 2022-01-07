@@ -6,3 +6,4 @@ from .login import logout
 from .users import users
 from .contacts import contacts
 from .chats import chats
+from .failure import failure
