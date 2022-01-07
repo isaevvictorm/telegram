@@ -75,6 +75,7 @@ def get_answer_failure():
 
 
 def get_answer_dialog(text):
+    print(dialog)
     if dialog:
         text = filter_text(text)
         # -----------------------------------------
@@ -90,7 +91,7 @@ def get_answer_dialog(text):
         qa = list(set(qa))[:1000]
 
         print(qa)
-        
+
         results = []
 
         for question, answer in qa:
