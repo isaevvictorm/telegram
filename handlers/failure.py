@@ -62,9 +62,9 @@ class Handler:
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin, 'breadcrumb':[{'name':'Пользователи', 'link':'/users'}]}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin, 'breadcrumb':[{'name':'Пользователи', 'link':'/failure'}]}}
         else:
-            return web.HTTPFound('/login?redirect=users')
+            return web.HTTPFound('/login?redirect=failure')
 
     async def post(self, request):
         jsn = await request.json()
@@ -82,11 +82,9 @@ class Handler:
             try:
                 table, err = await do(add, jsn)
                 if err:
-                    return web.json_response({'result':False, 'err': str(err)})
-                elif table and len(table) > 0:
-                    return web.json_response({'result':True, 'err': None})
+                    return web.json_response({'result':False, 'err': str(err)})             
                 else:
-                    return web.json_response({'result':False, 'err': "Не удалось добавить заглушку."})
+                    return web.json_response({'result':True, 'err': None})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})
         if method == "delete":
