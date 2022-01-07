@@ -6,7 +6,7 @@ import nltk
 
 
 def filter_text(text):
-    text = text.lower()
+    #text = text.lower()
     #text = [c for c in text if c in setting['SYMBOL']]
     #text = ''.join(text)
     return text
@@ -81,7 +81,6 @@ def get_answer_dialog(text):
         # Получение ответа из диалогов
         # -----------------------------------------
         words = text.split(' ')
-        print(words)
 
         qa = []
         for word in words:
@@ -89,16 +88,12 @@ def get_answer_dialog(text):
                 qa += dialog[word]
         qa = list(set(qa))[:1000]
 
-        print(qa)
-
         results = []
 
         for question, answer in qa:
             dist = nltk.edit_distance(text, question)
             dist_percent = dist / len(question)
             results.append([dist_percent, question, answer])
-
-        print(results)
 
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
