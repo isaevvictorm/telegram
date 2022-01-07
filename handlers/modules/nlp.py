@@ -89,7 +89,7 @@ def get_answer_dialog(text):
         results = []
 
         for question, answer in qa:
-            dist = nltk.edit_distance(text, question)
+            dist = nltk.edit_distance(question, text)
             dist_percent = dist / len(question)
             results.append([dist_percent, question, answer])
 
