@@ -64,7 +64,7 @@ def add(jsn):
 
     except Exception as ee:
         return False, str(ee), []
-        
+
     return True, None, table
 
 
@@ -106,9 +106,9 @@ class Handler:
             try:
                 result, err, table = await do(add, jsn)
                 if result:
-                    return web.json_response({'result':False, 'err': str(err), 'table': [] })             
+                    return web.json_response({'result': True, 'err': None, 'table': table })             
                 else:
-                    return web.json_response({'result':True, 'err': None, 'table': table})
+                    return web.json_response({'result':False, 'err': str(err), 'table': []})
             except Exception as ee:
                 return web.json_response({"result":False, "err":str(ee),'table': [] })
         if method == "delete":
