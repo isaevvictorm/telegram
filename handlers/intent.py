@@ -111,7 +111,7 @@ def add_intent(jsn):
                     '{1}' as text_answer
                 where '{1}' not in 
                 (Select text_answer from Answer where text_answer = '{1}' and id_intent = {0});
-            '''.format(id_intent, element.replace("'", '"')))
+            '''.format(id_intent, element['text_answer'].replace("'", '"')))
             if dt.err:
                 return False. str(dt.err), None
 
@@ -123,7 +123,7 @@ def add_intent(jsn):
                     '{1}' as text_example
                 where '{1}' not in 
                 (Select text_example from Example where text_example = '{1}' and id_intent = {0});
-            '''.format(id_intent, element.replace("'", '"')))
+            '''.format(id_intent, element['text_example'].replace("'", '"')))
             if dt.err:
                 return False. str(dt.err), None
 
