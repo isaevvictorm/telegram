@@ -87,13 +87,13 @@ def add_intent(jsn):
             (Select name_intent from Intent where name_intent = '{0}');
         '''.format(jsn['data']['name_intent']))
         if dt.err:
-            return False. str(dt.err)
+            return False. str(dt.err), None
 
         dt = db.exec('''
            Select id_intent, name_intent, date_insert from Intent where name_intent = '{0}';
         '''.format(jsn['data']['name_intent']))
         if dt.err:
-            return False. str(dt.err)
+            return False. str(dt.err), None
 
         table = [{
             "id_intent": dt.table[0]['id_intent'],
@@ -113,7 +113,7 @@ def add_intent(jsn):
                 (Select text_answer from Answer where text_answer = '{1}' and id_intent = {0});
             '''.format(id_intent, element.replace("'", '"')))
             if dt.err:
-                return False. str(dt.err)
+                return False. str(dt.err), None
 
         for element in jsn['data']['example']:
             dt = db.exec('''
@@ -125,11 +125,11 @@ def add_intent(jsn):
                 (Select text_example from Example where text_example = '{1}' and id_intent = {0});
             '''.format(id_intent, element.replace("'", '"')))
             if dt.err:
-                return False. str(dt.err)
+                return False. str(dt.err), None
 
     except Exception as ee:
-        return False, str(ee)
-    return True, table
+        return False, str(ee), None
+    return True, None, table
 
 def delete(jsn):
     try:
@@ -219,13 +219,13 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "add_intent":
             try:
-                table, err = await do(add_intent, jsn)
+                table, err, table = await do(add_intent, jsn)
                 if err:
-                    return web.json_response({'result':False, 'err': str(err)})             
+                    return web.json_response({'result':False, 'err': str(err), 'data': []})             
                 else:
-                    return web.json_response({'result':True, 'data': err})
+                    return web.json_response({'result':True, 'err': str(err), 'data': table})
             except Exception as ee:
-                return web.json_response({"result":False,"err":str(ee)})
+                return web.json_response({"result":False,"err":str(ee), 'data': []})
         if method == "delete":
             try:
                 result, err = await do(delete, jsn)
