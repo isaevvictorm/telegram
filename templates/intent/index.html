@@ -128,12 +128,21 @@ $(document).ready(function(){
 $(document).on('click', '#btn_add', function(e){
     refresh_table_example([]);
     refresh_table_answer([]);
+    document.getElementById('name_intent').value = "";
+    document.getElementById('new_answer').value = "";
+    document.getElementById('new_example').value = "";
     document.getElementById('name_intent').disabled = false;
     document.getElementById('btn_save').innerHTML = "Добавить"; 
+    $('.modal-title').text('Добавление записи');
     $('.bd-example-modal-lg-add-inent').modal('toggle');
 });
 
 $(document).on('click', '#btn_edit', function(e){
+    $('.modal-title').text('Редактирование записи');
+    document.getElementById('name_intent').value = "";
+    document.getElementById('new_answer').value = "";
+    document.getElementById('new_example').value = "";
+
     table = $('#table_data').DataTable();
     var row  = $(this).parents('tr')[0];
     var data = table.row( row ).data();
