@@ -7,7 +7,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.svm import LinearSVC
 
-
 def filter_text(text):
     text = text.lower()
     text = [c for c in text if c not in str(setting['FILTER'])]
@@ -39,7 +38,7 @@ def fill_dialog():
                     qa_by_word_dataset[word] = []
                 qa_by_word_dataset[word].append((question, answer))
 
-        qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < 1000}
+        qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < setting['MAX_W']}
 
         return qa_by_word_dataset
     else:
@@ -70,7 +69,7 @@ def fill_template(ls_words):
                 qa_by_word_dataset[word] = []
             qa_by_word_dataset[word].append((question, answer))
 
-    qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < 1000}
+    qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < setting['MAX_W']}
 
     return qa_by_word_dataset
 
@@ -90,7 +89,7 @@ def get_answer_failure():
     db = DB()
   
     dt = db.exec('''
-        Select text from Failure;
+        Select text from Failure where type = 'нет ответа';
     ''')
     
     dictionary = []

@@ -3,10 +3,9 @@ from aiohttp import web
 import asyncio
 import telebot
 import json
-import os
 from .modules import DB, setting, generate_answer
 from telebot import types
-
+import random 
 # -============================
 # - Токен
 # -============================
@@ -18,7 +17,29 @@ try:
 except Exception as ee:
     print(ee)
 
-@bot.message_handler(commands=['start', 'help'])
+
+def get_answer_start():
+    # -----------------------------------------
+    # Получение ответа из таблицы заглушек
+    # -----------------------------------------
+    db = DB()
+  
+    dt = db.exec('''
+        Select text from Failure where type = 'Приветствие';
+    ''')
+    
+    dictionary = []
+
+    for row in dt.table:
+        dictionary.append(row['text'])
+
+    if len(dictionary) == 0:
+        return 'Привет! Чем я могу Вам помочь?'
+    else:
+        return random.sample(dictionary, 1)[0]
+
+
+@bot.message_handler(commands=['start'])
 def start_command(message):
     try:
         db = DB()
@@ -40,7 +61,7 @@ def start_command(message):
                     message.from_user.username))
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
-        bot.send_message(message.chat.id, str('Привет! Меня зовут Харпер, могу я чем-то помочь?'))
+        bot.send_message(message.chat.id, get_answer_start())
     except Exception as ee:
         print(str(ee))
 
