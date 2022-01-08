@@ -35,4 +35,7 @@ routes=[
     # ---------------------------
     web.post('/intent',intent.post),
     web.get('/intent',intent.get),
+
+    web.post('/template',template.post),
+    web.get('/template',template.get),
 ]
