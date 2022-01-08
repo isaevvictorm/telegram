@@ -90,11 +90,17 @@ $(document).on('click', '#btn_add', function(e){
     });
 });
 
+$(document).on('change', '#type', function(e){
+  get_table();
+});
+
+
+
 function get_table(){
     $.ajax({
       type: 'POST',
       url: '/failure',
-      data: JSON.stringify({"method":"get"}),
+      data: JSON.stringify({"method":"get", "type": document.getElementById('type').value}),
       success: function(response){
           if (response.result){
             refresh_table(response.table);

@@ -19,8 +19,10 @@ def get_data(jsn, login = None):
             rid,
             text,
             date_insert
-        FROM Failure;
-    ''')
+        FROM 
+            Failure
+        WHERE type = '{0}';
+    '''.format(jsn['type']))
     table = []
     for row in dt.table:
         table_row = {

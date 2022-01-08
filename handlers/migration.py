@@ -130,10 +130,6 @@ def migration():
         );
     ''')
 
-    db.exec('''
-        ALTER TABLE "Failure" add type TEXT;
-    ''')
-
     # ----------------------
     # Таблица "Ответы"
     # ----------------------
