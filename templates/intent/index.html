@@ -154,6 +154,7 @@ $(document).on('click', '#btn_add', function(e){
                 table = $('#table_data').DataTable();
                 table.rows.add(response.data).draw();
                 generate_alert("Данные успешно добавлены...", "success");
+                $('.bd-example-modal-lg-add-inent').modal('toggle');
             }
             else {
                 generate_alert("При добавлении данных возникла ошибка: " + response.err, "error");
@@ -300,7 +301,7 @@ $(document).on('click', '#btn_delete_example', function(){
           Список статей
         </div>
         <div class="card-body">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-failure">Добавить</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-inent">Добавить</button>
         </div>
         <div class="card-body">
            <div class="loader" id="loader_reports"></div>
@@ -327,7 +328,7 @@ $(document).on('click', '#btn_delete_example', function(){
          </div>
         </div>
 
-        <div class="modal fade bd-example-modal-lg-add-failure" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg-add-inent" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
