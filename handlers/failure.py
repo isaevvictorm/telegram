@@ -31,15 +31,17 @@ def get_data(jsn, login = None):
         table.append(table_row)
     return table
 
+
 def add(jsn):
     try:
         db = DB()
         dt = db.exec('''
             INSERT INTO Failure (text, type)
-            SELECT '{0}' text, '{1}' as type
+            SELECT '{0}' as text, '{1}' as type
             WHERE 
                 '{0}' not in (Select text from Failure where text = '{0}' and type = '{1}');
         '''.format(jsn['data']['text'], jsn['data']['type']))
+
         if dt.err:
             return False, str(dt.err), []
 
@@ -52,15 +54,17 @@ def add(jsn):
                 Failure
             WHERE 
                 text = '{0}' and type = '{1}';
-        '''.format(jsn['data']['text'], jsn['data']['type']))
+        '''.fromat(jsn['data']['text'], jsn['data']['type']))
 
         table = [{
             "rid": dt.table[0]['rid'],
             "text": dt.table[0]['text'],
             "date_insert": dt.table[0]['date_insert']
         }]
+
     except Exception as ee:
         return False, str(ee), []
+        
     return True, None, table
 
 
