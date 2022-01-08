@@ -76,18 +76,60 @@ def get_example(jsn):
         table.append(table_row)
     return table
 
-def add(jsn):
+def add_intent(jsn):
     try:
         db = DB()
         dt = db.exec('''
             INSERT INTO Intent (name_intent)
-            SELECT '{0}' as name_intent
+            SELECT 
+                '{0}' as name_intent
+            where '{0}' not in 
+            (Select name_intent from Intent where name_intent = '{0}');
         '''.format(jsn['data']['name_intent']))
         if dt.err:
             return False. str(dt.err)
+
+        dt = db.exec('''
+           Select id_intent, name_intent, date_insert from Intent where name_intent = '{0}';
+        '''.format(jsn['data']['name_intent']))
+        if dt.err:
+            return False. str(dt.err)
+
+        table = [{
+            "id_intent": dt.table[0]['id_intent'],
+            "name_intent": dt.table[0]['name_intent'],
+            "date_insert": dt.table[0]['date_insert']
+        }]
+
+        id_intent = dt.table[0]['id_intent']
+
+        for element in jsn['data']['answer']:
+            dt = db.exec('''
+                INSERT INTO Answer (id_intent, text_answer)
+                SELECT 
+                    {0} as id_intent,
+                    '{1}' as text_answer
+                where '{1}' not in 
+                (Select text_answer from Answer where text_answer = '{1}' and id_intent = {0});
+            '''.format(id_intent, element.replace("'", '"')))
+            if dt.err:
+                return False. str(dt.err)
+
+        for element in jsn['data']['example']:
+            dt = db.exec('''
+                INSERT INTO Example (id_intent, text_example)
+                SELECT 
+                    {0} as id_intent,
+                    '{1}' as text_example
+                where '{1}' not in 
+                (Select text_example from Example where text_example = '{1}' and id_intent = {0});
+            '''.format(id_intent, element.replace("'", '"')))
+            if dt.err:
+                return False. str(dt.err)
+
     except Exception as ee:
         return False, str(ee)
-    return True, None
+    return True, table
 
 def delete(jsn):
     try:
@@ -177,11 +219,11 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "add_intent":
             try:
-                table, err = await do(add, jsn)
+                table, err = await do(add_intent, jsn)
                 if err:
                     return web.json_response({'result':False, 'err': str(err)})             
                 else:
-                    return web.json_response({'result':True, 'err': None})
+                    return web.json_response({'result':True, 'data': err})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})
         if method == "delete":

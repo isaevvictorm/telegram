@@ -131,12 +131,29 @@ $(document).on('click', '#btn_add', function(e){
     answer = $('#table_answer').DataTable().data();
 
     jsn = {
-        method: "add_intent",
         example: example,
         answer: answer,
         name_intent: document.getElementById('name_intent').value
     }
-    console.log(jsn)
+    $.ajax({
+        type: 'POST',
+        url: '/intent',
+        data: JSON.stringify({"method":"add_intent", "data":jsn}),
+        success: function(response){
+            if (response.result){
+                table = $('#table_data').DataTable();
+                table.rows.add(response.data).draw();
+                generate_alert("Данные успешно добавлены...", "success");
+            }
+            else {
+                generate_alert("При добавлении данных возникла ошибка: " + response.err, "error");
+            }
+        },
+        dataType:"json",
+        error:function(response){
+            generate_alert('Непредвиденна ошибка', "error");
+        },
+    });
 });
 
 $(document).on('click', '.btn_add_answer', function(e){
@@ -171,7 +188,7 @@ function get_table(){
     $.ajax({
       type: 'POST',
       url: '/intent',
-      data: JSON.stringify({"method":"get"}),
+      data: JSON.stringify({"method":"get_intent"}),
       success: function(response){
           if (response.result){
             refresh_table(response.table);
