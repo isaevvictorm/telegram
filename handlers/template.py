@@ -69,6 +69,24 @@ def add(jsn):
         return False, str(ee), []
     return True, None, table
 
+
+def edit(jsn):
+    try:
+        db = DB()
+        dt = db.exec('''
+            Update Template 
+            set 
+                question = '{0}',
+                response = '{1}'
+            where 
+                id_template = {2};
+        '''.format(jsn['question'], jsn['response'], jsn['id_template']))
+        if dt.err:
+            return False, str(dt.err)
+    except Exception as ee:
+        return False, str(ee)
+    return True, None
+
 def delete(jsn):
     try:
         db = DB()
@@ -115,6 +133,15 @@ class Handler:
         if method == "delete":
             try:
                 result, err = await do(delete, jsn)
+                if result:
+                    return web.json_response({"result":True, "err": None})
+                else:
+                    return web.json_response({"result":False,"err": str(err)})
+            except Exception as ee:
+                return web.json_response({"result":False,"err":str(ee)})
+        if method == "edit":
+            try:
+                result, err = await do(edit, jsn)
                 if result:
                     return web.json_response({"result":True, "err": None})
                 else:

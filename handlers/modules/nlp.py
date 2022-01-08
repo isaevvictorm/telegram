@@ -45,6 +45,35 @@ def fill_dialog():
     else:
         return None
 
+def fill_template(ls_words):
+    db = DB()
+
+    where = "WHERE 1 = 0"
+    for word_ls_words in ls_words:
+        where = where + " or question like '%{0}%'".format(word_ls_words)
+
+    dt = db.exec('''
+        Select question, response from Template {0};
+    '''.format(where))
+    
+    dictionary = []
+
+    for row in dt.table:
+        dictionary.append([filter_text(row['question']), row['response']])
+
+    qa_by_word_dataset = {}
+
+    for question, answer in dictionary:
+        words = question.split(' ')
+        for word in words:
+            if word not in qa_by_word_dataset:
+                qa_by_word_dataset[word] = []
+            qa_by_word_dataset[word].append((question, answer))
+
+    qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < 1000}
+
+    return qa_by_word_dataset
+
 dialog = fill_dialog()
 
 def get_answer_intent(text):
@@ -87,7 +116,7 @@ def get_answer_dialog(text):
         for word in words:
             if word in dialog:
                 qa += dialog[word]
-        qa = list(set(qa))[:1000]
+        qa = list(set(qa))[:setting['MAX_W']]
 
         results = []
 
@@ -107,6 +136,36 @@ def get_answer_template(text):
     # -----------------------------------------
     # Получение ответа из таблицы шаблонов
     # -----------------------------------------
+    list_w = filter_text(text).split(' ')
+    template = fill_template(list_w)
+    if template:
+        text = filter_text(text)
+        # -----------------------------------------
+        # Получение ответа из диалогов
+        # -----------------------------------------
+        words = text.split(' ')
+
+        qa = []
+        for word in words:
+            if word in template:
+                qa += template[word]
+        qa = list(set(qa))[:setting['MAX_W']]
+
+        results = []
+
+        for question, answer in qa:
+            dist = nltk.edit_distance(question, text)
+            dist_percent = dist / len(question)
+            results.append([dist_percent, question, answer])
+
+        if results:
+            dist_percent, question, answer = min(results, key=lambda pair:pair[0])
+            if dist_percent <= setting['DIST']:
+                return answer
+    else:
+        return
+
+
     
     return
 

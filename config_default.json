@@ -7,5 +7,6 @@
     "TEMPLATE_DIR": "./templates",
     "DEBUG": 0,
     "DIST": 0.4,
+    "MAX_W": 1000,
     "FILTER": "абвгдеёжзийклмнопрстуфхцчшщЪьэюя- abcdefghijklmnopqrstuvwxyz"
 }
