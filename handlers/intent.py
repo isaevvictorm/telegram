@@ -190,7 +190,7 @@ class Handler:
     async def post(self, request):
         jsn = await request.json()
         method = jsn['method']
-        if method == "get":
+        if method == "get_intent":
             try:
                 table = await do(get_data, jsn)
                 if len(table) > 0:
