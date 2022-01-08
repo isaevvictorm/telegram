@@ -18,15 +18,15 @@ except Exception as ee:
     print(ee)
 
 
-def get_answer_start():
+def get_fast_answer(type):
     # -----------------------------------------
     # Получение ответа из таблицы заглушек
     # -----------------------------------------
     db = DB()
   
     dt = db.exec('''
-        Select text from Failure where type = 'Приветствие';
-    ''')
+        Select text from Failure where type = '{0}';
+    '''.format(type))
     
     dictionary = []
 
@@ -34,7 +34,7 @@ def get_answer_start():
         dictionary.append(row['text'])
 
     if len(dictionary) == 0:
-        return 'Привет! Чем я могу Вам помочь?'
+        return 'Чем я могу Вам помочь?'
     else:
         return random.sample(dictionary, 1)[0]
 
@@ -54,16 +54,35 @@ def start_command(message):
                 '{0}' user_id,
                 '{1}' first_name,
                 '{2}' last_name,
-                '{3}' username;
+                '{3}' username
+            WHERE 
+                '{0}' not in (Select user_id from Contact where user_id = '{0}')
         '''.format( message.from_user.id,
                     message.from_user.first_name,
                     message.from_user.last_name,
                     message.from_user.username))
         if dt.err:
-            bot.send_message(message.chat.id, str(dt.err))
-        bot.send_message(message.chat.id, get_answer_start())
+            bot.send_message(setting['ADMIN'], str(dt.err))
+        bot.send_message(message.chat.id, get_fast_answer('Приветствие'))
     except Exception as ee:
-        print(str(ee))
+        bot.send_message(setting['ADMIN'], str(dt.err))
+
+@bot.message_handler(content_types=['contact'])
+def start_command(message):
+    try:
+        db = DB()
+        dt = db.exec('''
+            Update Contact set phone_number = '{1}'
+            WHERE 
+                user_id = {0};
+        '''.format( message.from_user.id,
+                    message.contact.phone_number))
+        if dt.err:
+            bot.send_message(setting['ADMIN'], str(dt.err))
+        bot.send_message(message.chat.id, get_fast_answer('Контакт'))
+    except Exception as ee:
+        bot.send_message(setting['ADMIN'], str(dt.err))
+
 
 @bot.message_handler(content_types=["text"])
 def text_command(message):
