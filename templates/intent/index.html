@@ -127,14 +127,24 @@ $(document).on('click', '#btn_add', function(e){
       generate_alert("Введите текст заглушки... ", "error");
       return false;
     }
-    example = $('#table_example').DataTable().data();
-    answer = $('#table_answer').DataTable().data();
+    data = $('#table_example').DataTable().data();
+    example = []
+    data.each(function (value, index) {
+        example.push(value)
+    });
+
+    data = $('#table_answer').DataTable().data();
+    answer = [];
+    data.each(function (value, index) {
+        answer.push(value)
+    });
 
     jsn = {
         example: example,
         answer: answer,
         name_intent: document.getElementById('name_intent').value
     }
+
     $.ajax({
         type: 'POST',
         url: '/intent',
@@ -211,7 +221,7 @@ $(document).on('click', '#btn_delete', function(){
     $.ajax({
       type: 'POST',
       url: '/intent',
-      data: JSON.stringify({"method":"delete", "id_intent": data.id_intent}),
+      data: JSON.stringify({"method":"delete_intent", "id_intent": data.id_intent}),
       success: function(response){
           if (response.result){
             generate_alert("Запись успешно удалена.", "success");

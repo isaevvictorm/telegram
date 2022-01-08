@@ -131,7 +131,7 @@ def add_intent(jsn):
         return False, str(ee), None
     return True, None, table
 
-def delete(jsn):
+def delete_intent(jsn):
     try:
         db = DB()
         dt = db.exec("""
@@ -226,9 +226,9 @@ class Handler:
                     return web.json_response({'result':True, 'err': str(err), 'data': table})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee), 'data': []})
-        if method == "delete":
+        if method == "delete_intent":
             try:
-                result, err = await do(delete, jsn)
+                result, err = await do(delete_intent, jsn)
                 if result:
                     return web.json_response({"result":True, "err": None})
                 else:
