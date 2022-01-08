@@ -36,6 +36,9 @@ function refresh_table(data){
         "scrollX": false,
         "autoWidth": true,
         data: data,
+        createdRow: function (row, datat, dataIndex) {
+            $(row).attr('id', datat['id_intent']);
+        },
         columns: [
             {  data: 'id_intent', className: "text-center export"},
             {  data: 'name_intent', className: "text-center export"},
@@ -122,12 +125,20 @@ $(document).ready(function(){
   refresh_table_answer([])
 });
 
-
+$(document).on('click', '#btn_add', function(e){
+    refresh_table_example([]);
+    refresh_table_answer([]);
+    document.getElementById('name_intent').disabled = false;
+    document.getElementById('btn_save').innerHTML = "Добавить"; 
+    $('.bd-example-modal-lg-add-inent').modal('toggle');
+});
 
 $(document).on('click', '#btn_edit', function(e){
     table = $('#table_data').DataTable();
     var row  = $(this).parents('tr')[0];
     var data = table.row( row ).data();
+    document.getElementById('btn_save').innerHTML = "Сохранить"; 
+
     $('.bd-example-modal-lg-add-inent').modal('toggle');
 
     $.ajax({
@@ -165,9 +176,12 @@ $(document).on('click', '#btn_edit', function(e){
             generate_alert('Непредвиденна ошибка', "error");
         },
     });
+
+    document.getElementById('name_intent').value = data.name_intent;
+    document.getElementById('name_intent').disabled = true; 
 });
 
-$(document).on('click', '#btn_add', function(e){
+$(document).on('click', '#btn_save', function(e){
     if (document.getElementById('name_intent').value == ""){
       generate_alert("Введите текст заглушки... ", "error");
       return false;
@@ -197,6 +211,7 @@ $(document).on('click', '#btn_add', function(e){
         success: function(response){
             if (response.result){
                 table = $('#table_data').DataTable();
+                table.row("#"+response.data[0].id_intent).remove().draw();
                 table.rows.add(response.data).draw();
                 generate_alert("Данные успешно добавлены...", "success");
                 $('.bd-example-modal-lg-add-inent').modal('toggle');
@@ -346,7 +361,7 @@ $(document).on('click', '#btn_delete_example', function(){
           Список статей
         </div>
         <div class="card-body">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-inent">Добавить</button>
+            <button type="button" class="btn btn-primary" id = "btn_add">Добавить</button>
         </div>
         <div class="card-body">
            <div class="loader" id="loader_reports"></div>
@@ -446,7 +461,7 @@ $(document).on('click', '#btn_delete_example', function(){
                     </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" id = "btn_add" class="btn btn-primary">Добавить</button>
+                  <button type="button" id = "btn_save" class="btn btn-primary">Добавить</button>
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                 </div>
             </div>
