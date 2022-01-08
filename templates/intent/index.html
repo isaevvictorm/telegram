@@ -241,6 +241,7 @@ $(document).on('click', '.btn_add_answer', function(e){
       generate_alert("Введите текст ответа... ", "error");
       return false;
     }
+   
     data = {
         id_answer: -1,
         text_answer: document.getElementById('new_answer').value.replace(/\n/g, '<br/>'),
@@ -248,6 +249,7 @@ $(document).on('click', '.btn_add_answer', function(e){
     }
     table = $('#table_answer').DataTable();
     table.row.add( data ).draw();
+    document.getElementById('new_answer').value = "";
 });
 
 $(document).on('click', '.btn_add_example', function(e){
@@ -262,6 +264,8 @@ $(document).on('click', '.btn_add_example', function(e){
     }
     table = $('#table_example').DataTable();
     table.row.add( data ).draw();
+    document.getElementById('new_example').value = "";
+
 });
 
 function get_table(){
