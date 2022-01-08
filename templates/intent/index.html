@@ -122,6 +122,51 @@ $(document).ready(function(){
   refresh_table_answer([])
 });
 
+
+
+$(document).on('click', '#btn_edit', function(e){
+    table = $('#table_data').DataTable();
+    var row  = $(this).parents('tr')[0];
+    var data = table.row( row ).data();
+    $('.bd-example-modal-lg-add-inent').modal('toggle');
+
+    $.ajax({
+        type: 'POST',
+        url: '/intent',
+        data: JSON.stringify({"method":"get_answer", "id_intent":data.id_intent}),
+        success: function(response){
+            if (response.result){
+                refresh_table_answer(response.table)
+            }
+            else {
+                generate_alert("При добавлении данных возникла ошибка: " + response.err, "error");
+            }
+        },
+        dataType:"json",
+        error:function(response){
+            generate_alert('Непредвиденна ошибка', "error");
+        },
+    });
+
+    $.ajax({
+        type: 'POST',
+        url: '/intent',
+        data: JSON.stringify({"method":"get_example", "id_intent":data.id_intent}),
+        success: function(response){
+            if (response.result){
+                refresh_table_example(response.table)
+            }
+            else {
+                generate_alert("При добавлении данных возникла ошибка: " + response.err, "error");
+            }
+        },
+        dataType:"json",
+        error:function(response){
+            generate_alert('Непредвиденна ошибка', "error");
+        },
+    });
+});
+
 $(document).on('click', '#btn_add', function(e){
     if (document.getElementById('name_intent').value == ""){
       generate_alert("Введите текст заглушки... ", "error");
