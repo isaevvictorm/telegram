@@ -35,14 +35,34 @@ def add(jsn):
     try:
         db = DB()
         dt = db.exec('''
-            INSERT INTO Failure (text)
-            SELECT '{0}' text
-        '''.format(jsn['data']['text']))
+            INSERT INTO Failure (text, type)
+            SELECT '{0}' text, '{1}' as type
+            WHERE 
+                '{0}' not in (Select text from Failure where text = '{0}' and type = '{1}');
+        '''.format(jsn['data']['text'], jsn['data']['type']))
         if dt.err:
-            return False. str(dt.err)
+            return False. str(dt.err), []
+
+        dt = db.exec('''
+            SELECT
+                rid,
+                text,
+                date_insert
+            FROM 
+                Failure
+            WHERE 
+                text = '{0}' and type = '{1}';
+        '''.format(jsn['data']['text'], jsn['data']['type']))
+
+        table = [{
+            "rid": dt.table[0]['rid'],
+            "text": dt.table[0]['text'],
+            "date_insert": dt.table[0]['date_insert']
+        }]
     except Exception as ee:
-        return False, str(ee)
-    return True, None
+        return False, str(ee), []
+    return True, None, table
+
 
 def delete(jsn):
     try:
@@ -80,13 +100,13 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "add":
             try:
-                table, err = await do(add, jsn)
-                if err:
-                    return web.json_response({'result':False, 'err': str(err)})             
+                result, err, table = await do(add, jsn)
+                if result:
+                    return web.json_response({'result':False, 'err': str(err), 'table': []})             
                 else:
-                    return web.json_response({'result':True, 'err': None})
+                    return web.json_response({'result':True, 'err': None, 'table': table})
             except Exception as ee:
-                return web.json_response({"result":False,"err":str(ee)})
+                return web.json_response({"result":False,"err":str(ee),'table': []})
         if method == "delete":
             try:
                 result, err = await do(delete, jsn)

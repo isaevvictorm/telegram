@@ -36,6 +36,9 @@ function refresh_table(data){
         "scrollX": false,
         "autoWidth": true,
         data: data,
+        createdRow: function (row, datat, dataIndex) {
+            $(row).attr('id', datat['rid']);
+        },
         columns: [
             {  data: 'rid', className: "text-center export"},
             {  data: 'text', className: "text-center export"},
@@ -55,26 +58,24 @@ $(document).ready(function(){
   get_table();
 });
 
-
-
 $(document).on('click', '#btn_add', function(e){
     if (document.getElementById('txt').value == ""){
       generate_alert("Введите текст заглушки... ", "error");
       return false;
     }
-    data = {
-        rid: -1,
+    jsn = {
         text: document.getElementById('txt').value,
-        date_insert: "Только что..."
+        type: document.getElementById('type').value
     }
     $.ajax({
     type: 'POST',
     url: '/failure',
-    data: JSON.stringify({"method":"add", "data": data}),
+    data: JSON.stringify({"method":"add", "data": jsn}),
     success: function(response){
         if (response.result){
             table = $('#table_data').DataTable();
-            table.row.add( data ).draw();
+            table.row("#"+response.table[0].rid).remove().draw();
+            table.row.add( response.table[0] ).draw();
             generate_alert("Заглушка успешно добавлена.", "success");
             $('.bd-example-modal-lg-add-failure').modal('toggle');
         }
@@ -143,8 +144,14 @@ $(document).on('click', '#btn_delete', function(){
             <h5>Заглушки</h5>
         </div>
         <div class="card-body">
-          Список заглушек
-        </div>
+          <div class="form-group">
+            <select class="form-control" id = "type">
+              <option value = "Нет ответа">Нет ответа</option>
+              <option value = "Приветствие">Приветствие</option>
+            </select>
+          </div>
+        </div>       
+
         <div class="card-body">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-failure">Добавить</button>
         </div>

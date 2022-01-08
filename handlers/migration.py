@@ -125,6 +125,7 @@ def migration():
         CREATE TABLE "Failure" (
             rid INTEGER PRIMARY KEY AUTOINCREMENT,
             text TEXT,
+            type TEXT,
             date_insert datetime default current_timestamp
         );
     ''')
