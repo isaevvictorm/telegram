@@ -56,7 +56,7 @@ def add(jsn):
                 Failure
             WHERE 
                 text = '{0}' and type = '{1}';
-        '''.fromat(jsn['data']['text'], jsn['data']['type']))
+        '''.format(jsn['data']['text'], jsn['data']['type']))
 
         table = [{
             "rid": dt.table[0]['rid'],
