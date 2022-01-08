@@ -46,7 +46,7 @@ def add(jsn):
                 '{0}' not in (Select question from Template where question = '{0}' and response = '{1}');
         '''.format(jsn['question'], jsn['response']))
         if dt.err:
-            return False. str(dt.err), None
+            return False. str(dt.err), []
 
         dt = db.exec('''
             SELECT
@@ -66,7 +66,7 @@ def add(jsn):
             "date_insert": dt.table[0]['date_insert']
         }]
     except Exception as ee:
-        return False, str(ee), None
+        return False, str(ee), []
     return True, None, table
 
 def delete(jsn):

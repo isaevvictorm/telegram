@@ -81,7 +81,7 @@ $(document).on('click', '#btn_add', function(e){
         if (response.result){
             table = $('#table_data').DataTable();
             table.row("#"+response.table[0].id_template).remove().draw();
-            table.row.add( response.table ).draw();
+            table.row.add( response.table[0] ).draw();
             generate_alert("Шаблон успешно добавлен.", "success");
             $('.bd-example-modal-lg-add-template').modal('toggle');
         }
