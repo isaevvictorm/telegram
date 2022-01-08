@@ -41,7 +41,7 @@ def add(jsn):
                 '{0}' not in (Select text from Failure where text = '{0}' and type = '{1}');
         '''.format(jsn['data']['text'], jsn['data']['type']))
         if dt.err:
-            return False. str(dt.err), []
+            return False, str(dt.err), []
 
         dt = db.exec('''
             SELECT
@@ -102,11 +102,11 @@ class Handler:
             try:
                 result, err, table = await do(add, jsn)
                 if result:
-                    return web.json_response({'result':False, 'err': str(err), 'table': []})             
+                    return web.json_response({'result':False, 'err': str(err), 'table': [] })             
                 else:
                     return web.json_response({'result':True, 'err': None, 'table': table})
             except Exception as ee:
-                return web.json_response({"result":False,"err":str(ee),'table': []})
+                return web.json_response({"result":False, "err":str(ee),'table': [] })
         if method == "delete":
             try:
                 result, err = await do(delete, jsn)
