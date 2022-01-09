@@ -193,10 +193,7 @@ function update_message(id){
 						if(!message_list.includes(response.table[i].rid)){
 							message_list.push(response.table[i].rid)
 							if (response.table[i].from_me == 0){
-							newReplies(response.table[i].message, name, response.table[i].date_insert, response.table[i].rid)
-							}
-							else{
-								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
+								newReplies(response.table[i].message, name, response.table[i].date_insert, response.table[i].rid)
 							}
 						}	
 					}
@@ -212,12 +209,12 @@ function update_message(id){
 
 
 $(document).on('click', '.contact', function(){
+	$(".contact.active").removeClass('active');
+	$(this).addClass('active');
 	var id = $(".contact.active").attr('user_id');
 	if (current_userid != id){
 		current_userid = id;
 		$('#messages_ul').empty();
-		$(".contact.active").removeClass('active');
-		$(this).addClass('active');
 		var name = $(".contact.active .name").text();
 		document.getElementById('pic').hidden = true;
 		document.getElementById('loader_reports').hidden = false;
