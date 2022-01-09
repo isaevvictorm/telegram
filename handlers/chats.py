@@ -48,7 +48,7 @@ def get_contacts(jsn):
         Select
             t1.first_name,
             t1.last_name,
-            t2.text as message,
+            substring(t2.text, 0, 50) as message,
             t2.date_insert,
             t1.username,
             t1.user_id,
@@ -84,7 +84,7 @@ def get_contacts(jsn):
         table_row = {
             "first_name": row['first_name'],
             "last_name": row['last_name'],
-            "message": row['message'],
+            "message": row['message'].replace('<br/>', ' ').replace('<br>', ' '),
             "date_insert": str(row['date_insert']),
             "username": str(row['username']),
             "user_id": str(row['user_id']),
@@ -97,18 +97,28 @@ def get_message(jsn):
     try:
         db = DB()
         dt = db.exec('''
-            SELECT
+            Select
                 rid,
                 text as message,
                 from_me,
                 date_insert
             from
-                Message
-            WHERE
-                from_user__id = '{0}'
+                (
+                    SELECT
+                        rid,
+                        text as message,
+                        from_me,
+                        date_insert
+                    from
+                        Message
+                    WHERE
+                        from_user__id = '{0}'
+                    order by
+                        date_insert desc
+                    limit 50
+                )tt
             order by
-                date_insert asc
-            limit 50;
+                date_insert asc;
         '''.format(jsn['chat__id']))
         if dt.err:
             return False, [], str(dt.err)

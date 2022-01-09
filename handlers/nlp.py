@@ -239,20 +239,24 @@ def generate_answer(text):
 
     answer = get_answer_intent(text)
     if answer:
+        answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
         return answer, True
 
     answer = get_answer_template(text)
     if answer:
+        answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
         return answer, True
 
     answer = get_answer_dialog(text)
     if answer:
+        answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
         return answer, True
 
     answer = get_answer_failure()
     if answer:
+        answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
         return answer, False
-    
+
     return None, False
 
 class Handler:
