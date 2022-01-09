@@ -11,8 +11,8 @@ function refresh_table(data){
   document.getElementById('table_data').hidden = true;
   $('#table_data').DataTable().destroy();
   $('#table_data').DataTable( {
-        dom: 'f<"d-none d-sm-block"B><"datatable-scroll"t>ip',
-        lengthMenu: [ [-1], ["Все"] ],
+        dom: 'f<"d-none d-sm-block"B><""t>ip',
+        lengthMenu: [ [10], ["Все"] ],
         buttons: [ {
                 extend: 'excel',
                 text: 'Выгрузить в Excel',
@@ -41,8 +41,8 @@ function refresh_table(data){
         },
         columns: [
             {  data: 'id_template', className: "text-center export"},
-            {  data: 'question', className: "text-center export"},
-            {  data: 'response', className: "text-center export"},
+            {  data: 'question', className: "export"},
+            {  data: 'response', className: "export"},
             {  data: 'date_insert', className: "text-center export"},
             {  data: 'id_template', className: "text-center", "mRender": function(data, type, full){
                 return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_edit" class="dropdown-item"><i class="icon-pencil"></i>Изменить</a><a id = "btn_delete" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
