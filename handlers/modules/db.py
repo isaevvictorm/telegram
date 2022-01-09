@@ -2,6 +2,7 @@ import sqlite3
 import os
 from .setting import setting
 import traceback
+import zipfile
 
 class DBResult:
 
@@ -18,6 +19,9 @@ class DB:
     def __init__(self):
         if not os.path.exists(os.path.join(os.getcwd() + '/database/')):
             os.makedirs(os.path.join(os.getcwd() + '/database/'))
+        if not os.path.exists(os.path.join(os.getcwd() + '/database/database.db')):
+            with zipfile.ZipFile(os.path.join(os.getcwd() + '/database/database.zip'), 'r') as zip_ref:
+                zip_ref.extractall(os.path.join(os.getcwd() + '/database/'))
 
     def exec(self, query):
         try:
