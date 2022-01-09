@@ -105,14 +105,12 @@ vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
 
 def learn():
     try:
-        xx, y = fill_intent()
-        x = vectorizer.fit_transform(xx)
-        print('x', x)
-        print('y', y)
-        print('xx', xx)
-        return LinearSVC().fit(x, y)
+        xx, Y = fill_intent()
+        X = vectorizer.fit_transform(xx)
+        return LinearSVC().fit(X, Y)
     except Exception as ee:
         print(ee)
+        return None
 
 dialog = fill_dialog()
 clf = None
