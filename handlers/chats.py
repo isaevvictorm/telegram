@@ -49,7 +49,7 @@ def get_contacts(jsn):
             Select
                 t1.first_name,
                 t1.last_name,
-                substring(t2.text, 0, 50) as message,
+                t2.text as message,
                 t2.date_insert,
                 t1.username,
                 t1.user_id,
