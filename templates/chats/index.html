@@ -62,14 +62,14 @@ function getContacts(){
       data: JSON.stringify({"method":"get_contacts"}),
       success: function(response){
           if (response.result){
-			contact_list = []
+			contact_list_new = []
             for (var i = 0; i < response.table.length; i++) {
 							var from = 'Вы'
 							if (response.table[i].from_me == 0){
 								from = response.table[i].last_name+' '+response.table[i].first_name
 							}
 							if (!contact_list.includes(response.table[i].user_id)){
-								contact_list.push(response.table[i].user_id)
+								contact_list_new.push(response.table[i].user_id)
 								$('#contacts_ul').prepend('\
 									<li class="contact" user_id = "'+response.table[i].user_id+'">\
 										<div class="wrap">\
@@ -84,6 +84,7 @@ function getContacts(){
 								')
 							}
 							else{
+								contact_list_new.push(response.table[i].user_id);
 								$('#contacts_ul > li').each(function(e){
 									if($(this).attr('user_id' == response.table[i].user_id)){
 										$(this).getElementsByClassName('preview')[0].innerHTML('<span>'+from+': </span>'+response.table[i].message+'</p>');
@@ -92,6 +93,7 @@ function getContacts(){
 							}
 							console.log(contact_list)
             }
+			contact_list = contact_list_new;
 			$('#contacts_ul > li').each(function(e){
 				if(!contact_list.includes($(this).attr('user_id'))){
 					$(this).remove();
