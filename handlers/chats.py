@@ -43,55 +43,61 @@ def send_message(jsn):
         return False, str(ee)
 
 def get_contacts(jsn):
-    db = DB()
-    dt = db.exec('''
-        Select
-            t1.first_name,
-            t1.last_name,
-            substring(t2.text, 0, 50) as message,
-            t2.date_insert,
-            t1.username,
-            t1.user_id,
-            t2.from_me
-        from
-            (
-                SELECT
-                    t1.user_id,
-                    first_name,
-                    username,
-                    last_name,
-                    max(t2.rid) as rid
-                FROM
-                    Contact t1
-                    inner join
-                    Message t2 on t1.user_id = t2.from_user__id
-                WHERE
-                    date_answer is null and t1.online = 1
-                GROUP BY
-                    first_name,
-                    last_name,
-                    username,
-                    t1.user_id
-            )t1
-        inner join
-            Message t2 on t1.user_id = t2.from_user__id and t1.rid = t2.rid
-        order by 
-            t2.rid desc
-        ;
-    ''')
-    table = []
-    for row in dt.table:
-        table_row = {
-            "first_name": row['first_name'],
-            "last_name": row['last_name'],
-            "message": row['message'].replace('<br/>', ' ').replace('<br>', ' '),
-            "date_insert": str(row['date_insert']),
-            "username": str(row['username']),
-            "user_id": str(row['user_id']),
-            "from_me": row['from_me'],
-        }
-        table.append(table_row)
-    return table
+    try:
+        db = DB()
+        dt = db.exec('''
+            Select
+                t1.first_name,
+                t1.last_name,
+                substring(t2.text, 0, 50) as message,
+                t2.date_insert,
+                t1.username,
+                t1.user_id,
+                t2.from_me
+            from
+                (
+                    SELECT
+                        t1.user_id,
+                        first_name,
+                        username,
+                        last_name,
+                        max(t2.rid) as rid
+                    FROM
+                        Contact t1
+                        inner join
+                        Message t2 on t1.user_id = t2.from_user__id
+                    WHERE
+                        date_answer is null and t1.online = 1
+                    GROUP BY
+                        first_name,
+                        last_name,
+                        username,
+                        t1.user_id
+                )t1
+            inner join
+                Message t2 on t1.user_id = t2.from_user__id and t1.rid = t2.rid
+            order by 
+                t2.rid desc
+            ;
+        ''')
+        if dt.err:
+            return False, str(dt.err), []
+        
+        table = []
+        for row in dt.table:
+            table_row = {
+                "first_name": row['first_name'],
+                "last_name": row['last_name'],
+                "message": str(row['message'].replace('<br/>', ' ').replace('<br>', ' ')),
+                "date_insert": str(row['date_insert']),
+                "username": str(row['username']),
+                "user_id": str(row['user_id']),
+                "from_me": row['from_me'],
+            }
+            table.append(table_row)
+        return True, table, None
+    except Exception as ee:
+        return False, str(ee), []
 
 def get_message(jsn):
     try:
@@ -172,11 +178,11 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee)})
         if method == "get_contacts":
             try:
-                table = await do(get_contacts, jsn)
-                if len(table) > 0:
+                result, table, error = await do(get_contacts, jsn)
+                if result:
                     return web.json_response({'result':True, 'err': None, 'table':table})
                 else:
-                    return web.json_response({'result':True, 'err': None, 'table':[]})
+                    return web.json_response({'result':True, 'err': error, 'table':[]})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "get_message":
