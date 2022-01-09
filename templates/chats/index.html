@@ -86,7 +86,7 @@ function getContacts(){
 							else{
 								contact_list_new.push(response.table[i].user_id);
 								$('#contacts_ul > li').each(function(e){
-									if($(this).attr('user_id' == response.table[i].user_id)){
+									if($(this).attr('user_id') == response.table[i].user_id){
 										$(this).getElementsByClassName('preview')[0].innerHTML('<span>'+from+': </span>'+response.table[i].message+'</p>');
 									};
 								});
