@@ -133,8 +133,8 @@ def get_answer_intent(text):
         '''.format(id_intent))
         intent = -1
         for example in examples.table:
-            dist = nltk.edit_distance(tt, filter_text(example))
-            dist_percentage = dist / len(example)
+            dist = nltk.edit_distance(tt, filter_text(example['text_example']))
+            dist_percentage = dist / len(example['text_example'])
             if dist_percentage <= setting['PROBA']:
                 intent = id_intent
 
