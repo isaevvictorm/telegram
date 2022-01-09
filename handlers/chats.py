@@ -125,6 +125,19 @@ def get_message(jsn):
     except Exception as ee:
         return False, [], str(ee)
 
+def close(jsn):
+    try:
+        db = DB()
+        dt = db.exec('''
+           Update Contact set online = 0
+           WHERE user_id = {0};
+        '''.format(jsn['userid_id']))
+        if dt.err:
+            return False, str(dt.err)
+        return True, None
+    except Exception as ee:
+        return False, str(ee)
+
 class Handler:
     @template("chats/index.html")
     async def get(self, request):
@@ -165,9 +178,9 @@ class Handler:
                     return web.json_response({'result':False, 'err': str(err), 'table':[]})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
-        if method == "delete":
+        if method == "close":
             try:
-                result, error = await do(delete, jsn)
+                result, error = await do(close, jsn)
                 return web.json_response({"result":result,"err":error})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})

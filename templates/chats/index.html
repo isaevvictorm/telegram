@@ -207,6 +207,31 @@ function update_message(id){
 	}
 }
 
+$(document).on('click', '#close', function(){
+	$.ajax({
+		type: 'POST',
+		url: '/chats',
+		data: JSON.stringify({"method":"close", "user_id": current_userid}),
+		success: function(response){
+				if (response.result){
+					generate_alert('Обращение закрыто');
+					$('#messages_ul').empty();
+					document.getElementById('pic').hidden = true;
+					document.getElementById('loader_reports').hidden = false;
+					document.getElementById('messages_ul').hidden = true;
+					$('#contacts_ul > li').each(function(e){
+						if(current_userid == ($(this).attr('user_id'))){
+							$(this).remove();
+						};
+					});
+				}
+				else {
+					generate_alert('Не удалось закрыть обращение...', "error")
+				}
+		},
+		dataType:"json",
+	});
+});
 
 $(document).on('click', '.contact', function(){
 	$(".contact.active").removeClass('active');
@@ -217,10 +242,9 @@ $(document).on('click', '.contact', function(){
 		$('#messages_ul').empty();
 		var name = $(".contact.active .name").text();
 		document.getElementById('pic').hidden = true;
-		document.getElementById('loader_reports').hidden = false;
+		document.getElementById('loader_reports').hidden = true;
 		document.getElementById('messages_ul').hidden = true;
 		$(".current_cl").text('');
-
 		$.ajax({
 			type: 'POST',
 			url: '/chats',
