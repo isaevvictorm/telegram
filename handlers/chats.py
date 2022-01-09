@@ -77,8 +77,7 @@ def get_contacts(jsn):
             inner join
                 Message t2 on t1.user_id = t2.from_user__id and t1.rid = t2.rid
             order by 
-                t2.rid desc
-            ;
+                t2.rid desc;
         ''')
         if dt.err:
             return False, str(dt.err), []
@@ -88,7 +87,7 @@ def get_contacts(jsn):
             table_row = {
                 "first_name": row['first_name'],
                 "last_name": row['last_name'],
-                "message": str(row['message'].replace('<br/>', ' ').replace('<br>', ' ')),
+                "message": str(row['message']).replace('<br/>', ' ').replace('<br>', ' '),
                 "date_insert": str(row['date_insert']),
                 "username": str(row['username']),
                 "user_id": str(row['user_id']),

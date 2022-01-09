@@ -66,34 +66,34 @@ function getContacts(){
           if (response.result){
 			contact_list_new = []
             for (var i = 0; i < response.table.length; i++) {
-							var from = 'Вы'
-							if (response.table[i].from_me == 0){
-								from = response.table[i].last_name+' '+response.table[i].first_name
-							}
-							if (!contact_list.includes(response.table[i].user_id)){
-								contact_list_new.push(response.table[i].user_id)
-								$('#contacts_ul').prepend('\
-									<li class="contact" user_id = "'+response.table[i].user_id+'">\
-										<div class="wrap">\
-											<span class="contact-status online"></span>\
-											<img src="static/img/user.png" alt="" />\
-											<div class="meta">\
-												<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name+'</p>\
-												<p class="preview"><span>'+from+': </span>'+response.table[i].message+'</p>\
-											</div>\
-										</div>\
-									</li>\
-								')
-							}
-							else{
-								contact_list_new.push(response.table[i].user_id)
+				var from = 'Вы'
+				if (response.table[i].from_me == 0){
+					from = response.table[i].last_name+' '+response.table[i].first_name
+				}
+				if (!contact_list.includes(response.table[i].user_id)){
+					contact_list_new.push(response.table[i].user_id)
+					$('#contacts_ul').prepend('\
+						<li class="contact" user_id = "'+response.table[i].user_id+'">\
+							<div class="wrap">\
+								<span class="contact-status online"></span>\
+								<img src="static/img/user.png" alt="" />\
+								<div class="meta">\
+									<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name+'</p>\
+									<p class="preview"><span>'+from+': </span>'+response.table[i].message+'</p>\
+								</div>\
+							</div>\
+						</li>\
+					')
+				}
+				else{
+					contact_list_new.push(response.table[i].user_id)
 
-								$('#contacts_ul > li').each(function(e){
-									if($(this).attr('user_id') == response.table[i].user_id){
-										$(this).find('.preview')[0].innerHTML = '<span>'+from+': </span>'+response.table[i].message+'</p>';
-									};
-								});
-							}
+					$('#contacts_ul > li').each(function(e){
+						if($(this).attr('user_id') == response.table[i].user_id){
+							$(this).find('.preview')[0].innerHTML = '<span>'+from+': </span>'+response.table[i].message+'</p>';
+						};
+					});
+				}
             }
 			contact_list = contact_list_new;
 			$('#contacts_ul > li').each(function(e){
