@@ -214,7 +214,7 @@ $(document).on('click', '#close', function(){
 		data: JSON.stringify({"method":"close", "user_id": current_userid}),
 		success: function(response){
 				if (response.result){
-					generate_alert('Обращение закрыто');
+					generate_alert('Обращение закрыто', 'success');
 					$('#messages_ul').empty();
 					document.getElementById('pic').hidden = true;
 					document.getElementById('loader_reports').hidden = false;
