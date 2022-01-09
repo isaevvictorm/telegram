@@ -50,7 +50,7 @@
 <script >
 
 $(document).ready(function(){
-  let timerId = setInterval(() => getContacts(), 2000);
+  let timerId = setInterval(() => getContacts(), 5000);
 });
 
 let contact_list = []
@@ -70,24 +70,31 @@ function getContacts(){
 							}
 							if (!contact_list.includes(response.table[i].user_id)){
 								contact_list.push(response.table[i].user_id)
+								$('#contacts_ul').prepend('\
+									<li class="contact" user_id = "'+response.table[i].user_id+'">\
+										<div class="wrap">\
+											<span class="contact-status online"></span>\
+											<img src="static/img/user.png" alt="" />\
+											<div class="meta">\
+												<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name+'</p>\
+												<p class="preview"><span>'+from+': </span>'+response.table[i].message+'</p>\
+											</div>\
+										</div>\
+									</li>\
+								')
 							}
-							$('#contacts_ul').prepend('\
-							<li class="contact" user_id = "'+response.table[i].user_id+'">\
-								<div class="wrap">\
-									<span class="contact-status online"></span>\
-									<img src="static/img/user.png" alt="" />\
-									<div class="meta">\
-										<p class="name">'+response.table[i].last_name+' '+response.table[i].first_name+'</p>\
-										<p class="preview"><span>'+from+': </span>'+response.table[i].message+'</p>\
-									</div>\
-								</div>\
-							</li>\
-							')
+							else{
+								$('#contacts_ul > li').each(function(e){
+									if($(this).attr('user_id' == response.table[i].user_id)){
+										$(this).getElementsByClassName('preview')[0].innerHTML('<span>'+from+': </span>'+response.table[i].message+'</p>');
+									};
+								});
+							}
+							console.log(contact_list)
             }
 			$('#contacts_ul > li').each(function(e){
 				if(!contact_list.includes($(this).attr('user_id'))){
 					$(this).remove();
-
 				};
 			});
           }
