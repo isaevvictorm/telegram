@@ -37,7 +37,7 @@ def get_contacts(jsn):
             t1.first_name,
             t1.last_name,
             t2.text as message,
-            t1.date_insert,
+            t2.date_insert,
             t1.username,
             t1.user_id,
             t2.from_me
@@ -48,7 +48,7 @@ def get_contacts(jsn):
                     first_name,
                     username,
                     last_name,
-                    max(t2.date_insert) as date_insert
+                    max(t2.rid) as rid
                 FROM
                     Contact t1
                     inner join
@@ -62,9 +62,9 @@ def get_contacts(jsn):
                     t1.user_id
             )t1
         inner join
-            Message t2 on t1.user_id = t2.from_user__id and t1.date_insert = t2.date_insert
+            Message t2 on t1.user_id = t2.from_user__id and t1.rid = t2.rid
         order by 
-            t2.date_insert desc
+            t2.rid desc
         ;
     ''')
     table = []
@@ -93,9 +93,10 @@ def get_message(jsn):
             from
                 Message
             WHERE
-                chat__id = '{0}'
+                from_user__id = '{0}'
             order by
-                date_insert asc;
+                date_insert asc
+            limit 50;
         '''.format(jsn['chat__id']))
         if dt.err:
             return False, [], str(dt.err)
