@@ -52,6 +52,7 @@ def migration():
             email TEXT,
             skype TEXT,
             date INTEGER,
+            online INTEGER default 0,
             date_insert datetime default current_timestamp
         );
     ''')

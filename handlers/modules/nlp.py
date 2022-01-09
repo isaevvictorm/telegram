@@ -172,18 +172,18 @@ def generate_answer(text):
 
     answer = get_answer_intent(text)
     if answer:
-        return answer
+        return answer, True
 
     answer = get_answer_template(text)
     if answer:
-        return answer
+        return answer, True
 
     answer = get_answer_dialog(text)
     if answer:
-        return answer
+        return answer, True
 
     answer = get_answer_failure()
     if answer:
-        return answer
+        return answer, False
     
-    return
+    return None, False

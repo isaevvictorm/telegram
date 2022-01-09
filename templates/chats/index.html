@@ -50,8 +50,10 @@
 <script >
 
 $(document).ready(function(){
-  getContacts();
+  let timerId = setInterval(() => getContacts(), 2000);
 });
+
+let contact_list = []
 
 function getContacts(){
     $.ajax({
@@ -60,12 +62,14 @@ function getContacts(){
       data: JSON.stringify({"method":"get_contacts"}),
       success: function(response){
           if (response.result){
-						// contact-status [away, inline, busy]
-						// contact [active, selected-contact]
+			contact_list = []
             for (var i = 0; i < response.table.length; i++) {
 							var from = 'Вы'
 							if (response.table[i].from_me == 0){
 								from = response.table[i].last_name+' '+response.table[i].first_name
+							}
+							if (!contact_list.includes(response.table[i].user_id)){
+								contact_list.push(response.table[i].user_id)
 							}
 							$('#contacts_ul').prepend('\
 							<li class="contact" user_id = "'+response.table[i].user_id+'">\
@@ -80,6 +84,12 @@ function getContacts(){
 							</li>\
 							')
             }
+			$('#contacts_ul > li').each(function(e){
+				if(!contact_list.includes($(this).attr('user_id'))){
+					$(this).remove();
+
+				};
+			});
           }
           else {
             console.log(response);
@@ -88,6 +98,11 @@ function getContacts(){
       dataType:"json",
     });
 };
+
+
+
+
+
 
 function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
 	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));

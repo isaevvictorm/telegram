@@ -92,6 +92,19 @@ def start_command(message):
     except Exception as ee:
         bot.send_message(setting['ADMIN'], str(ee))
 
+@bot.message_handler(commands=['help'])
+def start_command(message):
+    try:
+        save_user(message)
+        db = DB()
+        db.exec('''
+            Update Contact set online = 1
+            WHERE user_id = {0};
+        '''.format(message.from_user.id))
+        bot.send_message(message.chat.id, 'Специалист свяжется с Вами в ближайшее время. Ожидайте.')
+    except Exception as ee:
+        bot.send_message(setting['ADMIN'], str(ee))
+
 @bot.message_handler(content_types=['contact'])
 def start_command(message):
     try:
@@ -140,7 +153,12 @@ def text_command(message):
         '''.format(message.message_id, message.from_user.id, message.chat.id, message.text, message.date))
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
-        answer = generate_answer(message.text)
+        answer, result = generate_answer(message.text)
+        if result == False:
+            db.exec('''
+                Update Contact set online = 1
+                WHERE user_id = {0};
+            '''.format(message.from_user.id))
         if answer:
             bot.send_message(message.chat.id,  answer)
             jsn = {
@@ -187,7 +205,12 @@ def text_command(message):
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
         
-        answer = generate_answer(message.text)
+        answer, result = generate_answer(message.text)
+        if result == False:
+            db.exec('''
+                Update Contact set online = 1
+                WHERE user_id = {0};
+            '''.format(message.from_user.id))
         if answer:
             bot.send_message(message.chat.id,  answer)
             jsn = {

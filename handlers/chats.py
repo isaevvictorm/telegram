@@ -65,7 +65,7 @@ def get_contacts(jsn):
                     inner join
                     Message t2 on t1.user_id = t2.from_user__id
                 WHERE
-                    date_answer is null
+                    date_answer is null and t1.online = 1
                 GROUP BY
                     first_name,
                     last_name,
