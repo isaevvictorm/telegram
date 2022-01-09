@@ -39,8 +39,23 @@ def get_fast_answer(type):
         return random.sample(dictionary, 1)[0]
 
 
-@bot.message_handler(commands=['start'])
-def start_command(message):
+def save_answer(jsn):
+    try:
+        db = DB()
+        dt = db.exec('''
+            INSERT INTO Message  (chat__id, text, from_me, from_user__id)
+            SELECT
+                '{0}' as chat_id,
+                '{1}' as text,
+                {2} as from_me,
+                '{3}' as from_user__id;
+            '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['from_user__id'] if 'from_user__id' in jsn else ''))
+        return True, None
+    except Exception as ee:
+        return False, str(ee)
+
+
+def save_user(message):
     try:
         db = DB()
         dt = db.exec('''
@@ -55,7 +70,7 @@ def start_command(message):
                 '{1}' first_name,
                 '{2}' last_name,
                 '{3}' username
-            WHERE 
+            WHERE
                 '{0}' not in (Select user_id from Contact where user_id = '{0}')
         '''.format( message.from_user.id,
                     message.from_user.first_name,
@@ -63,9 +78,17 @@ def start_command(message):
                     message.from_user.username))
         if dt.err:
             bot.send_message(setting['ADMIN'], str(dt.err))
+    except Exception as ee:
+        bot.send_message(setting['ADMIN'], str(ee))
+
+
+@bot.message_handler(commands=['start'])
+def start_command(message):
+    try:
+        save_user(message)
         bot.send_message(message.chat.id, get_fast_answer('Приветствие'))
     except Exception as ee:
-        bot.send_message(setting['ADMIN'], str(dt.err))
+        bot.send_message(setting['ADMIN'], str(ee))
 
 @bot.message_handler(content_types=['contact'])
 def start_command(message):
@@ -87,6 +110,8 @@ def start_command(message):
 @bot.message_handler(content_types=["text"])
 def text_command(message):
     try:
+        save_user(message)
+
         db = DB()
         dt = db.exec('''
             INSERT INTO Message (
@@ -126,6 +151,8 @@ def text_command(message):
 @bot.message_handler(content_types=["photo"])
 def text_command(message):
     try:
+        save_user(message)
+
         db = DB()
         dt = db.exec('''
             INSERT INTO Message (
@@ -166,21 +193,6 @@ def text_command(message):
         save_answer(jsn)
     except Exception as ee:
         print(str(ee))
-
-def save_answer(jsn):
-    try:
-        db = DB()
-        dt = db.exec('''
-            INSERT INTO Message  (chat__id, text, from_me, from_user__id)
-            SELECT
-                '{0}' as chat_id,
-                '{1}' as text,
-                {2} as from_me,
-                '{3}' as from_user__id;
-            '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['from_user__id'] if 'from_user__id' in jsn else ''))
-        return True, None
-    except Exception as ee:
-        return False, str(ee)
 
 class Handler:
     async def get(self, request):
