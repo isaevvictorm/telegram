@@ -98,6 +98,8 @@ function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
 };
 	
 var docHeight = $(document).height();
+let last_message = ""
+
 
 function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38') {
 	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
@@ -105,6 +107,7 @@ function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38')
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
 	$(".messages").animate({ scrollTop: docHeight + 93 }, 1);
 	docHeight += 93;
+	last_message = message;
 };
 
 $('.submit.sent').click(function() {
@@ -119,7 +122,7 @@ $('.submit.sent').click(function() {
 		"chat__id": $(".contact.active").attr('user_id'),
 		"from_me": 1,
 		"text": message,
-		"answer_for": "test",
+		"answer_for": last_message,
 	}
 	$.ajax({
 		type: 'POST',
@@ -130,7 +133,12 @@ $('.submit.sent').click(function() {
 					newMessage(message, 'Вы', t);
 				}
 				else {
-					console.log(response);
+					if (response.err == 'A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user'){
+						generate_alert("Вы не можете отправить сообщение данному пользователю, так как он заблокировал бота. Ваш ответ был добавлен в шаблоны и будет использоваться в дальнейшем.")
+					}
+					else{
+						console.log(response)
+					}
 				}
 		},
 		dataType:"json",

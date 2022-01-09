@@ -34,7 +34,7 @@ def get_fast_answer(type):
         dictionary.append(row['text'])
 
     if len(dictionary) == 0:
-        return 'Чем я могу Вам помочь?'
+        return
     else:
         return random.sample(dictionary, 1)[0]
 
@@ -86,7 +86,9 @@ def save_user(message):
 def start_command(message):
     try:
         save_user(message)
-        bot.send_message(message.chat.id, get_fast_answer('Приветствие'))
+        answer =  get_fast_answer('Приветствие')
+        if answer:
+            bot.send_message(message.chat.id, answer)
     except Exception as ee:
         bot.send_message(setting['ADMIN'], str(ee))
 
@@ -102,7 +104,9 @@ def start_command(message):
                     message.contact.phone_number))
         if dt.err:
             bot.send_message(setting['ADMIN'], str(dt.err))
-        bot.send_message(message.chat.id, get_fast_answer('Контакт'))
+        answer =  get_fast_answer('Контакт')
+        if answer:
+            bot.send_message(message.chat.id, answer)
     except Exception as ee:
         bot.send_message(setting['ADMIN'], str(dt.err))
 
@@ -137,14 +141,15 @@ def text_command(message):
         if dt.err:
             bot.send_message(message.chat.id, str(dt.err))
         answer = generate_answer(message.text)
-        bot.send_message(message.chat.id,  answer)
-        jsn = {
-            "chat__id": message.chat.id,
-            "from_me": 1,
-            "text": answer,
-            "from_user__id": message.from_user.id
-	    }
-        save_answer(jsn)
+        if answer:
+            bot.send_message(message.chat.id,  answer)
+            jsn = {
+                "chat__id": message.chat.id,
+                "from_me": 1,
+                "text": answer,
+                "from_user__id": message.from_user.id
+            }
+            save_answer(jsn)
     except Exception as ee:
         print(str(ee))
 
@@ -183,14 +188,15 @@ def text_command(message):
             bot.send_message(message.chat.id, str(dt.err))
         
         answer = generate_answer(message.text)
-        bot.send_message(message.chat.id,  answer)
-        jsn = {
-            "chat__id": message.chat.id,
-            "from_me": 1,
-            "text": answer,
-            "from_user__id": message.from_user.id
-	    }
-        save_answer(jsn)
+        if answer:
+            bot.send_message(message.chat.id,  answer)
+            jsn = {
+                "chat__id": message.chat.id,
+                "from_me": 1,
+                "text": answer,
+                "from_user__id": message.from_user.id
+            }
+            save_answer(jsn)
     except Exception as ee:
         print(str(ee))
 
