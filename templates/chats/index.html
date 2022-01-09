@@ -52,7 +52,7 @@
 $(document).ready(function(){
 	getContacts();
  	let timerId = setInterval(() => getContacts(), 5000);
-	let timerId = setInterval(() => update_message(current_userid), 5000);
+	let timer_message = setInterval(() => update_message(current_userid), 5000);
 });
 
 let contact_list = []
