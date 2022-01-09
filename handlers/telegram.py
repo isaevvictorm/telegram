@@ -117,6 +117,7 @@ def text_command(message):
             "chat__id": message.chat.id,
             "from_me": 1,
             "text": answer,
+            "from_user__id": message.from_user.id
 	    }
         save_answer(jsn)
     except Exception as ee:
@@ -160,6 +161,7 @@ def text_command(message):
             "chat__id": message.chat.id,
             "from_me": 1,
             "text": answer,
+            "from_user__id": message.from_user.id
 	    }
         save_answer(jsn)
     except Exception as ee:
@@ -169,12 +171,13 @@ def save_answer(jsn):
     try:
         db = DB()
         dt = db.exec('''
-            INSERT INTO Message  (chat__id, text, from_me)
+            INSERT INTO Message  (chat__id, text, from_me, from_user__id)
             SELECT
                 '{0}' as chat_id,
                 '{1}' as text,
-                {2} as from_me;
-            '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else ''))
+                {2} as from_me,
+                '{3}' as from_user__id;
+            '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['from_user__id'] if 'from_user__id' in jsn else ''))
         return True, None
     except Exception as ee:
         return False, str(ee)
