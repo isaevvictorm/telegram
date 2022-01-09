@@ -1,12 +1,12 @@
 {
     "WEBHOOK_HOST": "127.0.0.1",
     "WEBHOOK_PORT": "8443",
-    "DOMAIN": "example.ru",
+    "DOMAIN": "irvicorp.ru",
     "TOKEN": "980164770:AAEJw2Hy9YGKNlw_DW0Bo5KgPm4yXQaPrOU",
     "AMDIN": "658586931",
     "TEMPLATE_DIR": "./templates",
     "DEBUG": 0,
-    "DIST": 0.4,
+    "DIST": 0.3,
     "MAX_W": 1000,
-    "FILTER": "абвгдеёжзийклмнопрстуфхцчшщЪьэюя- abcdefghijklmnopqrstuvwxyz"
+    "FILTER": ".?,!*1234567890\\/[]{};`~<>+=_()$#@№:^-"
 }
