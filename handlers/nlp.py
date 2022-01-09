@@ -94,13 +94,12 @@ def fill_intent():
             examples = db.exec('''
                 Select text_example from Example where id_intent = {0}
             '''.format(row['id_intent']))
-            for example in examples:
+            for example in examples.table:
                 x_temp.append(example['text_example'])
                 y_temp.append(row['id_intent'])
         return x_temp, y_temp
     else:
         return [], []
-
 
 vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
 
