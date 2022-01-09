@@ -84,14 +84,14 @@ function getContacts(){
 								')
 							}
 							else{
-								contact_list_new.push(response.table[i].user_id);
+								contact_list_new.push(response.table[i].user_id)
+
 								$('#contacts_ul > li').each(function(e){
-									if($(this).attr('user_id') == response.table[i].user_id){
-										$(this).getElementsByClassName('preview')[0].innerHTML('<span>'+from+': </span>'+response.table[i].message+'</p>');
+									if($(this).$(this).attr('user_id') == response.table[i].user_id){
+										$(this).find('.preview')[0].innerHTML = '<span>'+from+': </span>'+response.table[i].message+'</p>';
 									};
 								});
 							}
-							console.log(contact_list)
             }
 			contact_list = contact_list_new;
 			$('#contacts_ul > li').each(function(e){
