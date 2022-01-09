@@ -118,13 +118,9 @@ function newMessage(message, name = 'Вы', time = '', rid) {
 	message = message.replace('<br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
-	ss = $(".messages")[0].scrollHeight - docHeight
-	$(".messages").animate({ scrollTop: docHeight + ss }, 1);
-	docHeight = docHeight + ss;
+	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 };
 	
-var docHeight = $(document).height();
-
 let last_message = ""
 
 function newReplies(message, name = 'Абонент', time = '', rid) {
@@ -135,9 +131,7 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	message = message.replace('</br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
-	ss = $(".messages")[0].scrollHeight - docHeight
-	$(".messages").animate({ scrollTop: docHeight + ss }, 1);
-	docHeight = docHeight + ss;
+	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 	last_message = message;
 };
 
