@@ -564,7 +564,7 @@
   clear: both;
   float: left;
   margin: 15px 15px 5px 15px;
-  width: calc(100% - 25px);
+  width: calc(100% - 50px);
   font-size: 0.9em;
 }
 #frame .content .messages ul li:nth-last-child(1) {
@@ -600,6 +600,7 @@
 @media screen and (min-width: 735px) {
   #frame .content .messages ul li p {
     max-width: 300px;
+    overflow-wrap: break-word;
   }
 }
 #frame .content .message-input {
