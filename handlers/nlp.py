@@ -106,39 +106,46 @@ vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
 def learn():
     xx, y = fill_intent()
     x = vectorizer.fit_transform(xx)
+    print('x', len(x))
+    print('y', len(y))
+    print('xx', len(xx))
     return LinearSVC().fit(x, y)
 
 dialog = fill_dialog()
-clf = learn()
+try:
+    clf = learn()
+except:
+    clf = None
 
 def get_answer_intent(text):
-    db = DB()
-    tt = filter_text(text)
-    # -----------------------------------------
-    # Получение ответа из таблицы классификации
-    # -----------------------------------------
-    text_vector = vectorizer.transform([text])
-    id_intent = clf.predict(text_vector)[0]
-    examples = db.exec('''
-        Select text_example from Example where id_intent = {0}
-    '''.format(id_intent))
-    intent = -1
-    for example in examples:
-       dist = nltk.edit_distance(tt, filter_text(example))
-       dist_percentage = dist / len(example)
-       if dist_percentage <= setting['PROBA']:
-           intent = id_intent
-    
-    if intent > -1:
-        dt = db.exec('''
-            Select text_answer from Answer where id_intent = {0}
-        '''.format(intent))
-        answers = []
-        for row in dt.table:
-            answers.append(row['text_answer'])
+    if clf:
+        db = DB()
+        tt = filter_text(text)
+        # -----------------------------------------
+        # Получение ответа из таблицы классификации
+        # -----------------------------------------
+        text_vector = vectorizer.transform([text])
+        id_intent = clf.predict(text_vector)[0]
+        examples = db.exec('''
+            Select text_example from Example where id_intent = {0}
+        '''.format(id_intent))
+        intent = -1
+        for example in examples:
+            dist = nltk.edit_distance(tt, filter_text(example))
+            dist_percentage = dist / len(example)
+            if dist_percentage <= setting['PROBA']:
+                intent = id_intent
 
-        if len(answers) > 0:
-            return random.choice(answers)
+        if intent > -1:
+            dt = db.exec('''
+                Select text_answer from Answer where id_intent = {0}
+            '''.format(intent))
+            answers = []
+            for row in dt.table:
+                answers.append(row['text_answer'])
+
+            if len(answers) > 0:
+                return random.choice(answers)
 
     return
 
