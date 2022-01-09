@@ -118,7 +118,6 @@ function newMessage(message, name = 'Вы', time = '', rid) {
 	message = message.replace('<br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
-	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 };
 	
 let last_message = ""
@@ -131,7 +130,6 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	message = message.replace('</br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
-	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 	last_message = message;
 };
 
@@ -205,6 +203,7 @@ function update_message(id){
 				else {
 					console.log(response);
 				}
+				$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 			},
 			dataType:"json",
 		});
@@ -276,6 +275,7 @@ $(document).on('click', '.contact', function(){
 							}
 						}
 						message_list = message_list_new;
+						$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 					}
 					else {
 						console.log(response);
