@@ -17,12 +17,13 @@ def send_message(jsn):
     try:
         db = DB()
         dt = db.exec('''
-            INSERT INTO Message  (chat__id, text, from_me, answer_for)
+            INSERT INTO Message  (chat__id, text, from_me, answer_for, from_user__id)
             SELECT
                 '{0}' as chat_id,
                 '{1}' as text,
                 {2} as from_me,
-                '{3}' as answer_for;
+                '{3}' as answer_for,
+                '{0}' as from_user__id;
             '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['answer_for'] if 'answer_for' in jsn else ''))
 
         dt = db.exec('''
