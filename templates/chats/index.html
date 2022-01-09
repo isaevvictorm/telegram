@@ -213,6 +213,7 @@ function update_message(id){
 
 $(document).on('click', '.contact', function(){
 	var id = $(".contact.active").attr('user_id');
+	current_userid = id;
 	if (current_userid != id){
 		$('#messages_ul').empty();
 		$(".contact.active").removeClass('active');
