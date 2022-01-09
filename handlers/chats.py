@@ -120,11 +120,11 @@ def get_message(jsn):
                         from_user__id = '{0}'
                     order by
                         date_insert desc
-                    limit 50
+                    limit {1}
                 )tt
             order by
                 date_insert asc;
-        '''.format(jsn['chat__id']))
+        '''.format(jsn['chat__id'], setting['CNT_MESSAGE_IN_CHAT']))
         if dt.err:
             return False, [], str(dt.err)
         table = []

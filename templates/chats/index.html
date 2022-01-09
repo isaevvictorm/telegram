@@ -118,8 +118,8 @@ function newMessage(message, name = 'Вы', time = '', rid) {
 	message = message.replace('<br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
-	docHeight = $(".messages")[0].scrollHeight
-	$(".messages").animate({ scrollTop: docHeight }, 1);
+	$(".messages").animate({ scrollTop: docHeight + 93 }, 1);
+	docHeight = docHeight + 93;
 };
 	
 var docHeight = $(document).height();
@@ -133,8 +133,8 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	message = message.replace('</br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
-	docHeight = $(".messages")[0].scrollHeight
-	$(".messages").animate({ scrollTop: docHeight }, 1);
+	$(".messages").animate({ scrollTop: docHeight + 93 }, 1);
+	docHeight = docHeight + 93;
 	last_message = message;
 };
 
