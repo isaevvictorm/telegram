@@ -52,7 +52,7 @@ def get_contacts(jsn):
                 FROM
                     Contact t1
                     inner join
-                    Message t2 on t1.user_id = t2.chat__id
+                    Message t2 on t1.user_id = t2.from_user__id
                 WHERE
                     date_answer is null
                 GROUP BY
@@ -62,7 +62,7 @@ def get_contacts(jsn):
                     t1.user_id
             )t1
         inner join
-            Message t2 on t1.user_id = t2.chat__id and t1.date_insert = t2.date_insert
+            Message t2 on t1.user_id = t2.from_user__id and t1.date_insert = t2.date_insert
         order by 
             t2.date_insert desc
         ;
