@@ -18,9 +18,9 @@
 			<img src="static/img/user.png" id = "pic" alt= "" />
 			<p class = "current_cl"></p>
 			<div class="social-media">
-				<i class="fa fa-facebook" aria-hidden="true"></i>
-				<i class="fa fa-twitter" aria-hidden="true"></i>
-				 <i class="fa fa-instagram" aria-hidden="true"></i>
+				<i class="fa" aria-hidden="true"></i>
+				<i class="icon-close2" id="close" data-id="-1"></i>
+				 <i class="fa" aria-hidden="true"></i>
 			</div>
 		</div>
 		<div class="messages">
@@ -52,6 +52,7 @@
 $(document).ready(function(){
 	getContacts();
  	let timerId = setInterval(() => getContacts(), 5000);
+	let timerId = setInterval(() => update_message(current_userid), 5000);
 });
 
 let contact_list = []
@@ -109,13 +110,8 @@ function getContacts(){
     });
 };
 
-
-
-
-
-
-function newMessage(message, name = 'Вы', time = '2021-09-31 23:38') {
-	$('<li class="sent"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
+function newMessage(message, name = 'Вы', time = '', rid) {
+	$('<li class="sent" data-rid="'+rid+'"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
 	$(".messages").animate({ scrollTop: docHeight + 93 }, 1);
@@ -126,8 +122,8 @@ var docHeight = $(document).height();
 let last_message = ""
 
 
-function newReplies(message, name = 'Абонент', time = '2021-09-31 23:38') {
-	$('<li class="replies"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
+function newReplies(message, name = 'Абонент', time = '', rid) {
+	$('<li class="replies" data-rid="'+rid+'"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
 	$('.message-input textarea').val(null);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
 	$(".messages").animate({ scrollTop: docHeight + 93 }, 1);
@@ -179,47 +175,85 @@ $('.submit.replies').click(function() {
 	}
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-  newReplies(message, name, time = t);
+  	newReplies(message, name, time = t);
 });
 
-$(document).on('click', '.contact', function(){
-	$('#messages_ul').empty();
-	$(".contact.active").removeClass('active');
-	$(this).addClass('active');
-	var name = $(".contact.active .name").text();
-	document.getElementById('pic').hidden = true;
-	document.getElementById('loader_reports').hidden = false;
-	document.getElementById('messages_ul').hidden = true;
-	$(".current_cl").text('');
-	var id = $(".contact.active").attr('user_id');
+let current_userid = -1
+let message_list = []
 
-	$.ajax({
-		type: 'POST',
-		url: '/chats',
-		data: JSON.stringify({"method":"get_message", "chat__id": id}),
-		success: function(response){
+function update_message(id){
+	if (id > 0){
+		$.ajax({
+			type: 'POST',
+			url: '/chats',
+			data: JSON.stringify({"method":"get_message", "chat__id": id}),
+			success: function(response){
 				if (response.result){
-					// contact-status [away, inline, busy]
-					// contact [active, selected-contact]
 					for (var i = 0; i < response.table.length; i++) {
-						if (response.table[i].from_me == 0){
-							newReplies(response.table[i].message, name, response.table[i].date_insert)
-						}
-						else{
-							newMessage(response.table[i].message, 'Вы', response.table[i].date_insert)
-						}
+						if(!message_list.includes(response.table[i].rid)){
+							message_list.push(response.table[i].rid)
+							if (response.table[i].from_me == 0){
+							newReplies(response.table[i].message, name, response.table[i].date_insert, response.table[i].rid)
+							}
+							else{
+								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
+							}
+						}	
 					}
 				}
 				else {
 					console.log(response);
 				}
-				document.getElementById('pic').hidden = false;
-				document.getElementById('loader_reports').hidden = true;
-				document.getElementById('messages_ul').hidden = false;
-				$(".current_cl").text($(".contact.active .name").text());
-		},
-		dataType:"json",
-	});
+			},
+			dataType:"json",
+		});
+	}
+}
+
+
+$(document).on('click', '.contact', function(){
+	var id = $(".contact.active").attr('user_id');
+	if (current_userid != id){
+		$('#messages_ul').empty();
+		$(".contact.active").removeClass('active');
+		$(this).addClass('active');
+		var name = $(".contact.active .name").text();
+		document.getElementById('pic').hidden = true;
+		document.getElementById('loader_reports').hidden = false;
+		document.getElementById('messages_ul').hidden = true;
+		$(".current_cl").text('');
+
+		$.ajax({
+			type: 'POST',
+			url: '/chats',
+			data: JSON.stringify({"method":"get_message", "chat__id": id}),
+			success: function(response){
+					if (response.result){
+						// contact-status [away, inline, busy]
+						// contact [active, selected-contact]
+						message_list_new = []
+						for (var i = 0; i < response.table.length; i++) {
+							message_list_new.push(response.table[i].rid)
+							if (response.table[i].from_me == 0){
+								newReplies(response.table[i].message, name, response.table[i].date_insert, response.table[i].rid)
+							}
+							else{
+								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
+							}
+						}
+						message_list = message_list_new;
+					}
+					else {
+						console.log(response);
+					}
+					document.getElementById('pic').hidden = false;
+					document.getElementById('loader_reports').hidden = true;
+					document.getElementById('messages_ul').hidden = false;
+					$(".current_cl").text($(".contact.active .name").text());
+			},
+			dataType:"json",
+		});
+	}
 });
 
 </script>
