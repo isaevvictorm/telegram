@@ -225,6 +225,11 @@ $(document).on('click', '#close', function(){
 							$(this).remove();
 						};
 					});
+					const index = contact_list.indexOf(current_userid);
+					if (index > -1) {
+						contact_list.splice(index, 1);
+					}
+					current_userid = -1;
 				}
 				else {
 					generate_alert('Не удалось закрыть обращение...', "error")
