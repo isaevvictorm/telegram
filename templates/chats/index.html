@@ -118,12 +118,12 @@ function newMessage(message, name = 'Вы', time = '', rid) {
 	message = message.replace('<br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
-	$(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight  }, 1);
+	docHeight = $(".messages")[0].scrollHeight
+	$(".messages").animate({ scrollTop: docHeight }, 1);
 };
 	
 var docHeight = $(document).height();
 let last_message = ""
-
 
 function newReplies(message, name = 'Абонент', time = '', rid) {
 	$('<li class="replies" data-rid="'+rid+'"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
@@ -133,7 +133,8 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	message = message.replace('</br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
-	$(".messages").animate({ scrollTop: $(".messages")[0].scrollHeight }, 1);
+	docHeight = $(".messages")[0].scrollHeight
+	$(".messages").animate({ scrollTop: docHeight }, 1);
 	last_message = message;
 };
 
@@ -175,16 +176,16 @@ $('.submit.sent').click(function() {
 
 $('.submit.replies').click(function() {
 	message = $(".message-input textarea").val();
-	name = $(".contact.active .name").text();
 	if($.trim(message) == '') {
 		return false;
 	}
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-  	newReplies(message, name, time = t);
+  	newReplies(message, current_name, time = t);
 });
 
 let current_userid = -1
+let current_name = ""
 let message_list = []
 
 function update_message(id){
@@ -199,7 +200,7 @@ function update_message(id){
 						if(!message_list.includes(response.table[i].rid)){
 							message_list.push(response.table[i].rid)
 							if (response.table[i].from_me == 0){
-								newReplies(response.table[i].message, name, response.table[i].date_insert, response.table[i].rid)
+								newReplies(response.table[i].message, current_name, response.table[i].date_insert, response.table[i].rid)
 							}
 						}	
 					}
@@ -236,6 +237,7 @@ $(document).on('click', '#close', function(){
 						contact_list.splice(index, 1);
 					}
 					current_userid = -1;
+					current_name = "";
 				}
 				else {
 					generate_alert('Не удалось закрыть обращение...', "error")
@@ -249,10 +251,11 @@ $(document).on('click', '.contact', function(){
 	$(".contact.active").removeClass('active');
 	$(this).addClass('active');
 	var id = $(".contact.active").attr('user_id');
+	var name = $(".contact.active .name").text();
+	current_name = name;
 	if (current_userid != id){
 		current_userid = id;
 		$('#messages_ul').empty();
-		var name = $(".contact.active .name").text();
 		document.getElementById('pic').hidden = true;
 		document.getElementById('loader_reports').hidden = true;
 		document.getElementById('messages_ul').hidden = true;
