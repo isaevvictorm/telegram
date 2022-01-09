@@ -107,9 +107,9 @@ def learn():
     try:
         xx, y = fill_intent()
         x = vectorizer.fit_transform(xx)
-        print('x', len(x))
-        print('y', len(y))
-        print('xx', len(xx))
+        print('x', x)
+        print('y', y)
+        print('xx', xx)
         return LinearSVC().fit(x, y)
     except Exception as ee:
         print(ee)
