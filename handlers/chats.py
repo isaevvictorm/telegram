@@ -99,7 +99,7 @@ def get_message(jsn):
         dt = db.exec('''
             Select
                 rid,
-                text as message,
+                message as message,
                 from_me,
                 date_insert
             from
