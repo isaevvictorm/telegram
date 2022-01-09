@@ -50,7 +50,8 @@
 <script >
 
 $(document).ready(function(){
-  let timerId = setInterval(() => getContacts(), 5000);
+	getContacts();
+ 	let timerId = setInterval(() => getContacts(), 5000);
 });
 
 let contact_list = []
@@ -183,6 +184,7 @@ $('.submit.replies').click(function() {
 
 $(document).on('click', '.contact', function(){
 	$('#messages_ul').empty();
+	$(".contact.active").removeClass('active');
 	$(this).addClass('active');
 	var name = $(".contact.active .name").text();
 	document.getElementById('pic').hidden = true;
