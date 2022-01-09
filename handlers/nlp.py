@@ -132,7 +132,7 @@ def get_answer_intent(text):
             Select text_example from Example where id_intent = {0}
         '''.format(id_intent))
         intent = -1
-        for example in examples:
+        for example in examples.table:
             dist = nltk.edit_distance(tt, filter_text(example))
             dist_percentage = dist / len(example)
             if dist_percentage <= setting['PROBA']:
