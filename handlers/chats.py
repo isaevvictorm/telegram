@@ -32,7 +32,7 @@ def send_message(jsn):
                 '{1}' as response
             WHERE 
                 '{0}' not in (Select question from Template where question = '{0}' and response = '{1}')
-            '''.format(jsn['text'] if 'text' in jsn else '', jsn['answer_for'] if 'answer_for' in jsn else ''))
+            '''.format(jsn['answer_for'] if 'answer_for' in jsn else '', jsn['text'] if 'text' in jsn else ''))
         
         bot = telebot.TeleBot(setting['TOKEN'])
         bot.send_message(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else 'Спасибо за Ваше сообщение, мы скоро на него ответим...')
