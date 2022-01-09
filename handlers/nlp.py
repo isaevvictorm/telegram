@@ -1,11 +1,17 @@
-from .db import DB
-from .setting import setting
+from .modules import DB, setting
 import random
 import nltk 
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from concurrent.futures import ThreadPoolExecutor
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
+from aiohttp import web
+from .modules import setting
+import asyncio
+
+async def do(func, arg_obj):
+    loop = asyncio.get_event_loop()
+    executor = ThreadPoolExecutor(max_workers = 100)
+    return await loop.run_in_executor(executor, func, arg_obj)
 
 def filter_text(text):
     text = text.lower()
@@ -73,12 +79,67 @@ def fill_template(ls_words):
 
     return qa_by_word_dataset
 
+def fill_intent():
+    x_temp = []
+    y_temp = []
+    
+    db = DB()
+    dt = db.exec('''
+        Select id_intent, name_intent from Intent
+    ''')
+    if dt.err:
+        return [], []
+    if len(dt.table) > 0:
+        for row in dt.table:
+            examples = db.exec('''
+                Select text_example from Example where id_intent = {0}
+            '''.format(row['id_intent']))
+            for example in examples:
+                x_temp.append(example['text_example'])
+                y_temp.append(row['id_intent'])
+        return x_temp, y_temp
+    else:
+        return [], []
+
+
+vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
+
+def learn():
+    xx, y = fill_intent()
+    x = vectorizer.fit_transform(xx)
+    return LinearSVC().fit(x, y)
+
 dialog = fill_dialog()
+clf = learn()
 
 def get_answer_intent(text):
+    db = DB()
+    tt = filter_text(text)
     # -----------------------------------------
     # Получение ответа из таблицы классификации
     # -----------------------------------------
+    text_vector = vectorizer.transform([text])
+    id_intent = clf.predict(text_vector)[0]
+    examples = db.exec('''
+        Select text_example from Example where id_intent = {0}
+    '''.format(id_intent))
+    intent = -1
+    for example in examples:
+       dist = nltk.edit_distance(tt, filter_text(example))
+       dist_percentage = dist / len(example)
+       if dist_percentage <= setting['PROBA']:
+           intent = id_intent
+    
+    if intent > -1:
+        dt = db.exec('''
+            Select text_answer from Answer where id_intent = {0}
+        '''.format(intent))
+        answers = []
+        for row in dt.table:
+            answers.append(row['text_answer'])
+
+        if len(answers) > 0:
+            return random.choice(answers)
 
     return
 
@@ -163,9 +224,7 @@ def get_answer_template(text):
                 return answer
     else:
         return
-
-
-    
+ 
     return
 
 def generate_answer(text):
@@ -187,3 +246,20 @@ def generate_answer(text):
         return answer, False
     
     return None, False
+
+class Handler:
+
+    async def post(self, request):
+        jsn = await request.json()
+        method = jsn['method']
+        if method == "learn":
+            try:
+                result, error = await do(learn, jsn)
+                return web.json_response({"result":result,"err":error})
+            except Exception as ee:
+                return web.json_response({"result":False,"err":str(ee)})
+
+
+        return web.json_response({"result": False, "err": "Метод не найден", "data": None})
+
+nlp = Handler()

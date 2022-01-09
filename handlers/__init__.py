@@ -9,4 +9,6 @@ from .chats import chats
 from .failure import failure
 from .intent import intent
 from .template import template
+from .nlp import nlp
+
 

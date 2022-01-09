@@ -38,4 +38,7 @@ routes=[
 
     web.post('/template',template.post),
     web.get('/template',template.get),
+
+
+    web.post('/nlp',nlp.post),
 ]

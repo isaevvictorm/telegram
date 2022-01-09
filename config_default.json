@@ -7,6 +7,7 @@
     "TEMPLATE_DIR": "./templates",
     "DEBUG": 0,
     "DIST": 0.3,
+    "PROBA": 0.4,
     "MAX_W": 1000,
     "FILTER": ".?,!*1234567890\\/[]{};`~<>+=_()$#@№:^-"
 }

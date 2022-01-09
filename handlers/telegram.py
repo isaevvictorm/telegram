@@ -3,9 +3,11 @@ from aiohttp import web
 import asyncio
 import telebot
 import json
-from .modules import DB, setting, generate_answer
+from .modules import DB, setting
 from telebot import types
 import random 
+from .nlp import generate_answer
+
 # -============================
 # - Токен
 # -============================
@@ -16,7 +18,6 @@ try:
     bot.set_webhook(url='https://{0}/{1}/'.format(setting['DOMAIN'], setting['TOKEN']))
 except Exception as ee:
     print(ee)
-
 
 def get_fast_answer(type):
     # -----------------------------------------
