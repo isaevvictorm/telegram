@@ -132,7 +132,7 @@ class Handler:
                 if result:
                     return web.json_response({'result':True, 'err': None})
                 else:
-                    return web.json_response({'result':False, 'err': str(dt.err)})
+                    return web.json_response({'result':False, 'err': str(err)})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})
         if method == "get_contacts":
