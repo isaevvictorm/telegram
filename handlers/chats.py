@@ -131,7 +131,7 @@ def close(jsn):
         dt = db.exec('''
            Update Contact set online = 0
            WHERE user_id = {0};
-        '''.format(jsn['userid_id']))
+        '''.format(jsn['user_id']))
         if dt.err:
             return False, str(dt.err)
         return True, None
