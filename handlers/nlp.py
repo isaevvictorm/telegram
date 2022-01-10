@@ -103,21 +103,19 @@ def fill_intent():
 
 vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
 
-def learn():
+clf = None
+
+def learn(jsn = None):
     try:
         xx, Y = fill_intent()
         X = vectorizer.fit_transform(xx)
-        return LinearSVC().fit(X, Y)
+        clf = LinearSVC().fit(X, Y)
+        return True
     except Exception as ee:
-        print(ee)
-        return None
+        return False
 
 dialog = fill_dialog()
-clf = None
-try:
-    clf = learn()
-except:
-    pass
+learn()
 
 def get_answer_intent(text):
     if clf:
