@@ -121,6 +121,7 @@ function newMessage(message, name = 'Вы', time = '', rid) {
 };
 	
 let last_message = ""
+let last_message_rid = -1
 
 function newReplies(message, name = 'Абонент', time = '', rid) {
 	$('<li class="replies" data-rid="'+rid+'"><img src="static/img/user.png" alt="" /><p>' + message + '<br>-<br>'+name+': '+time+'</p></li>').appendTo($('.messages ul'));
@@ -131,6 +132,7 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
 	last_message = message;
+	last_message_rid = rid;
 };
 
 $('.submit.sent').click(function() {
@@ -189,7 +191,7 @@ function update_message(id){
 		$.ajax({
 			type: 'POST',
 			url: '/chats',
-			data: JSON.stringify({"method":"get_message", "chat__id": id}),
+			data: JSON.stringify({"method":"get_message", "chat__id": id, "rid": last_message_rid}),
 			success: function(response){
 				if (response.result){
 					for (var i = 0; i < response.table.length; i++) {

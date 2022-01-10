@@ -87,7 +87,7 @@ def get_contacts(jsn):
             table_row = {
                 "first_name": row['first_name'],
                 "last_name": row['last_name'],
-                "message": str(row['message']).replace('<br/>', ' ').replace('<br>', ' '),
+                "message": row['message'],
                 "date_insert": str(row['date_insert']),
                 "username": str(row['username']),
                 "user_id": str(row['user_id']),
@@ -101,6 +101,7 @@ def get_contacts(jsn):
 def get_message(jsn):
     try:
         db = DB()
+        where = "and rid > {0}".format(jsn['rid']) if 'rid' in jsn else ""
         dt = db.exec('''
             Select
                 rid,
@@ -117,14 +118,14 @@ def get_message(jsn):
                     from
                         Message
                     WHERE
-                        from_user__id = '{0}'
+                        from_user__id = '{0}' {2}
                     order by
                         date_insert desc
                     limit {1}
                 )tt
             order by
                 date_insert asc;
-        '''.format(jsn['chat__id'], setting['CNT_MESSAGE_IN_CHAT']))
+        '''.format(jsn['chat__id'], setting['CNT_MESSAGE_IN_CHAT'], where))
         if dt.err:
             return False, [], str(dt.err)
         table = []
