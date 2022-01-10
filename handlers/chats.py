@@ -16,7 +16,7 @@ async def do(func, arg_obj):
 def send_message(jsn):
     try:
         db = DB()
-        dt = db.exec('''
+        last = db.exec('''
             INSERT INTO Message  (chat__id, text, from_me, answer_for, from_user__id)
             SELECT
                 '{0}' as chat_id,
@@ -24,11 +24,11 @@ def send_message(jsn):
                 {2} as from_me,
                 '{3}' as answer_for,
                 '{0}' as from_user__id;
+            
+            SELECT LAST_INSERT_ROWID() as rid; 
             '''.format(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else '', jsn['from_me'] if 'from_me' in jsn else '', jsn['answer_for'] if 'answer_for' in jsn else ''))
-        last = db.exec('''
-            SELECT LAST_INSERT_ROWID() as rid;
-        ''')
-        dt = db.exec('''
+
+        db.exec('''
             INSERT INTO Template  (question, response)
             SELECT
                 '{0}' as question,
