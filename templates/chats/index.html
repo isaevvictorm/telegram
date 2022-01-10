@@ -257,22 +257,11 @@ $(document).on('click', '#close', function(){
 });
 
 function add_message(table, callback){
-	message_list_new = []
-	for (var i = 0; i < table.length; i++) {
-		message_list_new.push(table[i].rid)
-		if (table[i].from_me == 0){
-			newReplies(table[i].message, name, table[i].date_insert, table[i].rid)
-		}
-		else{
-			newMessage(table[i].message, 'Вы', table[i].date_insert, table[i].rid)
-		}
-	}
-	message_list = message_list_new;
-	callback();
+	
 }
 
 function scroll_message(){
-	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+	
 }
 
 $(document).on('click', '.contact', function(){
@@ -294,7 +283,23 @@ $(document).on('click', '.contact', function(){
 			data: JSON.stringify({"method":"get_message", "chat__id": id}),
 			success: function(response){
 					if (response.result){
-						add_message(response.table, scroll_message);	
+						table = response.table;
+						var bar = new Promise((resolve, reject) => {
+							message_list_new = []
+							for (var i = 0; i < table.length; i++) {
+								message_list_new.push(table[i].rid)
+								if (table[i].from_me == 0){
+									newReplies(table[i].message, name, table[i].date_insert, table[i].rid)
+								}
+								else{
+									newMessage(table[i].message, 'Вы', table[i].date_insert, table[i].rid)
+								}
+							}
+							message_list = message_list_new;
+						});
+						bar.then(() => {
+							$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+						});
 					}
 					else {
 						console.log(response);
