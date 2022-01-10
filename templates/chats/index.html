@@ -258,7 +258,7 @@ $(document).on('click', '#close', function(){
 	});
 });
 
-async function add_message(table){
+function add_message(table, callback){
 	message_list_new = []
 	for (var i = 0; i < table.length; i++) {
 		message_list_new.push(table[i].rid)
@@ -270,7 +270,7 @@ async function add_message(table){
 		}
 	}
 	message_list = message_list_new;
-	return
+	callback();
 }
 
 $(document).on('click', '.contact', function(){
@@ -292,8 +292,7 @@ $(document).on('click', '.contact', function(){
 			data: JSON.stringify({"method":"get_message", "chat__id": id}),
 			success: function(response){
 					if (response.result){
-						await add_message(response.table);
-						$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+						add_message(response.table, $(".messages").scrollTop($(".messages").prop('scrollHeight')));	
 					}
 					else {
 						console.log(response);
