@@ -273,6 +273,10 @@ function add_message(table, callback){
 	callback();
 }
 
+function scroll_message(){
+	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+}
+
 $(document).on('click', '.contact', function(){
 	$(".contact.active").removeClass('active');
 	$(this).addClass('active');
@@ -292,7 +296,7 @@ $(document).on('click', '.contact', function(){
 			data: JSON.stringify({"method":"get_message", "chat__id": id}),
 			success: function(response){
 					if (response.result){
-						add_message(response.table, $(".messages").scrollTop($(".messages").prop('scrollHeight')));	
+						add_message(response.table, scroll_message);	
 					}
 					else {
 						console.log(response);
