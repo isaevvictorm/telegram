@@ -160,7 +160,7 @@ def text_command(message):
                 Update Contact set online = 1
                 WHERE user_id = {0};
             '''.format(message.from_user.id))
-        if (answer and message.chat.id == message.from_user.id) or (answer and result == False and message.chat.id != message.from_user.id):
+        if (answer and result == True) or (answer and message.chat.id != message.from_user.id):
             bot.send_message(message.chat.id,  answer)
             jsn = {
                 "chat__id": message.chat.id,
@@ -212,7 +212,7 @@ def text_command(message):
                 Update Contact set online = 1
                 WHERE user_id = {0};
             '''.format(message.from_user.id))
-        if (answer and message.chat.id == message.from_user.id) or (answer and result == False and message.chat.id != message.from_user.id):
+        if (answer and result == True) or (answer and message.chat.id != message.from_user.id):
             bot.send_message(message.chat.id,  answer)
             jsn = {
                 "chat__id": message.chat.id,
