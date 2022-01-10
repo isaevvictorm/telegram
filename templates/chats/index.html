@@ -258,7 +258,7 @@ $(document).on('click', '#close', function(){
 	});
 });
 
-function add_message(table){
+async function add_message(table){
 	message_list_new = []
 	for (var i = 0; i < table.length; i++) {
 		message_list_new.push(table[i].rid)
