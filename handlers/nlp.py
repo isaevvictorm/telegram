@@ -165,7 +165,7 @@ def get_answer_failure():
     db = DB()
   
     dt = db.exec('''
-        Select text from Failure where type = 'нет ответа';
+        Select text from Failure where type = 'Нет ответа';
     ''')
     
     dictionary = []
