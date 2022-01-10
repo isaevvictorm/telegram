@@ -197,9 +197,11 @@ function update_message(id){
 			data: JSON.stringify({"method":"get_message", "chat__id": id, "rid": last_message_rid}),
 			success: function(response){
 				if (response.result){
+					var flag_new = false;
 					for (var i = 0; i < response.table.length; i++) {
 						if(!message_list.includes(response.table[i].rid)){
 							message_list.push(response.table[i].rid)
+							flag_new = true;
 							if (response.table[i].from_me == 0){
 								newReplies(response.table[i].message, current_name, response.table[i].date_insert, response.table[i].rid)
 							}
@@ -208,11 +210,13 @@ function update_message(id){
 							}
 						}	
 					}
+					if (flag_new){
+						$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+					}
 				}
 				else {
 					console.log(response);
-				}
-				$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+				}		
 			},
 			dataType:"json",
 		});
@@ -283,8 +287,8 @@ $(document).on('click', '.contact', function(){
 								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
 							}
 						}
-						message_list = message_list_new;
 						$(".messages").scrollTop($(".messages").prop('scrollHeight'));
+						message_list = message_list_new;
 					}
 					else {
 						console.log(response);

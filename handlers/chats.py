@@ -40,8 +40,11 @@ def send_message(jsn):
         
         bot = telebot.TeleBot(setting['TOKEN'])
         bot.send_message(jsn['chat__id'] if 'chat__id' in jsn else '', jsn['text'] if 'text' in jsn else 'Спасибо за Ваше сообщение, мы скоро на него ответим...')
-        
-        return True, last.table[0]['rid']
+        try:
+            rid = int(last.table[0]['rid']) + 1
+        except:
+            rid = -1
+        return True, rid
     except Exception as ee:
         return False, str(ee)
 
