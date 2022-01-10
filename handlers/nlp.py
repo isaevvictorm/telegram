@@ -106,13 +106,14 @@ vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
 clf = None
 
 def learn(jsn = None):
+    global clf 
     try:
         xx, Y = fill_intent()
         X = vectorizer.fit_transform(xx)
         clf = LinearSVC().fit(X, Y)
-        return True
+        return True, None
     except Exception as ee:
-        return False
+        return False, str(ee)
 
 dialog = fill_dialog()
 learn()
