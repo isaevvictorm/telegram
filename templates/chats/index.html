@@ -287,12 +287,12 @@ $(document).on('click', '.contact', function(){
 								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
 							}
 						}
-						$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 						message_list = message_list_new;
 					}
 					else {
 						console.log(response);
 					}
+					$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 					document.getElementById('pic').hidden = false;
 					document.getElementById('loader_reports').hidden = true;
 					document.getElementById('messages_ul').hidden = false;

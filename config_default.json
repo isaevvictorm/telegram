@@ -8,6 +8,7 @@
     "DEBUG": 0,
     "DIST": 0.3,
     "PROBA": 0.4,
+    "NORM": 0.5,
     "MAX_W": 1000,
     "CNT_MESSAGE_IN_CHAT": 20,
     "FILTER": ".?,!*\\/[]{};`~<>+=_()$#@№:^-"
