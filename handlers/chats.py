@@ -173,7 +173,7 @@ class Handler:
             try:
                 result, err = await do(send_message, jsn)
                 if result:
-                    return web.json_response({'result':True, 'err': None})
+                    return web.json_response({'result':True, 'err': err})
                 else:
                     return web.json_response({'result':False, 'err': str(err)})
             except Exception as ee:
