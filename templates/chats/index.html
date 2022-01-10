@@ -51,8 +51,10 @@
 
 $(document).ready(function(){
 	getContacts();
- 	let timerId = setInterval(() => getContacts(), 5000);
-	let timer_message = setInterval(() => update_message(current_userid), 5000);
+	setInterval(function(){ 
+		getContacts();
+		update_message(current_userid);
+	}, 2000);
 });
 
 let contact_list = []
@@ -155,7 +157,8 @@ $('.submit.sent').click(function() {
 		data: JSON.stringify(jsn),
 		success: function(response){
 				if (response.result){
-					newMessage(message, 'Вы', t);
+					newMessage(message, 'Вы', t, response.err);
+					message_list.push(response.err);
 					$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 				}
 				else {
@@ -199,6 +202,9 @@ function update_message(id){
 							message_list.push(response.table[i].rid)
 							if (response.table[i].from_me == 0){
 								newReplies(response.table[i].message, current_name, response.table[i].date_insert, response.table[i].rid)
+							}
+							else{
+								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
 							}
 						}	
 					}
