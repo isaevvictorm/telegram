@@ -258,6 +258,21 @@ $(document).on('click', '#close', function(){
 	});
 });
 
+function add_message(table){
+	message_list_new = []
+	for (var i = 0; i < table.length; i++) {
+		message_list_new.push(table[i].rid)
+		if (table[i].from_me == 0){
+			newReplies(table[i].message, name, table[i].date_insert, table[i].rid)
+		}
+		else{
+			newMessage(table[i].message, 'Вы', table[i].date_insert, table[i].rid)
+		}
+	}
+	message_list = message_list_new;
+	return
+}
+
 $(document).on('click', '.contact', function(){
 	$(".contact.active").removeClass('active');
 	$(this).addClass('active');
@@ -277,19 +292,8 @@ $(document).on('click', '.contact', function(){
 			data: JSON.stringify({"method":"get_message", "chat__id": id}),
 			success: function(response){
 					if (response.result){
-						// contact-status [away, inline, busy]
-						// contact [active, selected-contact]
-						message_list_new = []
-						for (var i = 0; i < response.table.length; i++) {
-							message_list_new.push(response.table[i].rid)
-							if (response.table[i].from_me == 0){
-								newReplies(response.table[i].message, name, response.table[i].date_insert, response.table[i].rid)
-							}
-							else{
-								newMessage(response.table[i].message, 'Вы', response.table[i].date_insert, response.table[i].rid)
-							}
-						}
-						message_list = message_list_new;
+						await add_message(response.table);
+						$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 					}
 					else {
 						console.log(response);
