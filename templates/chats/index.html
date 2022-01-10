@@ -120,7 +120,6 @@ function newMessage(message, name = 'Вы', time = '', rid) {
 	message = message.replace('<br>', ' ');
 	message = message.substring(0,50);
 	$('.contact.active .preview').html('<span>Вы: </span>' + message);
-	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 };
 	
 let last_message = ""
@@ -136,7 +135,6 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	$('.contact.active .preview').html('<span>'+name+': </span>' + message);
 	last_message = message;
 	last_message_rid = rid;
-	$(".messages").scrollTop($(".messages").prop('scrollHeight'));
 };
 
 $('.submit.sent').click(function() {
