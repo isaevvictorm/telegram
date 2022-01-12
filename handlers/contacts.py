@@ -57,6 +57,11 @@ def delete(jsn):
         """.format(user_id))
         if dt.err:
             return False, str(dt.err)
+        dt = db.exec("""
+            DELETE FROM Message where from_user__id = '{0}';
+        """.format(user_id))
+        if dt.err:
+            return False, str(dt.err)
     except Exception as ee:
         return False, str(ee)
     return True, None

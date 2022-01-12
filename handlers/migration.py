@@ -143,7 +143,9 @@ def migration():
             file_unique_id TEXT,
             answer_for text,
             date_answer datetime,
-            date_insert datetime default current_timestamp
+            date_insert datetime default current_timestamp,
+            FOREIGN KEY(from_user__id) REFERENCES Contact(user_id)
+
         );
     ''')
 
