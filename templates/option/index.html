@@ -168,10 +168,10 @@ $(document).on('click', '.bt-learn', function(e){
             $('.bt-learn').text('Переобучить модель');
             $('.bt-learn').removeClass('btn-secondary');
             $('.bt-learn').addClass('btn-success');
-            $(".bt-learn").attr("disabled","false");
+            $(".bt-learn").removeAttr('disabled');
           }
           else {
-            if (response.err == 'Не удалось переобученить модель: empty vocabulary; perhaps the documents only contain stop words'){
+            if (response.err.search('perhaps the documents only contain stop words') > -1){
                 generate_alert("Не удалось переобучить модель: нет данных - заполните базу знаний.", "error");
             }
             else{
@@ -180,7 +180,7 @@ $(document).on('click', '.bt-learn', function(e){
             $('.bt-learn').text('Переобучить модель');
             $('.bt-learn').removeClass('btn-secondary');
             $('.bt-learn').addClass('btn-success');
-            $(".bt-learn").attr("disabled","false");
+            $(".bt-learn").removeAttr('disabled');
           }
       },
       dataType:"json",
