@@ -20,7 +20,7 @@ def get_data(jsn, login = None):
             text,
             date_insert
         FROM 
-            Failure
+            Plug
         WHERE type = '{0}';
     '''.format(jsn['type']))
     table = []
@@ -38,10 +38,10 @@ def add(jsn):
     try:
         db = DB()
         dt = db.exec('''
-            INSERT INTO Failure (text, type)
+            INSERT INTO Plug (text, type)
             SELECT '{0}' as text, '{1}' as type
             WHERE 
-                '{0}' not in (Select text from Failure where text = '{0}' and type = '{1}');
+                '{0}' not in (Select text from Plug where text = '{0}' and type = '{1}');
         '''.format(jsn['data']['text'], jsn['data']['type']))
 
         if dt.err:
@@ -53,7 +53,7 @@ def add(jsn):
                 text,
                 date_insert
             FROM 
-                Failure
+                Plug
             WHERE 
                 text = '{0}' and type = '{1}';
         '''.format(jsn['data']['text'], jsn['data']['type']))
@@ -74,7 +74,7 @@ def delete(jsn):
     try:
         db = DB()
         dt = db.exec("""
-            DELETE FROM Failure where rid = {0};
+            DELETE FROM Plug where rid = {0};
         """.format(jsn['rid']))
         if dt.err:
             return False, str(dt.err)
@@ -83,14 +83,14 @@ def delete(jsn):
     return True, None
 
 class Handler:
-    @template("failure/index.html")
+    @template("plug/index.html")
     async def get(self, request):
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin, 'breadcrumb':[{'name':'Пользователи', 'link':'/failure'}]}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'id_role': a.user.id_role, 'breadcrumb':[{'name':'Пользователи', 'link':'/plug'}]}}
         else:
-            return web.HTTPFound('/login?redirect=failure')
+            return web.HTTPFound('/login?redirect=plug')
 
     async def post(self, request):
         jsn = await request.json()
@@ -126,4 +126,4 @@ class Handler:
 
         return web.json_response({"result": False, "err": "Метод не найден", "data": None})
 
-failure = Handler()
+plug = Handler()

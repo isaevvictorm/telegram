@@ -11,7 +11,7 @@ class Handler:
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'id_role': a.user.id_role}}
         else:
             return web.HTTPFound('/login')
 

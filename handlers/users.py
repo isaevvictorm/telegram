@@ -20,7 +20,7 @@ def get_users(jsn, login = None):
             login,
             first_name,
             last_name,
-            admin,
+            id_role,
             date_insert
         FROM User WHERE ({0});
     '''.format(where))
@@ -30,7 +30,7 @@ def get_users(jsn, login = None):
             "login": row['login'],
             "first_name": row['first_name'],
             "last_name": row['last_name'],
-            "admin": row['admin'],
+            "id_role": row['id_role'],
             "date_insert": row['date_insert'],
         }
         table.append(table_row)
@@ -39,14 +39,14 @@ def get_users(jsn, login = None):
 def add(jsn):
     db = DB()
     dt = db.exec('''
-        INSERT INTO User (login, first_name, last_name, password, admin)
+        INSERT INTO User (login, first_name, last_name, password, id_role)
         SELECT
             '{0}' login,
             '{1}' first_name,
             '{2}' last_name,
             '{3}' password,
-            {4} admin;
-    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['admin']))
+            {4} id_role;
+    '''.format(jsn['data']['login'], jsn['data']['first_name'], jsn['data']['last_name'], sha256(str(jsn['data']['password']).encode('utf-8')).hexdigest(), jsn['data']['id_role']))
     # ==========================
     # Предусмотреть вывод ошибок
     # ==========================>>>
@@ -77,7 +77,7 @@ class Handler:
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin, 'breadcrumb':[{'name':'Пользователи', 'link':'/users'}]}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'id_role': a.user.id_role, 'breadcrumb':[{'name':'Пользователи', 'link':'/users'}]}}
         else:
             return web.HTTPFound('/login?redirect=users')
 
@@ -113,7 +113,6 @@ class Handler:
                     return web.json_response({"result":False,"err": str(err)})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})
-
 
         return web.json_response({"result": False, "err": "Метод не найден", "data": None})
 

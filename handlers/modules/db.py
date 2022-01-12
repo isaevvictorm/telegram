@@ -1,6 +1,5 @@
 import sqlite3
 import os
-from .setting import setting
 import traceback
 import zipfile
 

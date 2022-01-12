@@ -10,14 +10,14 @@ class User:
     #=============
     #= Роли
     #=============>>>
-    admin = None
+    id_role = None
     #=============<<<
 
-    def set(self, login, first_name, last_name, admin):
+    def set(self, login, first_name, last_name, id_role):
         self.login = login
         self.first_name = first_name
         self.last_name = last_name
-        self.admin = admin
+        self.id_role = id_role
         return self
 
 class Auth:
@@ -40,7 +40,7 @@ class Auth:
     async def authenticate(self, login, password):
         db = DB()
         dt = db.exec('''
-            Select login, first_name, last_name, admin, password from User
+            Select login, first_name, last_name, id_role, password from User
         ''')
         users = []
         for row in dt.table:
@@ -48,18 +48,18 @@ class Auth:
                 "login":row['login'],
                 "first_name":row['first_name'],
                 "last_name":row['last_name'],
-                "admin":row['admin'],
+                "id_role":row['id_role'],
                 "password":row['password']
             })
         for user in users:
             if str(user['login']).lower() == str(login).lower() and str(user['password']).lower() == sha256(password.encode('utf-8')).hexdigest().lower():
-                return User().set(str(login), str(user['first_name']), str(user['last_name']), str(user['admin']))
+                return User().set(str(login), str(user['first_name']), str(user['last_name']), str(user['id_role']))
         return None
 
     async def get_user(self, login):
         db = DB()
         dt = db.exec('''
-            Select login, first_name, last_name, admin from User WHERE login = '{0}'
+            Select login, first_name, last_name, id_role from User WHERE login = '{0}'
         '''.format(login))
         if dt:
             users = []
@@ -68,7 +68,7 @@ class Auth:
                     "login":row['login'],
                     "first_name":row['first_name'],
                     "last_name":row['last_name'],
-                    "admin":row['admin']
+                    "id_role":row['id_role']
                 })
             for user in users:
                 if str(user['login']).lower() == str(login).lower():

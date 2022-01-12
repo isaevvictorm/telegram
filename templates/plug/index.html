@@ -69,7 +69,7 @@ $(document).on('click', '#btn_add', function(e){
     }
     $.ajax({
     type: 'POST',
-    url: '/failure',
+    url: '/plug',
     data: JSON.stringify({"method":"add", "data": jsn}),
     success: function(response){
         if (response.result){
@@ -77,7 +77,7 @@ $(document).on('click', '#btn_add', function(e){
             table.row("#"+response.table[0].rid).remove().draw();
             table.row.add( response.table[0] ).draw();
             generate_alert("Заглушка успешно добавлена.", "success");
-            $('.bd-example-modal-lg-add-failure').modal('toggle');
+            $('.bd-example-modal-lg-add-plug').modal('toggle');
         }
         else {
             generate_alert("При добавлении заглушки возникла ошибка: " + response.err, "error");
@@ -99,7 +99,7 @@ $(document).on('change', '#type', function(e){
 function get_table(){
     $.ajax({
       type: 'POST',
-      url: '/failure',
+      url: '/plug',
       data: JSON.stringify({"method":"get", "type": document.getElementById('type').value}),
       success: function(response){
           if (response.result){
@@ -122,7 +122,7 @@ $(document).on('click', '#btn_delete', function(){
     var data = table.row( row ).data();
     $.ajax({
       type: 'POST',
-      url: '/failure',
+      url: '/plug',
       data: JSON.stringify({"method":"delete", "rid": data.rid}),
       success: function(response){
           if (response.result){
@@ -160,7 +160,7 @@ $(document).on('click', '#btn_delete', function(){
         </div>       
 
         <div class="card-body">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-failure">Добавить</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg-add-plug">Добавить</button>
         </div>
         <div class="card-body">
            <div class="loader" id="loader_reports"></div>
@@ -187,7 +187,7 @@ $(document).on('click', '#btn_delete', function(){
          </div>
         </div>
 
-        <div class="modal fade bd-example-modal-lg-add-failure" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg-add-plug" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">

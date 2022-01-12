@@ -5,8 +5,11 @@ from aiohttp_jinja2 import template
 import asyncio
 from .modules import Auth
 from .modules import DB
-from .modules import setting
+from .modules import Setting
 import telebot
+
+params = Setting()
+setting = params.get()
 
 async def do(func, arg_obj):
     loop = asyncio.get_event_loop()
@@ -15,6 +18,7 @@ async def do(func, arg_obj):
 
 def send_message(jsn):
     try:
+        setting = params.get()
         db = DB()
         last = db.exec('''
             Select max(rid) as rid from Message;
@@ -105,6 +109,7 @@ def get_contacts(jsn):
         return False, str(ee), []
 
 def get_message(jsn):
+    setting = params.get()
     try:
         db = DB()
         where = "and rid > {0}".format(jsn['rid']) if 'rid' in jsn else ""
@@ -166,7 +171,7 @@ class Handler:
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'admin': a.user.admin, 'breadcrumb':[{'name':'Чаты', 'link':'/chats'}]}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'id_role': a.user.id_role, 'breadcrumb':[{'name':'Чаты', 'link':'/chats'}]}}
         else:
             return web.HTTPFound('/login?redirect=chats')
 

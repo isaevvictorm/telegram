@@ -5,8 +5,11 @@ from concurrent.futures import ThreadPoolExecutor
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
 from aiohttp import web
-from .modules import setting
 import asyncio
+from .modules import Setting
+
+params = Setting()
+setting = params.get()
 
 async def do(func, arg_obj):
     loop = asyncio.get_event_loop()
@@ -44,15 +47,15 @@ def fill_dialog():
                     qa_by_word_dataset[word] = []
                 qa_by_word_dataset[word].append((question, answer))
 
-        qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < setting['MAX_W']}
+        qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < int(setting['MAX_W'])}
 
         return qa_by_word_dataset
     else:
         return None
 
 def fill_template(ls_words):
+    setting = params.get()
     db = DB()
-
     where = "WHERE 1 = 0"
     for word_ls_words in ls_words:
         where = where + " or question like '%{0}%'".format(word_ls_words)
@@ -75,7 +78,7 @@ def fill_template(ls_words):
                 qa_by_word_dataset[word] = []
             qa_by_word_dataset[word].append((question, answer))
 
-    qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < setting['MAX_W']}
+    qa_by_word_dataset = {word: qa_list for word, qa_list in qa_by_word_dataset.items() if len(qa_list) < int(setting['MAX_W'])}
 
     return qa_by_word_dataset
 
@@ -119,6 +122,7 @@ dialog = fill_dialog()
 learn()
 
 def get_answer_intent(text):
+    setting = params.get()
     if clf:
         db = DB()
         tt = filter_text(text)
@@ -157,14 +161,14 @@ def get_answer_intent(text):
 
     return
 
-def get_answer_failure():
+def get_answer_plug():
     # -----------------------------------------
     # Получение ответа из таблицы заглушек
     # -----------------------------------------
     db = DB()
   
     dt = db.exec('''
-        Select text from Failure where type = 'Нет ответа';
+        Select text from Plug where type = 'Нет ответа';
     ''')
     
     dictionary = []
@@ -179,6 +183,7 @@ def get_answer_failure():
 
 
 def get_answer_dialog(text):
+    setting = params.get()
     if dialog:
         text = filter_text(text)
         # -----------------------------------------
@@ -207,6 +212,7 @@ def get_answer_dialog(text):
         return
 
 def get_answer_template(text):
+    setting = params.get()
     # -----------------------------------------
     # Получение ответа из таблицы шаблонов
     # -----------------------------------------
@@ -242,7 +248,6 @@ def get_answer_template(text):
     return
 
 def generate_answer(text):
-
     answer = get_answer_intent(text)
     if answer:
         answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
@@ -258,7 +263,7 @@ def generate_answer(text):
         answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
         return answer, True
 
-    answer = get_answer_failure()
+    answer = get_answer_plug()
     if answer:
         answer = answer.replace('<br/>', '\n').replace('<br>', '\n')
         return answer, False

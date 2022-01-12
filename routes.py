@@ -28,8 +28,8 @@ routes=[
     # ---------------------------
     # Список заглушек
     # ---------------------------
-    web.post('/failure',failure.post),
-    web.get('/failure',failure.get),
+    web.post('/plug',plug.post),
+    web.get('/plug',plug.get),
     # ---------------------------
     # Список знаний
     # ---------------------------
@@ -41,4 +41,8 @@ routes=[
 
 
     web.post('/nlp',nlp.post),
+    
+    web.post('/option',option.post),
+    web.get('/option',option.get),
+
 ]

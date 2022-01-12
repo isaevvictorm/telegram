@@ -3,7 +3,7 @@ from aiohttp import web
 import asyncio
 import telebot
 import json
-from .modules import DB, setting
+from .modules import DB, Setting
 from telebot import types
 import random 
 from .nlp import generate_answer
@@ -11,6 +11,9 @@ from .nlp import generate_answer
 # -============================
 # - Токен
 # -============================
+
+params = Setting()
+setting = params.get()
 
 bot = telebot.TeleBot(setting['TOKEN'])
 try:
@@ -26,7 +29,7 @@ def get_fast_answer(type):
     db = DB()
   
     dt = db.exec('''
-        Select text from Failure where type = '{0}';
+        Select text from Plug where type = '{0}';
     '''.format(type))
     
     dictionary = []

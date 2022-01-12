@@ -41,7 +41,7 @@ function refresh_table(data){
             {  data: 'login', className: "text-center export"},
             {  data: 'first_name', className: "text-center export"},
             {  data: 'last_name', className: "text-center export"},
-            {  data: 'admin', className: "text-center export"},
+            {  data: 'id_role', className: "text-center export"},
             {  data: 'date_insert', className: "text-center export"},
             {  data: 'login', className: "text-center", "mRender": function(data, type, full){
                 return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_delete" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
@@ -83,7 +83,7 @@ $(document).on('click', '#btn_add', function(e){
         first_name: document.getElementById('first_name').value,
         last_name: document.getElementById('last_name').value,
         password: document.getElementById('password1').value,
-        admin: document.getElementById('admin').value
+        id_role: document.getElementById('id_role').value
       }
       console.log(data);
       $.ajax({
@@ -238,8 +238,8 @@ $(document).on('click', '#btn_delete', function(){
                       <input type="password" class="col-md-12 form-control" id = "password2" placeholder="Повторите пароль..."></input>
                     </div>
                     <div class="form-group">
-                      <label for="admin">Сделать администратором:</label>
-                      <select type="text" class="col-md-12 form-control" id = "admin">
+                      <label for="id_role">Сделать администратором:</label>
+                      <select type="text" class="col-md-12 form-control" id = "id_role">
                         <option value = 0>Нет</option>
                         <option value = 1>Да</option>
                       </select>

@@ -6,86 +6,91 @@ import asyncio
 from .modules import Auth
 from .modules import DB
 from hashlib import sha256
+import os
+from .modules import Setting
+
+params = Setting()
+setting = params.get()
 
 async def do(func, arg_obj):
     loop = asyncio.get_event_loop()
     executor = ThreadPoolExecutor(max_workers=100)
     return await loop.run_in_executor(executor, func, arg_obj)
 
-def get_contacts(jsn, user_id = None):
-    where = "user_id='{0}'".format(user_id) if user_id else '1=1'
+def get_data(jsn):
     db = DB()
     dt = db.exec('''
         SELECT
-            user_id,
-            first_name,
-            last_name,
-            patronymic,
-            birthday,
-            username,
-            phone_number,
-            city,
-            email,
-            skype,
+            name,
+            value || '&&' || type || '&&' || name as value,
+            description,
+            type,
             date_insert
-        FROM Contact WHERE ({0});
-    '''.format(where))
+        FROM
+            Setting;
+    ''')
     table = []
     for row in dt.table:
         table_row = {
-            "user_id": row['user_id'],
-            "first_name": row['first_name'],
-            "last_name": row['last_name'],
-            "patronymic": row['patronymic'],
-            "birthday": row['birthday'],
-            "username": row['username'],
-            "phone_number": row['phone_number'],
-            "city": row['city'],
-            "email": row['email'],
-            "skype": row['skype'],
-            "date_insert": str(row['date_insert']),
+            "name": row['name'],
+            "value": str(row['value']),
+            "description": row['description'],
+            "type": row['type'],
+            "date_insert": row['date_insert'],
         }
         table.append(table_row)
     return table
 
-def delete(jsn):
-    user_id = jsn['user_id']
+def update(jsn):
     try:
         db = DB()
         dt = db.exec("""
-            DELETE FROM Contact where user_id = '{0}';
-        """.format(user_id))
+            Update Setting set value = '{1}' where name = '{0}';
+        """.format(jsn['param'], jsn['value']))
         if dt.err:
             return False, str(dt.err)
     except Exception as ee:
         return False, str(ee)
     return True, None
 
+def restart(jsn):
+    os.system("pm2 restart {0}".format(setting('APP_NAME')))
+    return True
+
 class Handler:
-    @template("contacts/index.html")
+    @template("option/index.html")
     async def get(self, request):
         a = Auth(request)
         if await a.is_logged():
             await a.init()
-            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'id_role': a.user.id_role, 'breadcrumb':[{'name':'Контакты', 'link':'/contacts'}]}}
+            return {'data':{'first_name':str(a.user.first_name), 'last_name':str(a.user.last_name), 'login': a.user.login, 'id_role': a.user.id_role, 'breadcrumb':[{'name':'Настройки', 'link':'/option'}]}}
         else:
-            return web.HTTPFound('/login?redirect=contacts')
+            return web.HTTPFound('/login?redirect=option')
 
     async def post(self, request):
         jsn = await request.json()
         method = jsn['method']
-        if method == "get_contacts":
+        if method == "get":
             try:
-                table = await do(get_contacts, jsn)
+                table = await do(get_data, jsn)
                 if len(table) > 0:
                     return web.json_response({'result':True, 'err': None, 'table':table})
                 else:
                     return web.json_response({'result':True, 'err': None, 'table':[]})
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
-        if method == "delete":
+        if method == "restart":
             try:
-                result, err = await do(delete, jsn)
+                result, err = await do(restart, jsn)
+                if result:
+                    return web.json_response({"result":True, "err": None})
+                else:
+                    return web.json_response({"result":False,"err": None})
+            except Exception as ee:
+                return web.json_response({"result":False,"err": None})
+        if method == "update":
+            try:
+                result, err = await do(update, jsn)
                 if result:
                     return web.json_response({"result":True, "err": None})
                 else:
@@ -93,7 +98,6 @@ class Handler:
             except Exception as ee:
                 return web.json_response({"result":False,"err":str(ee)})
 
-
         return web.json_response({"result": False, "err": "Метод не найден", "data": None})
 
-contacts = Handler()
+option = Handler()

@@ -1,3 +1,4 @@
-from .setting import setting
+from .setting import Setting
 from .auth import Auth
 from .db import DB
+

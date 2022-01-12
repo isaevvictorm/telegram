@@ -6,6 +6,58 @@ def migration():
     db = DB()
 
     # ----------------------
+    # Таблица "Настройки"
+    # ----------------------
+    db.exec('''
+        CREATE TABLE "Setting" (
+            name TEXT PRIMARY KEY,
+            description TEXT,
+            value TEXT,
+            type TEXT,
+            date_insert datetime default current_timestamp
+        );
+    ''')
+
+    # ----------------------
+    # Таблица "Роли"
+    # ----------------------
+    db.exec('''
+        CREATE TABLE "Role" (
+            id_role TEXT PRIMARY KEY,
+            name_role TEXT,
+            description TEXT,
+            date_insert datetime default current_timestamp
+        );
+    ''')
+
+    db.exec('''
+        INSERT INTO Role (id_role, name_role, description)
+        Select
+            '1' as id_role,
+            'Администратор' as name_role,
+            'Администратор системы' as description
+        WHERE NOT EXISTS (SELECT * FROM Role WHERE id_role = 1);
+    ''')
+
+    db.exec('''
+        INSERT INTO Role (id_role, name_role, description)
+        Select
+            '2' as id_role,
+            'Менеджер' as name_role,
+            'Менеджер системы' as description
+        WHERE NOT EXISTS (SELECT * FROM Role WHERE id_role = 2);
+    ''')
+
+    db.exec('''
+        INSERT INTO Role (id_role, name_role, description)
+        Select
+            '3' as id_role,
+            'Оператор' as name_role,
+            'Оператор системы' as description
+        WHERE NOT EXISTS (SELECT * FROM Role WHERE id_role = 3);
+    ''')
+
+    # ----------------------
     # Таблица "Пользователи"
     # ----------------------
     db.exec('''
@@ -14,9 +66,10 @@ def migration():
             password TEXT,
             first_name TEXT,
             last_name TEXT,
-            admin INTEGER,
+            id_role INTEGER,
             date_remove datetime,
-            date_insert datetime default current_timestamp
+            date_insert datetime default current_timestamp,
+            FOREIGN KEY(id_role) REFERENCES Role(id_role)
         );
     ''')
     
@@ -24,14 +77,14 @@ def migration():
     # Добавляем учетную запись администратора "первого эшелона"
     # ----------------------
     db.exec('''
-        INSERT INTO User (login, password, first_name, last_name, admin)
+        INSERT INTO User (login, password, first_name, last_name, id_role)
         Select
             'admin' as login,
             '835d5b87c6d3dcfb686b6ea6f63985265d39826fd6aff8ef0d8539808f9a424d' as password,
             'Администратор' as first_name,
-            'Admin' as last_name,
-            1 as admin
-        WHERE NOT EXISTS (SELECT * FROM User WHERE admin = 1);
+            'Системы' as last_name,
+            1 as id_role
+        WHERE NOT EXISTS (SELECT * FROM User WHERE id_role = 1);
     ''')
 
     # ----------------------
@@ -60,17 +113,17 @@ def migration():
     # ----------------------
     # Таблица "Чаты"
     # ----------------------
-    db.exec('''
-        CREATE TABLE "Chat" (
-            chat_id TEXT PRIMARY KEY,
-            first_name TEXT,
-            last_name TEXT,
-            username TEXT,
-            type TEXT,
-            date INTEGER,
-            date_insert datetime default current_timestamp
-        );
-    ''')
+    #db.exec('''
+    #    CREATE TABLE "Chat" (
+    #        chat_id TEXT PRIMARY KEY,
+    #        first_name TEXT,
+    #        last_name TEXT,
+    #        username TEXT,
+    #        type TEXT,
+    #        date INTEGER,
+    #        date_insert datetime default current_timestamp
+    #    );
+    #''')
 
     # ----------------------
     # Таблица "Сообщения"
@@ -120,18 +173,6 @@ def migration():
     ''')
 
     # ----------------------
-    # Таблица "Заглушек"
-    # ----------------------
-    db.exec('''
-        CREATE TABLE "Failure" (
-            rid INTEGER PRIMARY KEY AUTOINCREMENT,
-            text TEXT,
-            type TEXT,
-            date_insert datetime default current_timestamp
-        );
-    ''')
-
-    # ----------------------
     # Таблица "Ответы"
     # ----------------------
     db.exec('''
@@ -141,6 +182,18 @@ def migration():
             id_intent INTEGER,
             date_insert datetime default current_timestamp,
             FOREIGN KEY(id_intent) REFERENCES Intent(id_intent)
+        );
+    ''')
+
+    # ----------------------
+    # Таблица "Заглушек"
+    # ----------------------
+    db.exec('''
+        CREATE TABLE "Plug" (
+            rid INTEGER PRIMARY KEY AUTOINCREMENT,
+            text TEXT,
+            type TEXT,
+            date_insert datetime default current_timestamp
         );
     ''')
 
@@ -160,12 +213,12 @@ def migration():
     # ----------------------
     # Таблица "IMG"
     # ----------------------
-    db.exec('''
-        CREATE TABLE "Image" (
-            id_img INTEGER PRIMARY KEY AUTOINCREMENT,
-            path TEXT,
-            id_response INTEGER,
-            date_insert datetime default current_timestamp,
-            FOREIGN KEY(id_response) REFERENCES Response(id_response)
-        );
-    ''')
+    #db.exec('''
+    #    CREATE TABLE "Image" (
+    #        id_img INTEGER PRIMARY KEY AUTOINCREMENT,
+    #        path TEXT,
+    #        id_response INTEGER,
+    #        date_insert datetime default current_timestamp,
+    #        FOREIGN KEY(id_response) REFERENCES Response(id_response)
+    #    );
+    #''')

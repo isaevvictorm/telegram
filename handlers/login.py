@@ -25,7 +25,7 @@ class LoginHandler:
         await a.sign()
         await a.init()
         if (a.user and a.user.login):
-            return web.Response(text=json.dumps({'result':{'userid':a.user.login, 'last_name':a.user.last_name, 'first_name':a.user.first_name, 'admin': a.user.admin}}),content_type="application/json")
+            return web.Response(text=json.dumps({'result':{'userid':a.user.login, 'last_name':a.user.last_name, 'first_name':a.user.first_name, 'id_role': a.user.id_role}}),content_type="application/json")
         else:
             return web.Response(text=json.dumps({'result':False}), content_type="application/json")
 

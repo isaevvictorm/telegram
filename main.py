@@ -1,9 +1,10 @@
-from handlers import setting, migration
+from handlers import migration
 import aiohttp_jinja2
 import jinja2
 from aiohttp import web
 import ssl
 import os
+from handlers import Setting
 import pathlib
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from aiohttp_session import setup, get_session
@@ -18,11 +19,13 @@ def make_app(app):
 # - Создание таблиц БД и их обновление
 # -============================
 migration.migration()
+params = Setting()
+setting = params.get()
 
 # -============================
 # - Указываем путь к шаблонам
 # -============================
-aiohttp_jinja2.setup(app, loader = jinja2.FileSystemLoader(setting["TEMPLATE_DIR"]))
+aiohttp_jinja2.setup(app, loader = jinja2.FileSystemLoader('./templates'))
 
 # -===========================================
 # - Указываем роуты и пути к файлам со стилями
