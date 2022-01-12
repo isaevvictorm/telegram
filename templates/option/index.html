@@ -152,27 +152,6 @@ $(document).on('click', '.bt-restart', function(){
     });
 });
 
-
-$(document).on('click', '.bt-restart-server', function(){
-    $.ajax({
-      type: 'POST',
-      url: '/option',
-      data: JSON.stringify({"method":"restart_server"}),
-      success: function(response){
-          if (response.result){
-            generate_alert("Отправлено в перезагрузку", "success");
-          }
-          else {
-            generate_alert("Не удалось перезагрузить: " + response.err, "error");
-          }
-      },
-      dataType:"json",
-      error:function(response){
-          generate_alert('Непредвиденна ошибка', "error");
-      },
-    });
-});
-
 $(document).on('click', '.bt-learn', function(e){
     e.preventDefault();
     $('.bt-learn').text('Ожидайте');
@@ -229,7 +208,6 @@ $(document).on('click', '.bt-learn', function(e){
         <div class="card-body">
             <button type="button" class="btn btn-success bt-learn">Переобучить модель</button>
             <button type="button" class="btn btn-warning bt-restart">Перезапустить бота</button>
-            <button type="button" class="btn btn-warning bt-restart-server">Перезапустить сервер</button>
         </div>
         <div class="card-body">
           Список параметров системы чат-бота
