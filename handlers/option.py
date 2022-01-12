@@ -58,6 +58,7 @@ def update(jsn):
 def restart(jsn):
     setting = params.get()
     subprocess.run(["pm2", "restart", setting['APP_NAME']])
+    subprocess.run(["sudo", "reboot"])
     return True
 
 class Handler:
