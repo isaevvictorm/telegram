@@ -55,7 +55,7 @@ def update(jsn):
 
 def restart(jsn):
     setting = params.get()
-    os.system("pm2 restart {0}".format(setting('APP_NAME')))
+    os.system("pm2 restart {0}".format(setting['APP_NAME']))
     return True
 
 class Handler:
