@@ -17,7 +17,6 @@ def migration():
             date_insert datetime default current_timestamp
         );
     ''')
-
     # ----------------------
     # Таблица "Роли"
     # ----------------------

@@ -154,9 +154,10 @@ $(document).on('click', '.btn-restart', function(){
 
 $(document).on('click', '.bt-learn', function(e){
     e.preventDefault();
-    $('.bt-learn').text('Ожидайте');
+    .text('Ожидайте');
     $('.bt-learn').removeClass('btn-success');
     $('.bt-learn').addClass('btn-secondary');
+    $(".bt-learn").attr("disabled","true");
     $.ajax({
       type: 'POST',
       url: '/nlp',
@@ -167,9 +168,19 @@ $(document).on('click', '.bt-learn', function(e){
             $('.bt-learn').text('Переобучить модель');
             $('.bt-learn').removeClass('btn-secondary');
             $('.bt-learn').addClass('btn-success');
+            $(".bt-learn").attr("disabled","false");
           }
           else {
-            generate_alert("Не удалось переобученить модель: " + response.err, "error");
+            if (response.err == 'Не удалось переобученить модель: empty vocabulary; perhaps the documents only contain stop words'){
+                generate_alert("Не удалось переобучить модель: нет данных - заполните базу знаний.", "error");
+            }
+            else{
+                generate_alert("Не удалось переобучить модель: " + response.err, "error");
+            }
+            $('.bt-learn').text('Переобучить модель');
+            $('.bt-learn').removeClass('btn-secondary');
+            $('.bt-learn').addClass('btn-success');
+            $(".bt-learn").attr("disabled","false");
           }
       },
       dataType:"json",

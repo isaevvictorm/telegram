@@ -19,6 +19,7 @@ def make_app(app):
 # - Создание таблиц БД и их обновление
 # -============================
 migration.migration()
+
 params = Setting()
 setting = params.get()
 

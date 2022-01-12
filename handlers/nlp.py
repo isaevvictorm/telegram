@@ -104,10 +104,6 @@ def fill_intent():
     else:
         return [], []
 
-vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
-
-clf = None
-
 def learn(jsn = None):
     global clf 
     try:
@@ -118,6 +114,8 @@ def learn(jsn = None):
     except Exception as ee:
         return False, str(ee)
 
+vectorizer = TfidfVectorizer(analyzer='char_wb', ngram_range=(2,4))
+clf = None
 dialog = fill_dialog()
 learn()
 
