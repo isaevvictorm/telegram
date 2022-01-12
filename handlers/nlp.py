@@ -136,14 +136,14 @@ def get_answer_intent(text):
         for example in examples.table:
             dist = nltk.edit_distance(tt, filter_text(example['text_example']))
             dist_percentage = dist / len(example['text_example'])
-            if dist_percentage <= setting['NORM']:
+            if dist_percentage <= float(setting['NORM']):
                 db.exec('''
                     INSERT INTO Example (text_example, id_intent)
                     Select '{0}', {1}
                     WHERE 
                         '{0}' not in (Select text_example from Example where text_example = '{0}' and id_intent = {1})
                 '''.format(text, id_intent))
-            if dist_percentage <= setting['PROBA']:
+            if dist_percentage <= float(setting['PROBA']):
                 intent = id_intent
 
         if intent > -1:
@@ -193,7 +193,7 @@ def get_answer_dialog(text):
         for word in words:
             if word in dialog:
                 qa += dialog[word]
-        qa = list(set(qa))[:setting['MAX_W']]
+        qa = list(set(qa))[:int(setting['MAX_W'])]
 
         results = []
 
@@ -204,7 +204,7 @@ def get_answer_dialog(text):
 
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
-            if dist_percent <= setting['DIST']:
+            if dist_percent <= float(setting['DIST']):
                 return answer
     else:
         return
@@ -227,7 +227,7 @@ def get_answer_template(text):
         for word in words:
             if word in template:
                 qa += template[word]
-        qa = list(set(qa))[:setting['MAX_W']]
+        qa = list(set(qa))[:int(setting['MAX_W'])]
 
         results = []
 
@@ -238,7 +238,7 @@ def get_answer_template(text):
 
         if results:
             dist_percent, question, answer = min(results, key=lambda pair:pair[0])
-            if dist_percent <= setting['DIST']:
+            if dist_percent <= float(setting['DIST']):
                 return answer
     else:
         return

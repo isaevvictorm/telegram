@@ -54,6 +54,7 @@ def update(jsn):
     return True, None
 
 def restart(jsn):
+    setting = params.get()
     os.system("pm2 restart {0}".format(setting('APP_NAME')))
     return True
 
