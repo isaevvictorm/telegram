@@ -81,13 +81,13 @@ class Handler:
                 return web.json_response({"result":False,"err":str(ee),"table":[]})
         if method == "restart":
             try:
-                result, err = await do(restart, jsn)
+                result = await do(restart, jsn)
                 if result:
                     return web.json_response({"result":True, "err": None})
                 else:
                     return web.json_response({"result":False,"err": None})
             except Exception as ee:
-                return web.json_response({"result":False,"err": None})
+                return web.json_response({"result":False,"err": str(ee)})
         if method == "update":
             try:
                 result, err = await do(update, jsn)
