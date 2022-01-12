@@ -8,6 +8,8 @@ from .modules import DB
 from hashlib import sha256
 import os
 from .modules import Setting
+import subprocess
+
 
 params = Setting()
 setting = params.get()
@@ -55,7 +57,7 @@ def update(jsn):
 
 def restart(jsn):
     setting = params.get()
-    os.system("pm2 restart {0}".format(setting['APP_NAME']))
+    subprocess.run(["pm2", "restart", setting['APP_NAME']])
     return True
 
 class Handler:
