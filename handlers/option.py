@@ -58,6 +58,9 @@ def update(jsn):
 def restart(jsn):
     setting = params.get()
     subprocess.run(["pm2", "restart", setting['APP_NAME']])
+    return True
+
+def restart_server(jsn):
     subprocess.run(["sudo", "reboot"])
     return True
 
@@ -86,6 +89,15 @@ class Handler:
         if method == "restart":
             try:
                 result = await do(restart, jsn)
+                if result:
+                    return web.json_response({"result":True, "err": None})
+                else:
+                    return web.json_response({"result":False,"err": None})
+            except Exception as ee:
+                return web.json_response({"result":False,"err": str(ee)})
+        if method == "restart_server":
+            try:
+                result = await do(restart_server, jsn)
                 if result:
                     return web.json_response({"result":True, "err": None})
                 else:
