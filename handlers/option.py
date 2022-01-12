@@ -57,7 +57,7 @@ def update(jsn):
 
 def restart(jsn):
     setting = params.get()
-    code = subprocess.call(["pm2", "restart", setting['APP_NAME']])
+    code = subprocess.check_output(["pm2", "restart", setting['APP_NAME']])
     return True, code
 
 def restart_server(jsn):
