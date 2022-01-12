@@ -154,7 +154,7 @@ $(document).on('click', '.btn-restart', function(){
 
 $(document).on('click', '.bt-learn', function(e){
     e.preventDefault();
-    .text('Ожидайте');
+    $('.bt-learn').text('Ожидайте');
     $('.bt-learn').removeClass('btn-success');
     $('.bt-learn').addClass('btn-secondary');
     $(".bt-learn").attr("disabled","true");
