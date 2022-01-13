@@ -41,7 +41,7 @@ function refresh_table(data){
             {  data: 'login', className: "text-center export"},
             {  data: 'first_name', className: "text-center export"},
             {  data: 'last_name', className: "text-center export"},
-            {  data: 'id_role', className: "text-center export"},
+            {  data: 'name_role', className: "text-center export"},
             {  data: 'date_insert', className: "text-center export"},
             {  data: 'login', className: "text-center", "mRender": function(data, type, full){
                 return '<div class="list-icons"><div class="dropdown"><a href="#" class="list-icons-item" data-toggle="dropdown"><i class="icon-menu7"></i></a><div class="dropdown-menu dropdown-menu-right"><a id = "btn_delete" class="dropdown-item"><i class="icon-trash"></i>Удалить</a></div></div></div>'
@@ -186,7 +186,7 @@ $(document).on('click', '#btn_delete', function(){
                  <th>Логин</th>
                  <th>Имя</th>
                  <th>Фамилия</th>
-                 <th>Админ</th>
+                 <th>Роль</th>
                  <th>Дата добавления</th>
                  <th>Управление</th>
                </tr>
@@ -196,7 +196,7 @@ $(document).on('click', '#btn_delete', function(){
                  <th>Логин</th>
                  <th>Имя</th>
                  <th>Фамилия</th>
-                 <th>Админ</th>
+                 <th>Роль</th>
                  <th>Дата добавления</th>
                  <th>Управление</th>
                </tr>
@@ -238,10 +238,11 @@ $(document).on('click', '#btn_delete', function(){
                       <input type="password" class="col-md-12 form-control" id = "password2" placeholder="Повторите пароль..."></input>
                     </div>
                     <div class="form-group">
-                      <label for="id_role">Сделать администратором:</label>
+                      <label for="id_role">Роль:</label>
                       <select type="text" class="col-md-12 form-control" id = "id_role">
-                        <option value = 0>Нет</option>
-                        <option value = 1>Да</option>
+                        <option value = 1>Администратор</option>
+                        <option value = 2>Менеджер</option>
+                        <option value = 3>Оператор</option>
                       </select>
                     </div>
                 </div>

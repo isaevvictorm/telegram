@@ -65,7 +65,7 @@ $(document).on('click', '#btn_add', function(e){
     }
     jsn = {
         text: document.getElementById('txt').value,
-        type: document.getElementById('type').value
+        id_type: document.getElementById('type').value
     }
     $.ajax({
     type: 'POST',
@@ -94,13 +94,11 @@ $(document).on('change', '#type', function(e){
   get_table();
 });
 
-
-
 function get_table(){
     $.ajax({
       type: 'POST',
       url: '/plug',
-      data: JSON.stringify({"method":"get", "type": document.getElementById('type').value}),
+      data: JSON.stringify({"method":"get", "id_type": document.getElementById('type').value}),
       success: function(response){
           if (response.result){
             refresh_table(response.table);
@@ -152,9 +150,9 @@ $(document).on('click', '#btn_delete', function(){
         <div class="card-body">
           <div class="form-group">
             <select class="form-control" id = "type">
-              <option value = "Нет ответа">Нет ответа</option>
-              <option value = "Приветствие">Приветствие</option>
-              <option value = "Контакт">Контакт</option>
+              <option value = "1">Нет ответа</option>
+              <option value = "2">Приветствие</option>
+              <option value = "3">Контакт</option>
             </select>
           </div>
         </div>       

@@ -28,23 +28,17 @@
 
 			</ul>
 		</div>
-    <div class="message-input">
-      <div class="wrap">
-  			<textarea type="text" placeholder="Write your message..." cols="40" rows="5" style="margin-top: 0px;margin-bottom: 0px;height: 100px;min-height: 100px;max-height: 100px;"></textarea>
-		    <div style="background: white;">
-          <button class="submit replies" style="height: 40px;margin-top: 60px;">
-            <i class="icon-clippy" aria-hidden="true"></i>
-          </button>
-        </div>
-
-        <div style="background: white;">
-          <button class="submit sent" style="height: 40px;margin-top: 60px;">
-            <i class="icon-envelop" aria-hidden="true"></i>
-          </button>
-        </div>
-      </div>
-  </div>
-</div>
+		<div class="message-input">
+		<div class="wrap">
+				<textarea type="text" id="text_message" placeholder="Напишите новое сообщение и нажмите клавишу Enter....." cols="40" rows="5"></textarea>
+				<div style="background: white;">
+				<button class="submit sent" style="height: 40px;">
+					<i class="icon-envelop" aria-hidden="true"></i>
+				</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <script >
@@ -137,7 +131,19 @@ function newReplies(message, name = 'Абонент', time = '', rid) {
 	last_message_rid = rid;
 };
 
+$("#text_message").keydown(function(event){
+	isShift = !!window.event.shiftKey;
+    if(event.keyCode == 13 && !isShift){
+        event.preventDefault();
+		send_message();
+    }
+});
+
 $('.submit.sent').click(function() {
+	send_message();
+});
+
+function send_message(){
 	message = $(".message-input textarea").val();
 	var d = new Date();
 	var t = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
@@ -165,15 +171,18 @@ $('.submit.sent').click(function() {
 					if (response.err == 'A request to the Telegram API was unsuccessful. Error code: 403. Description: Forbidden: bot was blocked by the user'){
 						generate_alert("Вы не можете отправить сообщение данному пользователю, так как он заблокировал бота. Ваш ответ был добавлен в шаблоны и будет использоваться в дальнейшем.", "warning")
 					}
+					if (response.err.search('chat_id is empty')>-1){
+						generate_alert("Получатель не выбран.", "warning")
+					}
 					else{
-						console.log(response)
+						generate_alert("Не удалось отправить сообщение, обратитесь к администратору системы.", "error")
 					}
 				}
 		},
 		dataType:"json",
 	});
 	$('.message-input textarea').focus();
-});
+}
 
 $('.submit.replies').click(function() {
 	message = $(".message-input textarea").val();

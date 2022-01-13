@@ -17,12 +17,17 @@ def get_users(jsn, login = None):
     db = DB()
     dt = db.exec('''
         SELECT
-            login,
-            first_name,
-            last_name,
-            id_role,
-            date_insert
-        FROM User WHERE ({0});
+            t1.login,
+            t1.first_name,
+            t1.last_name,
+            t1.id_role,
+            t2.name_role,
+            t1.date_insert
+        FROM 
+                User t1
+            inner join 
+                Role t2 on t1.id_role = t2.id_role
+        WHERE ({0});
     '''.format(where))
     table = []
     for row in dt.table:
@@ -31,6 +36,7 @@ def get_users(jsn, login = None):
             "first_name": row['first_name'],
             "last_name": row['last_name'],
             "id_role": row['id_role'],
+            "name_role": row['name_role'],
             "date_insert": row['date_insert'],
         }
         table.append(table_row)
@@ -63,7 +69,7 @@ def delete(jsn):
     try:
         db = DB()
         dt = db.exec("""
-            DELETE FROM User where login = '{0}';
+            Update User set date_remove = current_timestamp where login = '{0}';
         """.format(user_id))
         if dt.err:
             return False, str(dt.err)

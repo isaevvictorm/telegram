@@ -142,6 +142,16 @@ class Setting:
                                 'Фильтр символов' as description
                             WHERE NOT EXISTS (SELECT * FROM Setting WHERE name = '{0}');
                         '''.format("FILTER", self.setting["FILTER"]))
+                    elif key == 'SEND_PLUG_TO_CHAT':
+                        db.exec('''
+                            INSERT INTO Setting (name, value, type, description)
+                            Select
+                                '{0}' as name,
+                                '{1}' as value,
+                                'int' as type,
+                                'Отправлять заглушки в чаты (0 - нет; 1 - да)' as description
+                            WHERE NOT EXISTS (SELECT * FROM Setting WHERE name = '{0}');
+                        '''.format("SEND_PLUG_TO_CHAT", self.setting["SEND_PLUG_TO_CHAT"]))
                     
                     else:
                         db.exec('''
@@ -157,11 +167,16 @@ class Setting:
     def get(self):
         db = DB()
         dt = db.exec('''
-            Select name, value from Setting;
+            Select name, value, type from Setting;
         ''')
         for row in dt.table:
-            self.setting[row['name']] =row['value']
-            
+            if row['type'] == 'int':
+                self.setting[row['name']] = int(row['value'])
+            elif row['type'] == 'float':
+                self.setting[row['name']] = float(row['value'])
+            else:
+                self.setting[row['name']] = str(row['value'])
+        
         return self.setting
             
             

@@ -16,13 +16,16 @@ def get_data(jsn, login = None):
     db = DB()
     dt = db.exec('''
         SELECT
-            rid,
-            text,
-            date_insert
+            t1.rid,
+            t1.text,
+            t1.date_insert
         FROM 
-            Plug
-        WHERE type = '{0}';
-    '''.format(jsn['type']))
+            Plug t1
+            inner join 
+            Type_plug t2 on t1.id_type = t2.id_type
+        WHERE 
+            t1.id_type = '{0}';
+    '''.format(jsn['id_type']))
     table = []
     for row in dt.table:
         table_row = {
@@ -38,11 +41,11 @@ def add(jsn):
     try:
         db = DB()
         dt = db.exec('''
-            INSERT INTO Plug (text, type)
+            INSERT INTO Plug (text, id_type)
             SELECT '{0}' as text, '{1}' as type
             WHERE 
-                '{0}' not in (Select text from Plug where text = '{0}' and type = '{1}');
-        '''.format(jsn['data']['text'], jsn['data']['type']))
+                '{0}' not in (Select text from Plug where text = '{0}' and id_type = '{1}');
+        '''.format(jsn['data']['text'], jsn['data']['id_type']))
 
         if dt.err:
             return False, str(dt.err), []
@@ -55,8 +58,8 @@ def add(jsn):
             FROM 
                 Plug
             WHERE 
-                text = '{0}' and type = '{1}';
-        '''.format(jsn['data']['text'], jsn['data']['type']))
+                text = '{0}' and id_type = '{1}';
+        '''.format(jsn['data']['text'], jsn['data']['id_type']))
 
         table = [{
             "rid": dt.table[0]['rid'],

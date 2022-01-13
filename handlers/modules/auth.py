@@ -40,7 +40,7 @@ class Auth:
     async def authenticate(self, login, password):
         db = DB()
         dt = db.exec('''
-            Select login, first_name, last_name, id_role, password from User
+            Select login, first_name, last_name, id_role, password from User where date_remove is null
         ''')
         users = []
         for row in dt.table:
@@ -59,7 +59,7 @@ class Auth:
     async def get_user(self, login):
         db = DB()
         dt = db.exec('''
-            Select login, first_name, last_name, id_role from User WHERE login = '{0}'
+            Select login, first_name, last_name, id_role from User WHERE login = '{0}' and date_remove is null
         '''.format(login))
         if dt:
             users = []

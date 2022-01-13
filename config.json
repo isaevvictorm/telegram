@@ -11,5 +11,6 @@
     "MAX_W": 1000,
     "APP_NAME": "telegram",
     "CNT_MESSAGE_IN_CHAT": 20,
+    "SEND_PLUG_TO_CHAT": 0,
     "FILTER": ".?,!*\\/[]{};`~<>+=_()$#@№:^-"
 }

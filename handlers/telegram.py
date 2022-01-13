@@ -22,15 +22,15 @@ try:
 except Exception as ee:
     print(ee)
 
-def get_fast_answer(type):
+def get_fast_answer(id_type):
     # -----------------------------------------
     # Получение ответа из таблицы заглушек
     # -----------------------------------------
     db = DB()
   
     dt = db.exec('''
-        Select text from Plug where type = '{0}';
-    '''.format(type))
+        Select text from Plug where id_type = '{0}';
+    '''.format(id_type))
     
     dictionary = []
 
@@ -90,7 +90,7 @@ def save_user(message):
 def start_command(message):
     try:
         save_user(message)
-        answer =  get_fast_answer('Приветствие')
+        answer =  get_fast_answer(2)
         if answer:
             bot.send_message(message.chat.id, answer)
     except Exception as ee:
@@ -121,7 +121,7 @@ def start_command(message):
                     message.contact.phone_number))
         if dt.err:
             bot.send_message(setting['ADMIN'], str(dt.err))
-        answer =  get_fast_answer('Контакт')
+        answer =  get_fast_answer(3)
         if answer:
             bot.send_message(message.chat.id, answer)
     except Exception as ee:
@@ -139,7 +139,6 @@ def text_command(message):
                 content_type,
                 message_id,
                 from_user__id,
-                is_bot,
                 chat__id,
                 text,
                 from_me,
@@ -149,7 +148,6 @@ def text_command(message):
                 'text' as content_type,
                 {0} as message_id,
                 '{1}' as from_user__id,
-                0 as is_bot,
                 '{2}' as chat__id,
                 '{3}' as text,
                 0 as from_me,
@@ -163,7 +161,7 @@ def text_command(message):
                 Update Contact set online = 1
                 WHERE user_id = {0};
             '''.format(message.from_user.id))
-        if (answer and result == True) or (answer and message.chat.id == message.from_user.id):
+        if (answer and result == True) or setting['SEND_PLUG_TO_CHAT'] == 1 or (answer and message.chat.id == message.from_user.id):
             bot.send_message(message.chat.id,  answer)
             jsn = {
                 "chat__id": message.chat.id,
